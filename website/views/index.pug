@@ -1,0 +1,12 @@
+extends layout
+
+block content 
+  h1#logo BedrockConnect
+
+  select(multiple="multiple" size="2" style="width: 300px; height: 300px;")
+    option(value="Whatever")
+      | One
+    option(value="Other")
+      | Two
+  button(name='connect')
+  button(name='add')
