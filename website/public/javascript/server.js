@@ -17,9 +17,11 @@ $(document).ready(function() {
         var selected = $('#list').val();
         if(selected) {
             $('#connect').prop('disabled', false);
+            $('#remove').prop('disabled', false);
         }
         else {
             $('#connect').prop('disabled', true);
+            $('#remove').prop('disabled', true);
         }
     });
 
@@ -51,6 +53,23 @@ $(document).ready(function() {
                 alert(data.error);
             }
         });
+    });
+
+    $("#remove").click(function(){
+        if(confirm("Do you wish to remove this server?")) {
+            $.post("/servers/remove",
+            {
+            ip: $('#list').val()
+            },
+            function(data,status){
+                if(data == "success") {
+                    $("#list").find('[value="' + $('#list').val() + '"]').remove();
+                }
+                else {
+                    alert(data.error);
+                }
+            });
+        }
     });
 
 });

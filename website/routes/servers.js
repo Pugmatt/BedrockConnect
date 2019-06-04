@@ -54,8 +54,8 @@ router.post('/remove', function(req, res, next) {
             } else {
                 var ips = JSON.parse(server.serverList);
                 if(ips.indexOf(req.body.ip) != -1) {
-                    ips.splice(req.body.ip, 1);
-                    server.serverList = ips;
+                    ips.splice(ips.indexOf(req.body.ip), 1);
+                    server.serverList = JSON.stringify(ips);
                     server.save().then(function() {
                         res.send("success");
                     });
