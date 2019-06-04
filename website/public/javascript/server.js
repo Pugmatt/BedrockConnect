@@ -6,16 +6,34 @@ $(document).ready(function() {
         if(data) {
             for(var i=0;i<data.serverList.length;i++)
                 $("#list").append('<option value="' + data.serverList[i] + '">' + data.serverList[i] + '</option>');
+            if(data.join)
+                $("#server").text(data.join);
+            else
+                $("#server").text($('#list').val());    
+        }
+    });
+
+    $('#list').click(function() {
+        var selected = $('#list').val();
+        if(selected) {
+            $('#connect').prop('disabled', false);
+        }
+        else {
+            $('#connect').prop('disabled', true);
         }
     });
 
     $("#connect").click(function(){
         $.post("/servers/connect",
         {
-        ip: "play.skyblockpe.com"
+            ip: $('#list').val()
         },
         function(data,status){
-        console.log(data);
+            if(data == "success") {
+                $("#server").text($('#list').val());
+            } else {
+                alert(data.error);
+            }
         });
     });
 
@@ -26,8 +44,12 @@ $(document).ready(function() {
         ip: ip
         },
         function(data,status){
-            if(data == "success")
-            $("#list").append('<option value="' + ip + '" selected="selected">' + ip + '</option>');
+            if(data == "success") {
+                $("#list").append('<option value="' + ip + '" selected="selected">' + ip + '</option>');
+            }
+            else {
+                alert(data.error);
+            }
         });
     });
 
