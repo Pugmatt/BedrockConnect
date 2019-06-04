@@ -3,13 +3,14 @@ var router = express.Router();
 
 const database = require("../database.js");
 
-const isReachable = require('is-reachable');
-
 function ip(req) {
     var ip = (req.headers['x-forwarded-for'] ||
     req.connection.remoteAddress ||
     req.socket.remoteAddress ||
     req.connection.socket.remoteAddress).split(",")[0];
+    if(ip.substr(0, 7) == "::ffff:") {
+        ip = ip.substr(7);
+    }
     return ip;
 }
 

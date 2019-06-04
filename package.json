@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dnsjack": "^1.0.0"
+    "asyncawait": "^1.0.8",
+    "dnsjack": "^1.0.0",
+    "sequelize": "^5.8.7"
   }
 }

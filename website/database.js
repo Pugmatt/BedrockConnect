@@ -3,6 +3,9 @@ const path = require('path');
 
 const Sequelize = require('sequelize');
 
+var async = require('asyncawait/async');
+var await = require('asyncawait/await');
+
 // Initialize Sequelize
 const sequelize = new Sequelize("bedrockconnect", "root", "", {
     host: "localhost",
@@ -28,7 +31,7 @@ const database = {
  * Tries to connect to the database and syncronise the schema. Will continue retrying if unable to connect.
  * @returns {Promise}
  */
-database.connect = async () => {
+database.connect = async (function() {
     return new Promise((resolve, reject) => {
         const tryConnect = () => {
             sequelize.sync().then(() => {
@@ -41,13 +44,13 @@ database.connect = async () => {
         };
         tryConnect();
     });
-};
+});
 
 /**
  * Loads database definition models in /models
  * @returns {Promise}
  */
-database.load = async () => {
+database.load = async (function() {
     console.log("Loading models...");
 
     return new Promise((resolve, reject) => {
@@ -74,6 +77,6 @@ database.load = async () => {
             resolve();
         });
     });
-};
+});
 
 module.exports = database;

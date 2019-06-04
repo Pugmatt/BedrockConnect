@@ -10,6 +10,9 @@ var serversRouter = require('./routes/servers');
 
 var database = require('./database');
 
+var async = require('asyncawait/async');
+var await = require('asyncawait/await');
+
 var app = express();
 
 // view engine setup
@@ -42,11 +45,11 @@ app.use(function(err, req, res, next) {
 });
 
 // Setup database
-const db = async function() {
-    await database.load();
-    await database.connect();
+const db = async (function() {
+    await (database.load());
+    await (database.connect());
     console.log("Loaded models");
-};
+});
 db();
 
 module.exports = app;
