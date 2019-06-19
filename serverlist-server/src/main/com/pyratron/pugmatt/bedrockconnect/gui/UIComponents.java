@@ -3,11 +3,13 @@ package main.com.pyratron.pugmatt.bedrockconnect.gui;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.nukkitx.protocol.bedrock.packet.ModalFormRequestPacket;
+import net.minidev.json.JSONUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UIComponents {
 
@@ -37,6 +39,7 @@ public class UIComponents {
 
     public static JsonObject createButton(String text, String image, String imageType) {
         JsonObject button = new JsonObject();
+        button.addProperty("type", "button");
         button.addProperty("text", text);
         if(image != null && imageType != null) {
             JsonObject buttonImage = new JsonObject();
@@ -49,8 +52,25 @@ public class UIComponents {
 
     public static JsonObject createButton(String text) {
         JsonObject button = new JsonObject();
+        button.addProperty("type", "button");
         button.addProperty("text", text);
         return button;
+    }
+
+    public static JsonObject createToggle(String text) {
+        JsonObject toggle = new JsonObject();
+        toggle.addProperty("type", "toggle");
+        toggle.addProperty("text", text);
+        toggle.addProperty("defaultValue", false);
+        return toggle;
+    }
+
+    public static JsonObject createToggle(String text, boolean toggled) {
+        JsonObject toggle = new JsonObject();
+        toggle.addProperty("type", "toggle");
+        toggle.addProperty("text", text);
+        toggle.addProperty("defaultValue", toggled);
+        return toggle;
     }
 
     public static JsonObject createForm(String type, String title) {
@@ -58,6 +78,22 @@ public class UIComponents {
         form.addProperty("type", type);
         form.addProperty("title", title);
         return form;
+    }
+
+    public static JsonObject createDropdown(List<String> options, String title, String defaultIndex) {
+        JsonObject dropdown = new JsonObject();
+        String listString = "[";
+        for(int i=0;i<options.size();i++) {
+            listString += '"' + options.get(i) + '"';
+            if(i != options.size()-1)
+                listString += ",";
+        }
+        listString += "]";
+        dropdown.addProperty("type", "dropdown");
+        dropdown.addProperty("options", listString);
+        dropdown.addProperty("text", title);
+        dropdown.addProperty("defaultOptionIndex", defaultIndex);
+        return dropdown;
     }
 
     public static ArrayList<String> getFormData(String data) {

@@ -23,6 +23,7 @@ import net.minidev.json.JSONObject;
 import java.io.IOException;
 import java.security.interfaces.ECPublicKey;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 // Heavily referenced from https://github.com/NukkitX/ProxyPass/blob/master/src/main/java/com/nukkitx/proxypass/network/bedrock/session/UpstreamPacketHandler.java
@@ -211,10 +212,23 @@ public class PacketHandler implements BedrockPacketHandler {
             switch (packet.getFormId()) {
                 case UIForms.MAIN:
                     if(UIForms.currentForm == UIForms.MAIN) {
-                        if (packet.getFormData().replaceAll("\\s+","").contains("0")) {
-                            session.sendPacketImmediately(UIForms.createDirectConnect());
-                        } else if (packet.getFormData().contains("null")) {
+                        // If exiting main window
+                        if (packet.getFormData().contains("null")) {
                             session.disconnect("Exiting Server List");
+                        } else { // If selecting button
+                            int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
+                            if (chosen == 0) { // Add Server
+                                session.sendPacketImmediately(UIForms.createDirectConnect());
+                            } else if (chosen == 1) { // Remove Server
+                                session.sendPacketImmediately(UIForms.createDirectConnect());
+                            } else { // Choosing Server
+                                List<String> servers = new ArrayList<>();
+                                servers.add("Play.SkyBlockpe.com:19132");
+                                TransferPacket tp = new TransferPacket();
+                                tp.setAddress("Play.SkyBlockpe.com");
+                                tp.setPort(19132);
+                                session.sendPacketImmediately(tp);
+                            }
                         }
                     }
                     break;

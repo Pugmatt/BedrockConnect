@@ -54,12 +54,12 @@ public class Server {
 
     public Server() {
         Server current = this;
-        InetSocketAddress bindAddress = new InetSocketAddress("localhost", 19132);
+        InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", 19132);
         codec = Bedrock_v354.V354_CODEC;
         server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
         pong.setEdition("MCPE");
-        pong.setMotd("BedrockConnect Connection Successful");
+        pong.setMotd("Join to open Server List");
         pong.setSubMotd("Test");
         pong.setPlayerCount(0);
         pong.setMaximumPlayerCount(20);
