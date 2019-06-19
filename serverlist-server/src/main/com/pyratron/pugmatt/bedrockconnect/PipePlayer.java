@@ -8,7 +8,9 @@ import com.nukkitx.protocol.bedrock.data.Attribute;
 import com.nukkitx.protocol.bedrock.data.GamePublishSetting;
 import com.nukkitx.protocol.bedrock.data.GameRule;
 import com.nukkitx.protocol.bedrock.packet.*;
+import io.netty.buffer.ByteBuf;
 import main.com.pyratron.pugmatt.bedrockconnect.chunk.ChunkData;
+import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
 
 import java.util.ArrayList;
 

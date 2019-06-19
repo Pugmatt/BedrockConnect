@@ -17,9 +17,18 @@ import java.util.ArrayList;
 
 public class PaletteManager {
 
-    private ByteBuf cachedPalette;
+    private ArrayList<RuntimeEntry> entries;
 
     public ByteBuf getCachedPalette() {
+        ByteBuf cachedPalette = Unpooled.buffer();
+
+        VarInts.writeInt(cachedPalette, entries.size());
+
+        for (RuntimeEntry entry : entries) {
+            BedrockUtils.writeString(cachedPalette, entry.name);
+            cachedPalette.writeShortLE(entry.data);
+        }
+
         return cachedPalette;
     }
 
@@ -32,22 +41,12 @@ public class PaletteManager {
         ObjectMapper mapper = new ObjectMapper();
         CollectionType type = mapper.getTypeFactory().constructCollectionType(ArrayList.class, RuntimeEntry.class);
 
-        ArrayList<RuntimeEntry> entries = new ArrayList<>();
+        entries = new ArrayList<>();
         try {
             entries = mapper.readValue(stream, type);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        cachedPalette = Unpooled.buffer();
-
-        VarInts.writeInt(cachedPalette, entries.size());
-
-        for (RuntimeEntry entry : entries) {
-            BedrockUtils.writeString(cachedPalette, entry.name);
-            cachedPalette.writeShortLE(entry.data);
-        }
-
     }
 
     private static class RuntimeEntry {

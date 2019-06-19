@@ -45,7 +45,7 @@ public class PacketHandler implements BedrockPacketHandler {
     private ArrayNode chainData;
     private AuthData authData;
 
-    @Override
+    /** @Override
     public boolean handle(AdventureSettingsPacket packet) {
         System.out.println(packet.getClass().getName());
         return false;
@@ -200,7 +200,7 @@ public class PacketHandler implements BedrockPacketHandler {
     public boolean handle(MobEquipmentPacket packet) {
         System.out.println(packet.getClass().getName());
         return false;
-    }
+    } **/
 
 
     @Override
@@ -236,6 +236,7 @@ public class PacketHandler implements BedrockPacketHandler {
         return false;
     }
 
+    /**
     @Override
     public boolean handle(MoveEntityAbsolutePacket packet) {
         System.out.println(packet.getClass().getName());
@@ -289,7 +290,7 @@ public class PacketHandler implements BedrockPacketHandler {
     public boolean handle(PurchaseReceiptPacket packet) {
         System.out.println(packet.getClass().getName());
         return false;
-    }
+    } **/
 
     @Override
     public boolean handle(RequestChunkRadiusPacket packet) {
@@ -324,7 +325,7 @@ public class PacketHandler implements BedrockPacketHandler {
         return false; **/
         return false;
     }
-
+    /**
     @Override
     public boolean handle(RiderJumpPacket packet) {
         System.out.println(packet.getClass().getName());
@@ -341,7 +342,7 @@ public class PacketHandler implements BedrockPacketHandler {
     public boolean handle(SetDefaultGameTypePacket packet) {
         System.out.println(packet.getClass().getName());
         return false;
-    }
+    } **/
 
     @Override
     public boolean handle(SetLocalPlayerAsInitializedPacket packet) {
@@ -351,6 +352,7 @@ public class PacketHandler implements BedrockPacketHandler {
         return false;
     }
 
+    /**
     @Override
     public boolean handle(SetPlayerGameTypePacket packet) {
         System.out.println(packet.getClass().getName());
@@ -835,7 +837,7 @@ public class PacketHandler implements BedrockPacketHandler {
     public boolean handle(VideoStreamConnectPacket packet) {
         System.out.println(packet.getClass().getName());
         return false;
-    }
+    } **/
 
     public PacketHandler(BedrockServerSession session, Server server) {
         this.session = session;
@@ -845,6 +847,7 @@ public class PacketHandler implements BedrockPacketHandler {
     }
 
     public void disconnect() {
+        System.out.println("Player disconnected");
         server.removePlayer(player);
     }
 
