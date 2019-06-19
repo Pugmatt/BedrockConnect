@@ -103,8 +103,6 @@ public class PipePlayer {
         session.sendPacketImmediately(startGamePacket);
 
         spawn();
-
-
     }
 
     public void sendAttributes() {

@@ -26,6 +26,15 @@ public class UIComponents {
         return input;
     }
 
+    public static JsonObject createInput(String text, String placeholder, String defaultValue) {
+        JsonObject input = new JsonObject();
+        input.addProperty("type", "input");
+        input.addProperty("placeholder", placeholder);
+        input.addProperty("text", text);
+        input.addProperty("default", defaultValue);
+        return input;
+    }
+
     public static JsonObject createButton(String text, String image, String imageType) {
         JsonObject button = new JsonObject();
         button.addProperty("text", text);
@@ -49,19 +58,6 @@ public class UIComponents {
         form.addProperty("type", type);
         form.addProperty("title", title);
         return form;
-    }
-
-    public static ModalFormRequestPacket createError(String error) {
-        ModalFormRequestPacket mf = new ModalFormRequestPacket();
-        mf.setFormId(UIForms.ERROR);
-        JsonObject form = new JsonObject();
-        form.addProperty("type", "custom_form");
-        form.addProperty("title", "Error");
-        JsonArray content = new JsonArray();
-        content.add(createLabel(error));
-        form.add("content", content);
-        mf.setFormData(form.toString());
-        return mf;
     }
 
     public static ArrayList<String> getFormData(String data) {

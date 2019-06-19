@@ -209,7 +209,7 @@ public class PacketHandler implements BedrockPacketHandler {
         System.out.println("\"" + packet.getFormData().replaceAll("\\s+","") + "\"");
 
             switch (packet.getFormId()) {
-                case 0:
+                case UIForms.MAIN:
                     if(UIForms.currentForm == UIForms.MAIN) {
                         if (packet.getFormData().replaceAll("\\s+","").contains("0")) {
                             session.sendPacketImmediately(UIForms.createDirectConnect());
@@ -218,18 +218,22 @@ public class PacketHandler implements BedrockPacketHandler {
                         }
                     }
                     break;
-                case 1:
+                case UIForms.DIRECT_CONNECT:
                     try {
-                        ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
-                        TransferPacket tp = new TransferPacket();
-                        tp.setAddress(data.get(0).replace(" ", ""));
-                        tp.setPort(Integer.parseInt(data.get(1)));
-                        session.sendPacketImmediately(tp);
+                        if(packet.getFormData().contains("null"))
+                            session.sendPacketImmediately(UIForms.createMain());
+                        else {
+                            ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
+                            TransferPacket tp = new TransferPacket();
+                            tp.setAddress(data.get(0).replace(" ", ""));
+                            tp.setPort(Integer.parseInt(data.get(1)));
+                            session.sendPacketImmediately(tp);
+                        }
                     } catch(Exception e) {
-                        session.sendPacketImmediately(UIComponents.createError("Please enter a port that contains only numbers."));
+                        session.sendPacketImmediately(UIForms.createError("Please enter a valid IP/Address and port that contains only numbers."));
                     }
                     break;
-                case 2:
+                case UIForms.ERROR:
                     session.sendPacketImmediately(UIForms.createMain());
                     break;
             }
