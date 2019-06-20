@@ -41,6 +41,9 @@ public class PacketHandler implements BedrockPacketHandler {
     private BedrockServerSession session;
     private PipePlayer player;
 
+    private String name;
+    private String uuid;
+
     private JSONObject skinData;
     private JSONObject extraData;
     private ArrayNode chainData;
@@ -982,6 +985,9 @@ public class PacketHandler implements BedrockPacketHandler {
             skinData = clientJwt.getPayload().toJSONObject();
 
             System.out.println("Made it through login - " + "User: " + extraData.getAsString("displayName") + " (" + extraData.getAsString("identity") + ")");
+
+            name = extraData.getAsString("displayName");
+            uuid = extraData.getAsString("identity");
 
             PlayStatusPacket status = new PlayStatusPacket();
             status.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
