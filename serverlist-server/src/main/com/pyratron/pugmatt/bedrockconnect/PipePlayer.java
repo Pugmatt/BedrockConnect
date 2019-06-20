@@ -10,20 +10,54 @@ import com.nukkitx.protocol.bedrock.data.GameRule;
 import com.nukkitx.protocol.bedrock.packet.*;
 import io.netty.buffer.ByteBuf;
 import main.com.pyratron.pugmatt.bedrockconnect.chunk.ChunkData;
+import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
+import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PipePlayer {
 
     private BedrockServerSession session;
+    private List<String> serverList = new ArrayList<>();
 
-    public PipePlayer(AuthData data, BedrockServerSession session) {
+    private int serverLimit;
+
+    private Data data;
+
+    private String uuid;
+
+
+    public PipePlayer(String uuid, Data data, BedrockServerSession session, List<String> serverList, int serverLimit) {
+        this.data = data;
         this.session = session;
+        this.serverList = serverList;
+        this.serverLimit = serverLimit;
+
+        joinGame();
     }
 
     public BedrockServerSession getSession() {
         return session;
+    }
+
+    public List<String> getServerList() {
+        return serverList;
+    }
+
+    public void setServerList(List<String> serverList) {
+        data.setValueString("servers", UIComponents.serversToFormData(serverList), uuid);
+        this.serverList = serverList;
+    }
+
+    public int getServerLimit() {
+        return serverLimit;
+    }
+
+    public void setServerLimit(int serverLimit) {
+        data.setValueInt("serverLimit", serverLimit, uuid);
+        this.serverLimit = serverLimit;
     }
 
     public void joinGame() {
@@ -148,59 +182,5 @@ public class PipePlayer {
         PlayStatusPacket playStatus = new PlayStatusPacket();
         playStatus.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         session.sendPacketImmediately(playStatus);
-
-        /** SetSpawnPositionPacket pkSpawn = new SetSpawnPositionPacket();
-        pkSpawn.setSpawnType(SetSpawnPositionPacket.Type.PLAYER_SPAWN);
-        pkSpawn.setSpawnForced(false);
-        pkSpawn.setBlockPosition(new Vector3i(-249, 67, -275));
-        session.sendPacketImmediately(pkSpawn);
-
-        MovePlayerPacket mp = new MovePlayerPacket();
-        mp.setRuntimeEntityId(-1);
-        mp.setOnGround(false);
-        mp.setMode(MovePlayerPacket.Mode.NORMAL);
-        mp.setRotation(new Vector3f(0,0,0));
-        mp.setPosition(new Vector3f(0,0,0));
-        session.sendPacketImmediately(mp);
-
-        SetTimePacket st = new SetTimePacket();
-        st.setTime(0);
-        session.sendPacketImmediately(st);
-
-        AdventureSettingsPacket as = new AdventureSettingsPacket();
-        as.setCommandPermission(0);
-        as.setCustomFlags(0);
-        as.setPlayerFlags(0);
-        as.setPlayerPermission(0);
-        as.setUniqueEntityId(0);
-        as.setWorldFlags(0);
-        as.setWorldFlags(0);
-        session.sendPacketImmediately(as);
-
-        RespawnPacket rp = new RespawnPacket();
-        rp.setPosition(new Vector3f(0,0,0));
-        session.sendPacketImmediately(rp);
-
-
-        /** FullChunkDataPacket fullChunk = new FullChunkDataPacket();
-        fullChunk.setChunkX(0);
-        fullChunk.setChunkZ(0);
-        fullChunk.setData(data.getBuffer());
-        session.sendPacketImmediately(fullChunk);
-        fullChunk.setChunkX(0);
-        fullChunk.setChunkZ(-1);
-        session.sendPacketImmediately(fullChunk);
-        fullChunk.setChunkX(-1);
-        fullChunk.setChunkZ(0);
-        session.sendPacketImmediately(fullChunk);
-        fullChunk.setChunkX(-1);
-        fullChunk.setChunkZ(-1);
-        session.sendPacketImmediately(fullChunk); **/
-
-        //SetSpawnPositionPacket ss = new SetSpawnPositionPacket();
-        //ss.setSpawnType(SetSpawnPositionPacket.Type.PLAYER_SPAWN);
-        //session.sendPacketImmediately(ss);
-
-
     }
 }

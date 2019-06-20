@@ -1,5 +1,6 @@
 package main.com.pyratron.pugmatt.bedrockconnect;
 
+import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
 
@@ -19,6 +20,9 @@ public class BedrockConnect {
 
     public static MySQL MySQL;
     public static Connection connection;
+    public static Data data;
+
+    public static Server server;
 
     public static void main(String[] args) {
         paletteManager =  new PaletteManager();
@@ -31,6 +35,8 @@ public class BedrockConnect {
             connection = null;
 
             connection = MySQL.openConnection();
+
+            data = new Data();
 
             // Keep MySQL connection alive
             Timer timer = new Timer();
@@ -67,10 +73,12 @@ public class BedrockConnect {
             timer.scheduleAtFixedRate(task, 0L, 1200L);
 
 
-            Server server = new Server();
+            server = new Server();
         } catch(IOException e) {
             e.printStackTrace();
         }
+
+        while(true) { }
     }
 
 }

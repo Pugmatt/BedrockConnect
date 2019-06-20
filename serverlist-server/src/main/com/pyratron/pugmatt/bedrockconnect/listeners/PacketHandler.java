@@ -14,6 +14,7 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import com.nukkitx.protocol.bedrock.packet.LoginPacket;
 import com.nukkitx.protocol.bedrock.util.EncryptionUtils;
 import main.com.pyratron.pugmatt.bedrockconnect.AuthData;
+import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.PipePlayer;
 import main.com.pyratron.pugmatt.bedrockconnect.Server;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
@@ -914,8 +915,7 @@ public class PacketHandler implements BedrockPacketHandler {
     public boolean handle(ResourcePackClientResponsePacket packet) {
         switch (packet.getStatus()) {
             case COMPLETED:
-                this.player = this.server.addPlayer(authData, session);
-                this.player.joinGame();
+                BedrockConnect.data.userExists(uuid, name, session);
                 break;
             case HAVE_ALL_PACKS:
                 ResourcePackStackPacket rs = new ResourcePackStackPacket();

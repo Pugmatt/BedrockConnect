@@ -82,27 +82,35 @@ public class UIComponents {
 
     public static JsonObject createDropdown(List<String> options, String title, String defaultIndex) {
         JsonObject dropdown = new JsonObject();
-        String listString = "[";
-        for(int i=0;i<options.size();i++) {
-            listString += '"' + options.get(i) + '"';
-            if(i != options.size()-1)
-                listString += ",";
-        }
-        listString += "]";
         dropdown.addProperty("type", "dropdown");
-        dropdown.addProperty("options", listString);
+        dropdown.addProperty("options", serversToFormData(options));
         dropdown.addProperty("text", title);
         dropdown.addProperty("defaultOptionIndex", defaultIndex);
         return dropdown;
     }
 
+    public static String serversToFormData(List<String> list) {
+        String listString = "[";
+        for(int i=0;i<list.size();i++) {
+            listString += '"' + list.get(i) + '"';
+            if(i != list.size()-1)
+                listString += ",";
+        }
+        listString += "]";
+        return listString;
+    }
+
     public static ArrayList<String> getFormData(String data) {
         JSONParser parser = new JSONParser();
+
+        // If no server data
+        if(data == null)
+            return new ArrayList<>();
+
         try {
             JSONArray obj = (JSONArray) parser.parse(data);
             ArrayList<String> strings = new ArrayList<>();
             for(int i=0;i<obj.size();i++) {
-                System.out.println(obj.get(i).toString());
                 strings.add(obj.get(i).toString());
             }
             return strings;

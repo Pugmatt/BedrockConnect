@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.nukkitx.protocol.bedrock.*;
 import com.nukkitx.protocol.bedrock.v354.Bedrock_v354;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
+import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 
 
 import javax.annotation.Nonnull;
@@ -31,7 +32,7 @@ public class Server {
     public static final ObjectMapper JSON_MAPPER = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     public static final YAMLMapper YAML_MAPPER = (YAMLMapper) new YAMLMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-    private List<PipePlayer> players = new ArrayList<>();
+    private List<PipePlayer> players;
 
     public List<PipePlayer> getPlayers() {
         return players;
@@ -41,8 +42,8 @@ public class Server {
         this.players.add(player);
     }
 
-    public PipePlayer addPlayer(AuthData data, BedrockServerSession session) {
-        PipePlayer player = new PipePlayer(data, session);
+    public PipePlayer addPlayer(String uuid, Data data, BedrockServerSession session, List<String> serverList, int serverLimit) {
+        PipePlayer player = new PipePlayer(uuid, data, session, serverList, serverLimit);
         this.players.add(player);
         return player;
     }
@@ -54,6 +55,8 @@ public class Server {
 
     public Server() {
         Server current = this;
+        players = new ArrayList<>();
+
         InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", 19132);
         codec = Bedrock_v354.V354_CODEC;
         server = new BedrockServer(bindAddress);
@@ -82,7 +85,5 @@ public class Server {
         // Start server up
         server.bind().join();
         System.out.println("Bedrock Connection Started: localhost:19132");
-
-        while(true) { }
     }
 }
