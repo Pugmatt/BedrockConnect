@@ -30,6 +30,7 @@ public class PipePlayer {
 
 
     public PipePlayer(String uuid, Data data, BedrockServerSession session, List<String> serverList, int serverLimit) {
+        this.uuid = uuid;
         this.data = data;
         this.session = session;
         this.serverList = serverList;
@@ -49,6 +50,10 @@ public class PipePlayer {
     public void setServerList(List<String> serverList) {
         data.setValueString("servers", UIComponents.serversToFormData(serverList), uuid);
         this.serverList = serverList;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public int getServerLimit() {

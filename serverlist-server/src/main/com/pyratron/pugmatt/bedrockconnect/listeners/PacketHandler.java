@@ -40,7 +40,6 @@ public class PacketHandler implements BedrockPacketHandler {
 
     private Server server;
     private BedrockServerSession session;
-    private PipePlayer player;
 
     private String name;
     private String uuid;
@@ -239,7 +238,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 case UIForms.DIRECT_CONNECT:
                     try {
                         if(packet.getFormData().contains("null"))
-                            session.sendPacketImmediately(UIForms.createMain());
+                            session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
                         else {
                             ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
                             TransferPacket tp = new TransferPacket();
@@ -252,7 +251,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     }
                     break;
                 case UIForms.ERROR:
-                    session.sendPacketImmediately(UIForms.createMain());
+                    session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
                     break;
             }
         return false;
@@ -368,9 +367,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(SetLocalPlayerAsInitializedPacket packet) {
-        System.out.println(packet.getClass().getName());
-
-        session.sendPacketImmediately(UIForms.createMain());
+        session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
         return false;
     }
 
@@ -870,7 +867,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
     public void disconnect() {
         System.out.println("Player disconnected");
-        server.removePlayer(player);
+        server.removePlayer(server.getPlayer(uuid));
     }
 
     private static boolean validateChainData(JsonNode data) throws Exception {

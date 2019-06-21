@@ -38,6 +38,14 @@ public class Server {
         return players;
     }
 
+    public PipePlayer getPlayer(String uuid) {
+        for(int i=0;i<players.size();i++) {
+            if(players.get(i).getUuid() == uuid)
+                return players.get(i);
+        }
+        return null;
+    }
+
     public void addPlayer(PipePlayer player) {
         this.players.add(player);
     }
