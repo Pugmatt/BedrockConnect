@@ -223,14 +223,24 @@ public class PacketHandler implements BedrockPacketHandler {
                             if (chosen == 0) { // Add Server
                                 session.sendPacketImmediately(UIForms.createDirectConnect());
                             } else if (chosen == 1) { // Remove Server
-                                session.sendPacketImmediately(UIForms.createDirectConnect());
+                                session.sendPacketImmediately(UIForms.createRemoveServer(server.getPlayer(uuid).getServerList()));
                             } else { // Choosing Server
-                                List<String> servers = new ArrayList<>();
-                                servers.add("Play.SkyBlockpe.com:19132");
-                                TransferPacket tp = new TransferPacket();
-                                tp.setAddress("Play.SkyBlockpe.com");
-                                tp.setPort(19132);
-                                session.sendPacketImmediately(tp);
+                                String address = server.getPlayer(uuid).getServerList().get(chosen-2);
+                                if(address.split(":").length > 1) {
+                                    String ip = address.split(":")[0];
+                                    String port = address.split(":")[1];
+
+                                    try {
+                                        TransferPacket tp = new TransferPacket();
+                                        tp.setAddress(ip);
+                                        tp.setPort(Integer.parseInt(port));
+                                        session.sendPacketImmediately(tp);
+                                    } catch(Exception e) {
+                                        session.sendPacketImmediately(UIForms.createError("Error connecting to server. Invalid address."));
+                                    }
+                                } else {
+                                    session.sendPacketImmediately(UIForms.createError("Invalid server address"));
+                                }
                             }
                         }
                     }
@@ -241,13 +251,56 @@ public class PacketHandler implements BedrockPacketHandler {
                             session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
                         else {
                             ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
-                            TransferPacket tp = new TransferPacket();
-                            tp.setAddress(data.get(0).replace(" ", ""));
-                            tp.setPort(Integer.parseInt(data.get(1)));
-                            session.sendPacketImmediately(tp);
+                            if(data.size() > 1) {
+                                if (!data.get(0).matches("[a-zA-Z.1-9]+"))
+                                    session.sendPacketImmediately(UIForms.createError("Enter a valid address. (E.g. play.example.net, 172.16.254.1)"));
+                                else if (!data.get(1).matches("[1-9]+"))
+                                    session.sendPacketImmediately(UIForms.createError("Enter a valid port that contains only numbers"));
+                                else {
+                                    boolean addServer = Boolean.parseBoolean(data.get(2));
+                                    if (addServer) {
+                                        List<String> serverList = server.getPlayer(uuid).getServerList();
+                                        if (serverList.size() >= server.getPlayer(uuid).getServerLimit())
+                                            session.sendPacketImmediately(UIForms.createError("You have it your serverlist limit of " + server.getPlayer(uuid).getServerLimit() + " servers. Remove some to add more."));
+                                        else {
+                                            serverList.add(data.get(0) + ":" + data.get(1));
+                                            server.getPlayer(uuid).setServerList(serverList);
+                                            TransferPacket tp = new TransferPacket();
+                                            tp.setAddress(data.get(0).replace(" ", ""));
+                                            tp.setPort(Integer.parseInt(data.get(1)));
+                                            session.sendPacketImmediately(tp);
+                                        }
+                                    } else {
+                                        TransferPacket tp = new TransferPacket();
+                                        tp.setAddress(data.get(0).replace(" ", ""));
+                                        tp.setPort(Integer.parseInt(data.get(1)));
+                                        session.sendPacketImmediately(tp);
+                                    }
+                                }
+                            }
                         }
                     } catch(Exception e) {
                         session.sendPacketImmediately(UIForms.createError("Please enter a valid IP/Address and port that contains only numbers."));
+                    }
+                    break;
+                case UIForms.REMOVE_SERVER:
+                    try {
+                        if(packet.getFormData().contains("null"))
+                            session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
+                        else {
+                            ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
+
+                            int chosen = Integer.parseInt(data.get(0));
+
+                            List<String> serverList = server.getPlayer(uuid).getServerList();
+                            serverList.remove(chosen);
+
+                            server.getPlayer(uuid).setServerList(serverList);
+
+                            session.sendPacketImmediately(UIForms.createMain(serverList));
+                        }
+                    } catch(Exception e) {
+                        session.sendPacketImmediately(UIForms.createError("Invalid server to remove"));
                     }
                     break;
                 case UIForms.ERROR:

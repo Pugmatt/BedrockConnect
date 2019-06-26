@@ -83,7 +83,11 @@ public class UIComponents {
     public static JsonObject createDropdown(List<String> options, String title, String defaultIndex) {
         JsonObject dropdown = new JsonObject();
         dropdown.addProperty("type", "dropdown");
-        dropdown.addProperty("options", serversToFormData(options));
+        JsonArray servers = new JsonArray();
+        for(int i=0;i<options.size();i++) {
+            servers.add(options.get(i));
+        }
+        dropdown.add("options", servers);
         dropdown.addProperty("text", title);
         dropdown.addProperty("defaultOptionIndex", defaultIndex);
         return dropdown;
