@@ -11,20 +11,20 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: com.github.steveice10:packetlib:1.4-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-all:4.1.25.Final" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v354:2.0.2" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-common:2.0.2" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:common:2.0.2" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.network:common:1.5.4" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v361:2.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-common:2.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:common:2.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.network:common:1.6.7" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.36.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport-native-epoll:linux-x86_64:4.1.36.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport-native-unix-common:4.1.36.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport-native-kqueue:osx-x86_64:4.1.36.Final" level="project" />
     <orderEntry type="library" name="Maven: cn.nukkit:nukkit-natives:1.0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx:nbt:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx:nbt:1.3.2" level="project" />
     <orderEntry type="library" name="Maven: com.flowpowered:flow-math:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: net.sf.trove4j:trove:3.1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: net.sf.trove4j:trove-generator:3.1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.network:raknet:1.5.4" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.network:raknet:1.6.7" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-handler:4.1.36.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-common:4.1.36.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport:4.1.36.Final" level="project" />

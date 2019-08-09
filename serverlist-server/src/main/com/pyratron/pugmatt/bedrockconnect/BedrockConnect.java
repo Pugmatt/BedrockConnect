@@ -78,7 +78,6 @@ public class BedrockConnect {
             e.printStackTrace();
         }
 
-        while(true) { }
     }
 
 }

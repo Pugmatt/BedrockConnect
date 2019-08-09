@@ -262,7 +262,7 @@ public class ClientPacketHandler implements BedrockPacketHandler {
         int chunkRadius = 5;
         for (int x = -chunkRadius; x < chunkRadius; x++) {
             for (int z = -chunkRadius; z < chunkRadius; z++) {
-                FullChunkDataPacket fullChunk = new FullChunkDataPacket();
+                LevelChunkPacket fullChunk = new LevelChunkPacket();
                 fullChunk.setChunkX(chunkPositionX + x);
                 fullChunk.setChunkZ(chunkPositionZ + z);
                 fullChunk.setData(new byte[0]);
@@ -430,11 +430,11 @@ public class ClientPacketHandler implements BedrockPacketHandler {
         return false;
     }
 
-    @Override
+    /** @Override
     public boolean handle(FullChunkDataPacket packet) {
         System.out.println(packet.toString());
         return false;
-    }
+    } **/
 
     @Override
     public boolean handle(GameRulesChangedPacket packet) {

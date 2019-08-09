@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.nukkitx.protocol.bedrock.*;
-import com.nukkitx.protocol.bedrock.v354.Bedrock_v354;
+import com.nukkitx.protocol.bedrock.v361.Bedrock_v361;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 
@@ -66,16 +66,17 @@ public class Server {
         players = new ArrayList<>();
 
         InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", 19132);
-        codec = Bedrock_v354.V354_CODEC;
+        codec = Bedrock_v361.V361_CODEC;
         server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
         pong.setEdition("MCPE");
         pong.setMotd("Join to open Server List");
-        pong.setSubMotd("Test");
+        pong.setSubMotd("BedrockConnect Server List");
         pong.setPlayerCount(0);
         pong.setMaximumPlayerCount(20);
         pong.setGameType("Survival");
-        pong.setProtocolVersion(Bedrock_v354.V354_CODEC.getProtocolVersion());
+        pong.setIpv4Port(19132);
+        pong.setProtocolVersion(Bedrock_v361.V361_CODEC.getProtocolVersion());
         server.setHandler(new BedrockServerEventHandler() {
             @Override
             public boolean onConnectionRequest(InetSocketAddress address) {

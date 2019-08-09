@@ -1,0 +1,34 @@
+sudo apt install bind9
+
+sudo vi /etc/default/bind9
+  Add -4 in OPTIONS
+
+sudo vi /etc/bind/named.conf.options
+  recursion no;
+  additional-from-cache no;
+
+sudo vi /etc/bind/named.conf.local
+zone "supercraft.com" IN {
+        type master;
+        file "db.supercraft.com";
+        allow-query { any; };
+};
+
+
+cd /var/cache/bind
+sudo vi db.supercraft.com
+@       in      SOA  supercraft.com. admin.supercraft.com. (
+                                2014030801      ; serial
+                                        1D      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
+
+@       NS      supercraft.com.
+
+                  IN      A       134.255.253.136
+
+
+
+sudo service bind9 restart
+dig @104.238.179.174 supercraft.com any

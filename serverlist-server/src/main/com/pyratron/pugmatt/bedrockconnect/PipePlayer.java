@@ -3,6 +3,10 @@ package main.com.pyratron.pugmatt.bedrockconnect;
 import com.flowpowered.math.vector.Vector2f;
 import com.flowpowered.math.vector.Vector3f;
 import com.flowpowered.math.vector.Vector3i;
+import com.nukkitx.nbt.CompoundTagBuilder;
+import com.nukkitx.nbt.NbtUtils;
+import com.nukkitx.nbt.stream.NBTOutputStream;
+import com.nukkitx.nbt.tag.CompoundTag;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.data.Attribute;
 import com.nukkitx.protocol.bedrock.data.GamePublishSetting;
@@ -14,6 +18,8 @@ import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +33,23 @@ public class PipePlayer {
     private Data data;
 
     private String uuid;
+
+    private static final CompoundTag EMPTY_TAG = CompoundTagBuilder.builder().buildRootTag();
+    private static final byte[] EMPTY_LEVEL_CHUNK_DATA;
+
+    static {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            outputStream.write(new byte[258]); // Biomes + Border Size + Extra Data Size
+
+            try (NBTOutputStream stream = NbtUtils.createNetworkWriter(outputStream)) {
+                stream.write(EMPTY_TAG);
+            }
+
+            EMPTY_LEVEL_CHUNK_DATA = outputStream.toByteArray();
+        }catch (IOException e) {
+            throw new AssertionError("Unable to generate empty level chunk data");
+        }
+    }
 
 
     public PipePlayer(String uuid, Data data, BedrockServerSession session, List<String> serverList, int serverLimit) {
@@ -105,15 +128,15 @@ public class PipePlayer {
         startGamePacket.setDifficulty(0);
         startGamePacket.setDefaultSpawn(new Vector3i(-249, 67, -275));
         startGamePacket.setAcheivementsDisabled(true);
-        startGamePacket.setTime(1300);
+        startGamePacket.setTime(0);
         startGamePacket.setEduLevel(false);
         startGamePacket.setEduFeaturesEnabled(false);
         startGamePacket.setRainLevel(0);
         startGamePacket.setLightningLevel(0);
         startGamePacket.setPlatformLockedContentConfirmed(false);
-        startGamePacket.setMultiplayerGame(false);
+        startGamePacket.setMultiplayerGame(true);
         startGamePacket.setBroadcastingToLan(false);
-        startGamePacket.getGamerules().add((new GameRule("showcoordinates", true)));
+        startGamePacket.getGamerules().add((new GameRule<>("showcoordinates", true)));
         startGamePacket.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
         startGamePacket.setXblBroadcastMode(GamePublishSetting.PUBLIC);
         startGamePacket.setCommandsEnabled(true);
@@ -133,8 +156,8 @@ public class PipePlayer {
         startGamePacket.setLevelId("oerjhii");
         startGamePacket.setWorldName("world");
         startGamePacket.setPremiumWorldTemplateId("00000000-0000-0000-0000-000000000000");
-        startGamePacket.setCurrentTick(1);
-        startGamePacket.setEnchantmentSeed(1);
+        startGamePacket.setCurrentTick(0);
+        startGamePacket.setEnchantmentSeed(0);
         startGamePacket.setMultiplayerCorrelationId("");
 
         startGamePacket.setCachedPalette(BedrockConnect.paletteManager.getCachedPalette());
@@ -176,10 +199,11 @@ public class PipePlayer {
 
         for (int x = -3; x < 3; x++) {
             for (int z = -3; z < 3; z++) {
-                FullChunkDataPacket data2 = new FullChunkDataPacket();
+                LevelChunkPacket data2 = new LevelChunkPacket();
                 data2.setChunkX(chunkX + x);
                 data2.setChunkZ(chunkZ + z);
-                data2.setData(new byte[0]);
+                data2.setSubChunksLength(0);
+                data2.setData(EMPTY_LEVEL_CHUNK_DATA);
                 session.sendPacketImmediately(data2);
             }
         }
