@@ -16,7 +16,11 @@ import java.util.List;
 
 public class Data {
 
-    public Data() {
+    String serverLimit;
+
+    public Data(String serverLimit) {
+        this.serverLimit = serverLimit;
+
         try {
             createTables();
         } catch(Exception e) {
@@ -107,7 +111,7 @@ public class Data {
                     PreparedStatement s = BedrockConnect.connection.prepareStatement("INSERT INTO servers (uuid, name, serverLimit) VALUES ('" + uuid + "', '" + name + "', 10)");
                     s.executeUpdate();
                     System.out.println("[BedrockConnect] Added new user '" + name + "' (" + uuid + ") to Database.");
-                    PipePlayer pl = new PipePlayer(uuid, db, session, new ArrayList<>(), 10);
+                    PipePlayer pl = new PipePlayer(uuid, db, session, new ArrayList<>(), Integer.parseInt(serverLimit));
                     BedrockConnect.server.addPlayer(pl);
                 }
                 catch (Exception e)

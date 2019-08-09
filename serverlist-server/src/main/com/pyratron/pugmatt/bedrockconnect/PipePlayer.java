@@ -12,11 +12,8 @@ import com.nukkitx.protocol.bedrock.data.Attribute;
 import com.nukkitx.protocol.bedrock.data.GamePublishSetting;
 import com.nukkitx.protocol.bedrock.data.GameRule;
 import com.nukkitx.protocol.bedrock.packet.*;
-import io.netty.buffer.ByteBuf;
-import main.com.pyratron.pugmatt.bedrockconnect.chunk.ChunkData;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
-import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -90,22 +87,6 @@ public class PipePlayer {
 
     public void joinGame() {
 
-        /**
-        StartGamePacket pkStartGame = new StartGamePacket();
-        pkStartGame.setUniqueEntityId(packet.getEntityId());
-        pkStartGame.setRuntimeEntityId(packet.getEntityId());
-        pkStartGame.setDimensionId(0);
-        pkStartGame.setSeed(0);
-        pkStartGame.setGeneratorId(1);
-        pkStartGame.setDifficulty(0);
-        pkStartGame.setDefaultSpawn(new Vector3i(0, 72, 0));
-        pkStartGame.setPlayerPosition(new Vector3f(0f, 72f + 5, 0f));
-        pkStartGame.setLevelId("");
-        pkStartGame.setWorldName("World");
-        pkStartGame.setDefaultPlayerPermission(2);
-        pkStartGame.setCommandsEnabled(true);
-        pkStartGame.setPremiumWorldTemplateId(""); **/
-
         MovePlayerPacket mp = new MovePlayerPacket();
         mp.setRuntimeEntityId(-1);
         mp.setOnGround(false);
@@ -167,31 +148,7 @@ public class PipePlayer {
         spawn();
     }
 
-    public void sendAttributes() {
-        UpdateAttributesPacket pk = new UpdateAttributesPacket();
-        pk.setRuntimeEntityId(0);
-        pk.setAttributes(new ArrayList<Attribute>() {
-            {
-                add(new Attribute("minecraft:health", 0.00f, 20.00f, 20.00f, 20.00f));
-                add(new Attribute("minecraft:player.hunger", 0.00f, 20.00f, 20.00f, 20.00f));
-                add(new Attribute("minecraft:movement", 0.00f, 340282346638528859811704183484516925440.00f, 0.10f, 0.10f));
-                add(new Attribute("minecraft:player.level", 0.00f, 24791.00f, 0.00f, 0.00f));
-                add(new Attribute("minecraft:player.experience", 0.00f, 1.00f, 0.00f, 0.00f));
-            }
-        });
-        session.sendPacketImmediately(pk);
-
-        RespawnPacket rp = new RespawnPacket();
-        rp.setPosition(new Vector3f(0, 0 ,0));
-        session.sendPacketImmediately(rp);
-
-        spawn();
-    }
-
     public void spawn() {
-
-        ChunkData data = new ChunkData(true);
-        data.encode();
 
         Vector3f pos = new Vector3f(-249, 67, -275);
         int chunkX = pos.getFloorX() >> 4;

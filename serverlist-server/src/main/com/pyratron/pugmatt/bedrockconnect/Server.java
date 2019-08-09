@@ -61,11 +61,11 @@ public class Server {
     }
 
 
-    public Server() {
+    public Server(String port) {
         Server current = this;
         players = new ArrayList<>();
 
-        InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", 19132);
+        InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", Integer.parseInt(port));
         codec = Bedrock_v361.V361_CODEC;
         server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
@@ -75,7 +75,7 @@ public class Server {
         pong.setPlayerCount(0);
         pong.setMaximumPlayerCount(20);
         pong.setGameType("Survival");
-        pong.setIpv4Port(19132);
+        pong.setIpv4Port(Integer.parseInt(port));
         pong.setProtocolVersion(Bedrock_v361.V361_CODEC.getProtocolVersion());
         server.setHandler(new BedrockServerEventHandler() {
             @Override

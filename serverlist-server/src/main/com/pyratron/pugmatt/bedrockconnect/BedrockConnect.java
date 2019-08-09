@@ -28,15 +28,42 @@ public class BedrockConnect {
         paletteManager =  new PaletteManager();
 
         try {
-            String password = new String(Files.readAllBytes(Paths.get("mysql.txt")));
+            String hostname = "localhost";
+            String database = "bedrock-connect";
+            String username = "root";
+            String password = "";
+            String port = "19132";
 
-            MySQL = new MySQL("localhost", "bedrock-connect", "root", password);
+            String serverLimit = "100";
+
+            for(String str : args) {
+                if(str.startsWith("mysql_host="))
+                    hostname = getArgValue(str, "mysql_host");
+                if(str.startsWith("mysql_db="))
+                    database = getArgValue(str, "mysql_db");
+                if(str.startsWith("mysql_user="))
+                    username = getArgValue(str, "mysql_user");
+                if(str.startsWith("mysql_pass="))
+                    password = getArgValue(str, "mysql_pass");
+                if(str.startsWith("server_limit="))
+                    serverLimit = getArgValue(str, "server_limit");
+                if(str.startsWith("port="))
+                    port = getArgValue(str, "port");
+            }
+
+            System.out.println("MySQL Host: " + hostname + "\n" +
+            "MySQL Database: " + database + "\n" +
+            "MySQL User: " + username + "\n" +
+            "Server Limit: " + serverLimit + "\n" +
+            "Port: " + port + "\n");
+
+            MySQL = new MySQL(hostname, database, username, password);
 
             connection = null;
 
             connection = MySQL.openConnection();
 
-            data = new Data();
+            data = new Data(serverLimit);
 
             // Keep MySQL connection alive
             Timer timer = new Timer();
@@ -73,11 +100,18 @@ public class BedrockConnect {
             timer.scheduleAtFixedRate(task, 0L, 1200L);
 
 
-            server = new Server();
-        } catch(IOException e) {
+            server = new Server(port);
+        } catch(Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    public static String getArgValue(String str, String name) {
+        String target = name + "=";
+        int index = str.indexOf(target);
+        int subIndex = index + target.length();
+        return str.substring(subIndex);
     }
 
 }

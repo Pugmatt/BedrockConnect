@@ -1,33 +1,16 @@
 package main.com.pyratron.pugmatt.bedrockconnect.listeners;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.nukkitx.protocol.bedrock.BedrockClientSession;
 import com.nukkitx.protocol.bedrock.packet.*;
 
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import com.nukkitx.protocol.bedrock.packet.LoginPacket;
-import main.com.pyratron.pugmatt.bedrockconnect.AuthData;
-import main.com.pyratron.pugmatt.bedrockconnect.PipePlayer;
-import net.minidev.json.JSONObject;
-
-// Heavily referenced from https://github.com/NukkitX/ProxyPass/blob/master/src/main/java/com/nukkitx/proxypass/network/bedrock/session/UpstreamPacketHandler.java
 
 public class ClientPacketHandler implements BedrockPacketHandler {
 
     private static final int PIXEL_SIZE = 4;
 
-    public static final int SINGLE_SKIN_SIZE = 64 * 32 * PIXEL_SIZE;
-    public static final int DOUBLE_SKIN_SIZE = 64 * 64 * PIXEL_SIZE;
-    public static final int SKIN_128_64_SIZE = 128 * 64 * PIXEL_SIZE;
-    public static final int SKIN_128_128_SIZE = 128 * 128 * PIXEL_SIZE;
-
     private BedrockClientSession session;
-    private PipePlayer player;
-
-    private JSONObject skinData;
-    private JSONObject extraData;
-    private ArrayNode chainData;
-    private AuthData authData;
 
     @Override
     public boolean handle(AdventureSettingsPacket packet) {
