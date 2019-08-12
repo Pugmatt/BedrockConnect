@@ -51,21 +51,43 @@ public class PacketHandler implements BedrockPacketHandler {
                             } else if (chosen == 1) { // Remove Server
                                 session.sendPacketImmediately(UIForms.createRemoveServer(server.getPlayer(uuid).getServerList()));
                             } else { // Choosing Server
-                                String address = server.getPlayer(uuid).getServerList().get(chosen-2);
-                                if(address.split(":").length > 1) {
-                                    String ip = address.split(":")[0];
-                                    String port = address.split(":")[1];
 
-                                    try {
-                                        TransferPacket tp = new TransferPacket();
-                                        tp.setAddress(ip);
-                                        tp.setPort(Integer.parseInt(port));
-                                        session.sendPacketImmediately(tp);
-                                    } catch(Exception e) {
-                                        session.sendPacketImmediately(UIForms.createError("Error connecting to server. Invalid address."));
+                                // If server chosen is a featued server
+                                if(chosen-2 > server.getPlayer(uuid).getServerList().size()-1) {
+                                    int featuredServer = (chosen - 2) - (server.getPlayer(uuid).getServerList().size() - 1);
+
+                                    switch (featuredServer) {
+                                        case 1: // Hive
+                                            transfer("54.39.75.136", 19132);
+                                            break;
+                                        case 2: // Mineplex
+                                            transfer("108.178.12.125", 19132);
+                                            break;
+                                        case 3: // Cubecraft
+                                            transfer("213.32.11.233", 19132);
+                                            break;
+                                        case 4: // Lifeboat
+                                            transfer("63.143.40.66", 19132);
+                                            break;
+                                        case 5: // Mineville
+                                            transfer("52.234.131.7", 19132);
+                                            break;
                                     }
-                                } else {
-                                    session.sendPacketImmediately(UIForms.createError("Invalid server address"));
+                                } else { // If server chosen is not a featured server
+                                    String address = server.getPlayer(uuid).getServerList().get(chosen-2);
+
+                                    if (address.split(":").length > 1) {
+                                        String ip = address.split(":")[0];
+                                        String port = address.split(":")[1];
+
+                                        try {
+                                            transfer(ip, Integer.parseInt(port));
+                                        } catch (Exception e) {
+                                            session.sendPacketImmediately(UIForms.createError("Error connecting to server. Invalid address."));
+                                        }
+                                    } else {
+                                        session.sendPacketImmediately(UIForms.createError("Invalid server address"));
+                                    }
                                 }
                             }
                         }
@@ -91,10 +113,7 @@ public class PacketHandler implements BedrockPacketHandler {
                                         else {
                                             serverList.add(data.get(0) + ":" + data.get(1));
                                             server.getPlayer(uuid).setServerList(serverList);
-                                            TransferPacket tp = new TransferPacket();
-                                            tp.setAddress(data.get(0).replace(" ", ""));
-                                            tp.setPort(Integer.parseInt(data.get(1)));
-                                            session.sendPacketImmediately(tp);
+                                            transfer(data.get(0).replace(" ", ""), Integer.parseInt(data.get(1)));
                                         }
                                     } else {
                                         TransferPacket tp = new TransferPacket();
@@ -134,6 +153,13 @@ public class PacketHandler implements BedrockPacketHandler {
                     break;
             }
         return false;
+    }
+
+    public void transfer(String ip, int port) {
+        TransferPacket tp = new TransferPacket();
+        tp.setAddress(ip);
+        tp.setPort(port);
+        session.sendPacketImmediately(tp);
     }
 
     @Override

@@ -26,9 +26,13 @@ public class UIForms {
         buttons.add(UIComponents.createButton("Connect to a Server"));
         buttons.add(UIComponents.createButton("Remove a Server"));
         for(int i=0;i<servers.size();i++) {
-            buttons.add(UIComponents.createButton(servers.get(i), "https://i.imgur.com/3BmFZRE.png", "url"));
+            buttons.add(UIComponents.createButton(servers.get(i), "./icon.png", "path"));
         }
-
+        buttons.add(UIComponents.createButton("The Hive", "./icon.png", "path"));
+        buttons.add(UIComponents.createButton("Mineplex", "./icon.png", "path"));
+        buttons.add(UIComponents.createButton("CubeCraft Games", "./icon.png", "path"));
+        buttons.add(UIComponents.createButton("Lifeboat Network", "./icon.png", "path"));
+        buttons.add(UIComponents.createButton("Mineville City", "./icon.png", "path"));
         out.add("buttons", buttons);
 
         mf.setFormData(out.toString());
