@@ -18,7 +18,7 @@ public class UIForms {
         ModalFormRequestPacket mf = new ModalFormRequestPacket();
         mf.setFormId(UIForms.MAIN);
 
-        JsonObject out = UIComponents.createForm("form", "ServerList");
+        JsonObject out = UIComponents.createForm("form", "Server List");
         out.addProperty("content", "");
 
         JsonArray buttons = new JsonArray();
@@ -26,13 +26,13 @@ public class UIForms {
         buttons.add(UIComponents.createButton("Connect to a Server"));
         buttons.add(UIComponents.createButton("Remove a Server"));
         for(int i=0;i<servers.size();i++) {
-            buttons.add(UIComponents.createButton(servers.get(i), "./icon.png", "path"));
+            buttons.add(UIComponents.createButton(servers.get(i), "https://i.imgur.com/3BmFZRE.png", "url"));
         }
-        buttons.add(UIComponents.createButton("The Hive", "./icon.png", "path"));
-        buttons.add(UIComponents.createButton("Mineplex", "./icon.png", "path"));
-        buttons.add(UIComponents.createButton("CubeCraft Games", "./icon.png", "path"));
-        buttons.add(UIComponents.createButton("Lifeboat Network", "./icon.png", "path"));
-        buttons.add(UIComponents.createButton("Mineville City", "./icon.png", "path"));
+        buttons.add(UIComponents.createButton("The Hive", "https://forum.playhive.com/uploads/default/original/1X/0d05e3240037f7592a0f16b11b57c08eba76f19c.png", "url"));
+        buttons.add(UIComponents.createButton("Mineplex", "https://www.mineplex.com/assets/www-mp/img/footer/footer_smalllogo.png", "url"));
+        buttons.add(UIComponents.createButton("CubeCraft Games", "https://i.imgur.com/aFH1NUr.png", "url"));
+        buttons.add(UIComponents.createButton("Lifeboat Network", "https://lbsg.net/wp-content/uploads/2017/06/lifeboat-square.png", "url"));
+        buttons.add(UIComponents.createButton("Mineville City", "https://pbs.twimg.com/profile_images/1095835578451537920/0-x9qcw8.png", "url"));
         out.add("buttons", buttons);
 
         mf.setFormData(out.toString());
