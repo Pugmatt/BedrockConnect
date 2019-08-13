@@ -3,6 +3,7 @@ package main.com.pyratron.pugmatt.bedrockconnect.listeners;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.nukkitx.network.util.Preconditions;
+import com.nukkitx.protocol.bedrock.BedrockClientSession;
 import com.nukkitx.protocol.bedrock.packet.*;
 
 import com.nimbusds.jose.JOSEException;
@@ -34,6 +35,728 @@ public class PacketHandler implements BedrockPacketHandler {
     private String uuid;
 
     private JSONObject extraData;
+
+    @Override
+    public boolean handle(AdventureSettingsPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(AnimatePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(BlockEntityDataPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(BlockPickRequestPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(BookEditPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ClientToServerHandshakePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(CommandBlockUpdatePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(CommandRequestPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ContainerClosePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(CraftingEventPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(EntityEventPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(EntityFallPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(EntityPickRequestPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(EventPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(InteractPacket packet) {
+
+        return false;
+    }
+
+    @Override
+    public boolean handle(InventoryContentPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(InventorySlotPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(InventoryTransactionPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ItemFrameDropItemPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(LabTablePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(LecternUpdatePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(LevelSoundEventPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(LevelSoundEvent3Packet packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(MapInfoRequestPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(MobArmorEquipmentPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(MobEquipmentPacket packet) {
+        
+        return false;
+    }
+    
+    @Override
+    public boolean handle(MoveEntityAbsolutePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(MovePlayerPacket packet) {
+
+        return false;
+    }
+
+    @Override
+    public boolean handle(NetworkStackLatencyPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(PhotoTransferPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(PlayerActionPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(PlayerHotbarPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(PlayerInputPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(PlayerSkinPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(PurchaseReceiptPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(RequestChunkRadiusPacket packet) {
+
+        return false;
+    }
+
+    @Override
+    public boolean handle(RiderJumpPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ServerSettingsRequestPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetDefaultGameTypePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetPlayerGameTypePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SubClientLoginPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(TextPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(AddBehaviorTreePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(AddEntityPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(AddHangingEntityPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(AddItemEntityPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(AddPaintingPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(AddPlayerPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(AvailableCommandsPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(BlockEventPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(BossEventPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(CameraPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ChangeDimensionPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ChunkRadiusUpdatedPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ClientboundMapItemDataPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(CommandOutputPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ContainerOpenPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ContainerSetDataPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(CraftingDataPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ExplodePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(GameRulesChangedPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(GuiDataPickItemPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(HurtArmorPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(AutomationClientConnectPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(LevelEventPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(MapCreateLockedCopyPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(MobEffectPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ModalFormRequestPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(MoveEntityDeltaPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(NpcRequestPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(OnScreenTextureAnimationPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(PlayerListPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(PlaySoundPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(PlayStatusPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(RemoveEntityPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(RemoveObjectivePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ResourcePackChunkDataPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ResourcePackDataInfoPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ResourcePacksInfoPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ResourcePackStackPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(RespawnPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ScriptCustomEventPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ServerSettingsResponsePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ServerToClientHandshakePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetCommandsEnabledPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetDifficultyPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetDisplayObjectivePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetEntityDataPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetEntityLinkPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetEntityMotionPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetHealthPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetLastHurtByPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetScoreboardIdentityPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetScorePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetSpawnPositionPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetTimePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SetTitlePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ShowCreditsPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ShowProfilePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(ShowStoreOfferPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SimpleEventPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SpawnExperienceOrbPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(StartGamePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(StopSoundPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(StructureBlockUpdatePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(TakeItemEntityPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(TransferPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(UpdateAttributesPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(UpdateBlockPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(UpdateBlockSyncedPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(UpdateEquipPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(UpdateSoftEnumPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(UpdateTradePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(AvailableEntityIdentifiersPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(BiomeDefinitionListPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(LevelSoundEvent2Packet packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(NetworkChunkPublisherUpdatePacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(SpawnParticleEffectPacket packet) {
+        
+        return false;
+    }
+
+    @Override
+    public boolean handle(VideoStreamConnectPacket packet) {
+        
+        return false;
+    }
+    
+
+    @Override
+    public boolean handle(ResourcePackChunkRequestPacket packet) {
+        
+        return true;
+    }
+    
 
     @Override
     public boolean handle(ModalFormResponsePacket packet) {
@@ -100,9 +823,17 @@ public class PacketHandler implements BedrockPacketHandler {
                         else {
                             ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
                             if(data.size() > 1) {
-                                if (!data.get(0).matches("[a-zA-Z.1-9]+"))
+                                // Remove any whitespace
+                                data.set(0, data.get(0).replaceAll("\\s",""));
+                                data.set(1, data.get(1).replaceAll("\\s",""));
+
+                                if(data.get(0).length() <= 45)
+                                    session.sendPacketImmediately(UIForms.createError("Address is too large. (Must be less than 45)"));
+                                else if(data.get(1).length() <= 10)
+                                    session.sendPacketImmediately(UIForms.createError("Port is too large. (Must be less than 10)"));
+                                else if (data.get(0).length() <= 45 && !data.get(0).matches("[a-zA-Z.1-9]+"))
                                     session.sendPacketImmediately(UIForms.createError("Enter a valid address. (E.g. play.example.net, 172.16.254.1)"));
-                                else if (!data.get(1).matches("[1-9]+"))
+                                else if (data.get(0).length() <= 10 && !data.get(1).matches("[1-9]+"))
                                     session.sendPacketImmediately(UIForms.createError("Enter a valid port that contains only numbers"));
                                 else {
                                     boolean addServer = Boolean.parseBoolean(data.get(2));
