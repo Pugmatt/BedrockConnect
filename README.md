@@ -6,15 +6,13 @@ On Minecraft Bedrock Edition, players on Xbox One and Nintendo Switch are limite
 
 BedrockConnect is an easy to use solution for Minecraft Bedrock Edition players on Xbox One and Nintendo Switch to join any server IP, while also having access to a serverlist that allows you to manage a list of servers.
 
-Here's the final result in action: 
+Here's the final result in action: https://www.youtube.com/watch?v=Uz-XYXAxd8Q
 
-Here's tutorials to get it setup yourself. It takes as little as 60 seconds to get setup.:
+Here's tutorials to get it setup yourself. It takes only a few minutes to get setup:
 
-# Tutorials
+Switch: https://www.youtube.com/watch?v=_9-2f5i9YNo
 
-**Video Playlist:**
-
-**Website Guide:** https://bedrockconnect.com
+Xbox: 
 
 # FAQ
 
@@ -25,6 +23,7 @@ The BedrockConnect serverlist server, is a specially made Minecraft server that 
 **What is a DNS server?** A DNS server is what devices uses to know what domain names go with what IP address. Your device sends the DNS server a domain name and asks what IP is associated with it, and the DNS server sends an IP back for the device to connect to. Commonly used ones include Google or Cloudflare DNS. Anyone can technically create a DNS server, and have it associate whatever IP they want to a domain. In this case, we make the 'Featured Server' domains direct to our own server.
 
 **I don't trust your DNS server...** It's understandable why some might not want to use a random DNS server. Keep in mind, that a DNS server does not have any access to the information you send to a server/website. It only knows the domains you are currently trying to use so it can respond back with an IP to connect to, but nothing that has to do with information you send to an actual server. If you still don't feel comfortable using the BedrockConnect DNS server, you can also make your own. Look under 'Using your own DNS server' further down this page for more on that.
+
 
 
 # Hosting your own serverlist server
