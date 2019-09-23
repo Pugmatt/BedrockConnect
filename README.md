@@ -10,9 +10,9 @@ Here's the final result in action: https://www.youtube.com/watch?v=Uz-XYXAxd8Q
 
 Here's tutorials to get it setup yourself. It takes only a few minutes to get setup:
 
-Switch: https://www.youtube.com/watch?v=_9-2f5i9YNo
+Switch: https://www.youtube.com/watch?v=zalT_oR1nPM
 
-Xbox: 
+Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
 
 # FAQ
 
