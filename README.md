@@ -1,6 +1,6 @@
 # BedrockConnect
 
-![Logo](https://raw.githubusercontent.com/Pugmatt/BedrockConnect/master/website-instructions/bedrockconnect/src/assets/logo.png?token=ABN2MOBAKVJUYHEPKVSNHZC5K4BGA)
+![Logo](https://i.imgur.com/H9zVzGT.png)
 
 On Minecraft Bedrock Edition, players on Xbox One and Nintendo Switch are limited to playing on 'Featured Servers' approved by Mojang/Microsoft. These players are not able to join servers via an IP/address. This is an issue for me and others, as the server community on Java edition was one of the major parts that made Minecraft what it was, and what also made what the servers that are now considered 'Mojang Server Partners' what they are today. I wanted to fix this, so I made a solution that anyone can setup easily.
 
