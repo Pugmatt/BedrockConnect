@@ -4,7 +4,7 @@
 
 On Minecraft Bedrock Edition, players on Xbox One and Nintendo Switch are limited to playing on 'Featured Servers' approved by Mojang/Microsoft. These players are not able to join servers via an IP/address. This is an issue for me and others, as the server community on Java edition was one of the major parts that made Minecraft what it was, and what also made what the servers that are now considered 'Mojang Server Partners' what they are today. I wanted to fix this, so I made a solution that anyone can setup easily.
 
-BedrockConnect is an easy to use solution for Minecraft Bedrock Edition players on Xbox One and Nintendo Switch to join any server IP, while also having access to a serverlist that allows you to manage a list of servers.
+BedrockConnect is an easy to use solution for Minecraft Bedrock Edition players on Xbox One and Nintendo Switch to join any server IP, while also having access to a serverlist that allows you to manage a list of servers. It doesn't require any downloads, just a few changes to settings.
 
 Here's the final result in action: https://www.youtube.com/watch?v=Uz-XYXAxd8Q
 
@@ -71,3 +71,9 @@ In the case where you want to use your own DNS server instead of the one I suppl
 | mco.cubecraft.net | 104.238.130.180  |
 
 *104.238.130.180 is the IP to the BedrockConnect serverlist server. If you are hosting your own BedrockConnect serverlist server as well, obviously use that IP instead*
+
+# Donations
+
+If you like what you see, feel free to throw a few bucks. I won't ever charge for this service, so currently everything is out of pocket.
+
+https://www.paypal.com/Pugmatt
