@@ -58,6 +58,9 @@ Example:
 java -jar BedrockConnect-1.0-SNAPSHOT.jar mysql_pass=test123 server_limit=10
 ```
 
+# Libraries used
+- [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)
+
 # Using your own DNS server
 
 In the case where you want to use your own DNS server instead of the one I supplied, this is what zones you'll need to set your DNS to in order for BedrockConnect to work:
@@ -74,8 +77,10 @@ In the case where you want to use your own DNS server instead of the one I suppl
 
 Here's an easy way to setup BIND (DNS server software) on Linux: https://github.com/Pugmatt/BedrockConnect/blob/master/BIND_Install.txt
 
+
 # Donations
 
 If you like what you see, feel free to throw a few bucks. I won't ever charge for this service, so currently everything is out of pocket.
 
 https://www.paypal.com/Pugmatt
+
