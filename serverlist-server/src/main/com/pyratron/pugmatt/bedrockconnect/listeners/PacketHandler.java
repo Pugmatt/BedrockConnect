@@ -827,13 +827,13 @@ public class PacketHandler implements BedrockPacketHandler {
                                 data.set(0, data.get(0).replaceAll("\\s",""));
                                 data.set(1, data.get(1).replaceAll("\\s",""));
 
-                                if(data.get(0).length() <= 45)
+                                if(data.get(0).length() >= 45)
                                     session.sendPacketImmediately(UIForms.createError("Address is too large. (Must be less than 45)"));
-                                else if(data.get(1).length() <= 10)
+                                else if(data.get(1).length() >= 10)
                                     session.sendPacketImmediately(UIForms.createError("Port is too large. (Must be less than 10)"));
-                                else if (data.get(0).length() <= 45 && !data.get(0).matches("[a-zA-Z.1-9]+"))
+                                else if (!data.get(0).matches("[a-zA-Z.1-9]+"))
                                     session.sendPacketImmediately(UIForms.createError("Enter a valid address. (E.g. play.example.net, 172.16.254.1)"));
-                                else if (data.get(0).length() <= 10 && !data.get(1).matches("[1-9]+"))
+                                else if (!data.get(1).matches("[1-9]+"))
                                     session.sendPacketImmediately(UIForms.createError("Enter a valid port that contains only numbers"));
                                 else {
                                     boolean addServer = Boolean.parseBoolean(data.get(2));
