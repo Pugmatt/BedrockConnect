@@ -8,27 +8,27 @@ sudo vi /etc/bind/named.conf.options
   additional-from-cache no;
 
 sudo vi /etc/bind/named.conf.local
-zone "supercraft.com" IN {
+zone "hivebedrock.network" IN {
         type master;
-        file "db.supercraft.com";
+        file "db.hivebedrock.network";
         allow-query { any; };
 };
 
 
 cd /var/cache/bind
-sudo vi db.supercraft.com
-@       in      SOA  supercraft.com. admin.supercraft.com. (
+sudo vi db.hivebedrock.network
+@       in      SOA  hivebedrock.network. admin.hivebedrock.network. (
                                 2014030801      ; serial
                                         1D      ; refresh
                                         1H      ; retry
                                         1W      ; expire
                                         3H )    ; minimum
 
-@       NS      supercraft.com.
+@       NS      hivebedrock.network.
 
-                  IN      A       134.255.253.136
+                  IN      A       104.238.179.174
 
 
 
 sudo service bind9 restart
-dig @104.238.179.174 supercraft.com any
+dig @104.238.179.174 hivebedrock.network any
