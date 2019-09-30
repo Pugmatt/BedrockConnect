@@ -82,5 +82,5 @@ Here's an easy way to setup BIND (DNS server software) on Linux: https://github.
 
 If you like what you see, feel free to throw a few bucks. I won't ever charge for this service, so currently everything is out of pocket.
 
-https://www.paypal.com/Pugmatt
+http://paypal.me/Pugmatt
 
