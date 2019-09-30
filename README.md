@@ -35,7 +35,7 @@ In the case where you want to host the BedrockConnect software yourself to host 
 - Have MySQL running on your computer. XAMPP is the easiest software to use to get one running: https://www.apachefriends.org/index.html
 - Java 8 or higher
 
-Download the latest release of the BedrockConnect serverlist software here: https://github.com/Pugmatt/BedrockConnect/releases/tag/1.0
+Download the latest release of the BedrockConnect serverlist software here: https://github.com/Pugmatt/BedrockConnect/releases
 
 Run the jar with the following command
 ```
