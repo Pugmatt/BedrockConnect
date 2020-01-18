@@ -2,10 +2,18 @@ package main.com.pyratron.pugmatt.bedrockconnect.listeners;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import com.nukkitx.math.vector.Vector2f;
+import com.nukkitx.math.vector.Vector3f;
+import com.nukkitx.math.vector.Vector3i;
+import com.nukkitx.nbt.CompoundTagBuilder;
+import com.nukkitx.nbt.NbtUtils;
+import com.nukkitx.nbt.stream.NBTOutputStream;
+import com.nukkitx.nbt.tag.CompoundTag;
 import com.nukkitx.network.util.Preconditions;
 import com.nukkitx.protocol.bedrock.BedrockClientSession;
+import com.nukkitx.protocol.bedrock.data.GamePublishSetting;
+import com.nukkitx.protocol.bedrock.data.GameRule;
 import com.nukkitx.protocol.bedrock.packet.*;
-
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory;
@@ -13,12 +21,14 @@ import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import com.nukkitx.protocol.bedrock.packet.LoginPacket;
 import com.nukkitx.protocol.bedrock.util.EncryptionUtils;
+import com.nukkitx.protocol.bedrock.v388.Bedrock_v388;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.Server;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIForms;
 import net.minidev.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.interfaces.ECPublicKey;
 import java.util.ArrayList;
@@ -36,731 +46,902 @@ public class PacketHandler implements BedrockPacketHandler {
 
     private JSONObject extraData;
 
+    private boolean print = false;
+
+    private static final CompoundTag EMPTY_TAG = CompoundTagBuilder.builder().buildRootTag();
+    private static final byte[] EMPTY_LEVEL_CHUNK_DATA;
+
+    static {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            outputStream.write(new byte[258]); // Biomes + Border Size + Extra Data Size
+
+            try (NBTOutputStream stream = NbtUtils.createNetworkWriter(outputStream)) {
+                stream.write(EMPTY_TAG);
+            }
+
+            EMPTY_LEVEL_CHUNK_DATA = outputStream.toByteArray();
+        }catch (IOException e) {
+            throw new AssertionError("Unable to generate empty level chunk data");
+        }
+    }
+
     @Override
     public boolean handle(AdventureSettingsPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(AnimatePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(BlockEntityDataPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(BlockPickRequestPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(BookEditPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ClientToServerHandshakePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(CommandBlockUpdatePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(CommandRequestPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ContainerClosePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(CraftingEventPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(EntityEventPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(EntityFallPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(EntityPickRequestPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(EventPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(InteractPacket packet) {
-
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(InventoryContentPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(InventorySlotPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(InventoryTransactionPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ItemFrameDropItemPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(LabTablePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(LecternUpdatePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(LevelSoundEventPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(LevelSoundEvent3Packet packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(MapInfoRequestPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(MobArmorEquipmentPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(MobEquipmentPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
     
     @Override
     public boolean handle(MoveEntityAbsolutePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(MovePlayerPacket packet) {
-
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(NetworkStackLatencyPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(PhotoTransferPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(PlayerActionPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(PlayerHotbarPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(PlayerInputPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(PlayerSkinPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(PurchaseReceiptPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(RequestChunkRadiusPacket packet) {
+        if(print)
+            System.out.println(packet.toString());
 
+        ChunkRadiusUpdatedPacket chunkRadiusUpdatePacket = new ChunkRadiusUpdatedPacket();
+        chunkRadiusUpdatePacket.setRadius(packet.getRadius());
+        session.sendPacketImmediately(chunkRadiusUpdatePacket);
+
+        PlayStatusPacket playStatus = new PlayStatusPacket();
+        playStatus.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
+        session.sendPacket(playStatus);
+
+        /* Vector3f pos = Vector3f.ZERO;
+        int chunkX = pos.getFloorX() >> 4;
+        int chunkZ = pos.getFloorX() >> 4;
+
+        for (int x = -3; x < 3; x++) {
+            for (int z = -3; z < 3; z++) {
+                LevelChunkPacket data2 = new LevelChunkPacket();
+                data2.setChunkX(chunkX + x);
+                data2.setChunkZ(chunkZ + z);
+                data2.setSubChunksLength(0);
+                data2.setData(EMPTY_LEVEL_CHUNK_DATA);
+                session.sendPacket(data2);
+            }
+        }
+
+        System.out.println("test");
+
+        PlayStatusPacket playStatus = new PlayStatusPacket();
+        playStatus.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
+        session.sendPacket(playStatus);
+
+        System.out.println("test2"); */
         return false;
     }
 
     @Override
     public boolean handle(RiderJumpPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ServerSettingsRequestPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetDefaultGameTypePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetPlayerGameTypePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SubClientLoginPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(TextPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(AddBehaviorTreePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(AddEntityPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(AddHangingEntityPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(AddItemEntityPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(AddPaintingPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(AddPlayerPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(AvailableCommandsPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(BlockEventPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(BossEventPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(CameraPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ChangeDimensionPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ChunkRadiusUpdatedPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ClientboundMapItemDataPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(CommandOutputPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ContainerOpenPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ContainerSetDataPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(CraftingDataPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ExplodePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(GameRulesChangedPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(GuiDataPickItemPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(HurtArmorPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(AutomationClientConnectPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(LevelEventPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(MapCreateLockedCopyPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(MobEffectPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ModalFormRequestPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(MoveEntityDeltaPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(NpcRequestPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(OnScreenTextureAnimationPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(PlayerListPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(PlaySoundPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(PlayStatusPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(RemoveEntityPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(RemoveObjectivePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ResourcePackChunkDataPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ResourcePackDataInfoPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ResourcePacksInfoPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ResourcePackStackPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(RespawnPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ScriptCustomEventPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ServerSettingsResponsePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ServerToClientHandshakePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetCommandsEnabledPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetDifficultyPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetDisplayObjectivePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetEntityDataPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetEntityLinkPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetEntityMotionPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetHealthPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetLastHurtByPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetScoreboardIdentityPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetScorePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetSpawnPositionPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetTimePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SetTitlePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ShowCreditsPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ShowProfilePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(ShowStoreOfferPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SimpleEventPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SpawnExperienceOrbPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(StartGamePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(StopSoundPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(StructureBlockUpdatePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(TakeItemEntityPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(TransferPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(UpdateAttributesPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(UpdateBlockPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(UpdateBlockSyncedPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(UpdateEquipPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(UpdateSoftEnumPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(UpdateTradePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(AvailableEntityIdentifiersPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(BiomeDefinitionListPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(LevelSoundEvent2Packet packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(NetworkChunkPublisherUpdatePacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(SpawnParticleEffectPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
 
     @Override
     public boolean handle(VideoStreamConnectPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return false;
     }
     
 
     @Override
     public boolean handle(ResourcePackChunkRequestPacket packet) {
-        
+        if(print)
+            System.out.println(packet.toString());
         return true;
     }
     
 
     @Override
     public boolean handle(ModalFormResponsePacket packet) {
-
+        if(print)
+            System.out.println(packet.toString());
             switch (packet.getFormId()) {
                 case UIForms.MAIN:
                     if(UIForms.currentForm == UIForms.MAIN) {
@@ -895,6 +1076,8 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(SetLocalPlayerAsInitializedPacket packet) {
+        if(print)
+            System.out.println(packet.toString());
         session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
         return false;
     }
@@ -903,7 +1086,7 @@ public class PacketHandler implements BedrockPacketHandler {
         this.session = session;
         this.server = server;
 
-        session.addDisconnectHandler((Reason) -> disconnect());
+        session.addDisconnectHandler((DisconnectReason) -> disconnect());
     }
 
     public void disconnect() {
@@ -945,15 +1128,18 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(ResourcePackClientResponsePacket packet) {
+        if(print)
+            System.out.println(packet.toString());
         switch (packet.getStatus()) {
             case COMPLETED:
                 BedrockConnect.data.userExists(uuid, name, session);
                 break;
             case HAVE_ALL_PACKS:
                 ResourcePackStackPacket rs = new ResourcePackStackPacket();
-                rs.setExperimental(false);
+                //rs.setExperimental(false);
                 rs.setForcedToAccept(false);
-                session.sendPacketImmediately(rs);
+                rs.setGameVersion(Server.codec.getMinecraftVersion());
+                session.sendPacket(rs);
                 break;
             default:
                 session.disconnect("disconnectionScreen.resourcePack");
@@ -965,6 +1151,8 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(LoginPacket packet) {
+        if(print)
+            System.out.println(packet.toString());
         int protocolVersion = packet.getProtocolVersion();
 
         if (protocolVersion != server.getProtocol()) {
@@ -1016,14 +1204,20 @@ public class PacketHandler implements BedrockPacketHandler {
             name = extraData.getAsString("displayName");
             uuid = extraData.getAsString("identity");
 
+
             PlayStatusPacket status = new PlayStatusPacket();
             status.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
-            session.sendPacketImmediately(status);
+            session.sendPacket(status);
+
+            SetEntityMotionPacket motion = new SetEntityMotionPacket();
+            motion.setRuntimeEntityId(1);
+            motion.setMotion(Vector3f.ZERO);
+            session.sendPacket(motion);
 
             ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
             resourcePacksInfo.setForcedToAccept(false);
-            session.sendPacketImmediately(resourcePacksInfo);
-
+            resourcePacksInfo.setScriptingEnabled(false);
+            session.sendPacket(resourcePacksInfo);
         } catch (Exception e) {
             session.disconnect("disconnectionScreen.internalError.cantConnect");
             throw new RuntimeException("Unable to complete login", e);

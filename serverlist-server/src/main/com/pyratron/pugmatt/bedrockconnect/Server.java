@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.nukkitx.protocol.bedrock.*;
-import com.nukkitx.protocol.bedrock.v361.Bedrock_v361;
+import com.nukkitx.protocol.bedrock.v389.Bedrock_v389;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 
@@ -19,7 +19,12 @@ public class Server {
     public BedrockServer server;
     public BedrockPong pong;
 
-    private BedrockPacketCodec codec;
+    public static BedrockPacketCodec codec;
+
+    public boolean recordingDone = false;
+    public List<BedrockPacket> packets = new ArrayList<>();
+
+
 
     public int getProtocol() {
         return codec.getProtocolVersion();
@@ -66,7 +71,7 @@ public class Server {
         players = new ArrayList<>();
 
         InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", Integer.parseInt(port));
-        codec = Bedrock_v361.V361_CODEC;
+        codec = Bedrock_v389.V389_CODEC;
         server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
         pong.setEdition("MCPE");
@@ -76,7 +81,8 @@ public class Server {
         pong.setMaximumPlayerCount(20);
         pong.setGameType("Survival");
         pong.setIpv4Port(Integer.parseInt(port));
-        pong.setProtocolVersion(Bedrock_v361.V361_CODEC.getProtocolVersion());
+        pong.setProtocolVersion(codec.getProtocolVersion());
+        pong.setVersion(codec.getMinecraftVersion());
         server.setHandler(new BedrockServerEventHandler() {
             @Override
             public boolean onConnectionRequest(InetSocketAddress address) {
@@ -84,7 +90,7 @@ public class Server {
             }
             @Nonnull
             public BedrockPong onQuery(InetSocketAddress address) {
-                return pong;
+                System.out.println("Ping"); return pong;
             }
             @Override
             public void onSessionCreation(BedrockServerSession session) {

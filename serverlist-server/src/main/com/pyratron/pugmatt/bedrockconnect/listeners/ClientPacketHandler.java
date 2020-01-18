@@ -773,10 +773,10 @@ public class ClientPacketHandler implements BedrockPacketHandler {
         return false;
     }
 
-    public ClientPacketHandler(BedrockClientSession session) {
-        this.session = session;
+    public ClientPacketHandler() {
+        //this.session = session;
 
-        session.addDisconnectHandler((Reason) -> disconnect());
+        //session.addDisconnectHandler((Reason) -> disconnect());
     }
 
     public void disconnect() {

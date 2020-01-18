@@ -1,24 +1,32 @@
 package main.com.pyratron.pugmatt.bedrockconnect;
 
-import com.flowpowered.math.vector.Vector2f;
-import com.flowpowered.math.vector.Vector3f;
-import com.flowpowered.math.vector.Vector3i;
+import com.nukkitx.math.vector.Vector2f;
+import com.nukkitx.math.vector.Vector3i;
 import com.nukkitx.nbt.CompoundTagBuilder;
 import com.nukkitx.nbt.NbtUtils;
+import com.nukkitx.nbt.stream.NBTInputStream;
 import com.nukkitx.nbt.stream.NBTOutputStream;
 import com.nukkitx.nbt.tag.CompoundTag;
+import com.nukkitx.nbt.tag.ListTag;
+import com.nukkitx.protocol.bedrock.Bedrock;
+import com.nukkitx.protocol.bedrock.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.data.Attribute;
 import com.nukkitx.protocol.bedrock.data.GamePublishSetting;
 import com.nukkitx.protocol.bedrock.data.GameRule;
 import com.nukkitx.protocol.bedrock.packet.*;
+import com.nukkitx.math.vector.Vector3f;
+import com.nukkitx.protocol.bedrock.v388.Bedrock_v388;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PipePlayer {
 
@@ -88,35 +96,35 @@ public class PipePlayer {
     public void joinGame() {
 
         MovePlayerPacket mp = new MovePlayerPacket();
-        mp.setRuntimeEntityId(-1);
+        mp.setRuntimeEntityId(1);
         mp.setOnGround(false);
         mp.setMode(MovePlayerPacket.Mode.NORMAL);
-        mp.setRotation(new Vector3f(0,0,0));
-        mp.setPosition(new Vector3f(0,0,0));
-        session.sendPacketImmediately(mp);
+        mp.setRotation(Vector3f.from(0,0,0));
+        mp.setPosition(Vector3f.from(0,0,0));
+        session.sendPacket(mp);
 
         StartGamePacket startGamePacket = new StartGamePacket();
-        startGamePacket.setUniqueEntityId(0);
-        startGamePacket.setRuntimeEntityId(0);
-        startGamePacket.setPlayerGamemode(0);
-        startGamePacket.setPlayerPosition(new Vector3f(-249, 67, -275));
-        startGamePacket.setRotation(new Vector2f(1, 1));
+        startGamePacket.setUniqueEntityId(1);
+        startGamePacket.setRuntimeEntityId(1);
+        startGamePacket.setPlayerGamemode(1);
+        startGamePacket.setPlayerPosition(Vector3f.from(0, 0, 0));
+        startGamePacket.setRotation(Vector2f.from(1, 1));
 
-        startGamePacket.setSeed(1111);
+        startGamePacket.setSeed(-1);
         startGamePacket.setDimensionId(0);
-        startGamePacket.setGeneratorId(0);
-        startGamePacket.setLevelGamemode(0);
-        startGamePacket.setDifficulty(0);
-        startGamePacket.setDefaultSpawn(new Vector3i(-249, 67, -275));
-        startGamePacket.setAcheivementsDisabled(true);
-        startGamePacket.setTime(0);
-        startGamePacket.setEduLevel(false);
+        startGamePacket.setGeneratorId(1);
+        startGamePacket.setLevelGamemode(1);
+        startGamePacket.setDifficulty(1);
+        startGamePacket.setDefaultSpawn(Vector3i.from(0, 0, 0));
+        startGamePacket.setAchievementsDisabled(false);
+        startGamePacket.setTime(-1);
+        startGamePacket.setEduFeaturesEnabled(false);
         startGamePacket.setEduFeaturesEnabled(false);
         startGamePacket.setRainLevel(0);
         startGamePacket.setLightningLevel(0);
         startGamePacket.setPlatformLockedContentConfirmed(false);
         startGamePacket.setMultiplayerGame(true);
-        startGamePacket.setBroadcastingToLan(false);
+        startGamePacket.setBroadcastingToLan(true);
         startGamePacket.getGamerules().add((new GameRule<>("showcoordinates", true)));
         startGamePacket.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
         startGamePacket.setXblBroadcastMode(GamePublishSetting.PUBLIC);
@@ -124,7 +132,7 @@ public class PipePlayer {
         startGamePacket.setTexturePacksRequired(false);
         startGamePacket.setBonusChestEnabled(false);
         startGamePacket.setStartingWithMap(false);
-        startGamePacket.setTrustingPlayers(true);
+        startGamePacket.setTrustingPlayers(false);
         startGamePacket.setDefaultPlayerPermission(1);
         startGamePacket.setServerChunkTickRange(4);
         startGamePacket.setBehaviorPackLocked(false);
@@ -133,24 +141,28 @@ public class PipePlayer {
         startGamePacket.setUsingMsaGamertagsOnly(false);
         startGamePacket.setFromWorldTemplate(false);
         startGamePacket.setWorldTemplateOptionLocked(false);
+        startGamePacket.setOnlySpawningV1Villagers(false);
+        startGamePacket.setMovementServerAuthoritative(false);
+        startGamePacket.setTrial(false);
+        startGamePacket.setVanillaVersion(Server.codec.getMinecraftVersion());
 
-        startGamePacket.setLevelId("oerjhii");
+        startGamePacket.setLevelId("");
         startGamePacket.setWorldName("world");
-        startGamePacket.setPremiumWorldTemplateId("00000000-0000-0000-0000-000000000000");
+        startGamePacket.setPremiumWorldTemplateId("");
         startGamePacket.setCurrentTick(0);
         startGamePacket.setEnchantmentSeed(0);
         startGamePacket.setMultiplayerCorrelationId("");
 
-        startGamePacket.setCachedPalette(BedrockConnect.paletteManager.getCachedPalette());
+        startGamePacket.setBlockPalette(BedrockConnect.paletteManager.CACHED_PALLETE);
 
-        session.sendPacketImmediately(startGamePacket);
+        session.sendPacket(startGamePacket);
 
         spawn();
     }
 
     public void spawn() {
 
-        Vector3f pos = new Vector3f(-249, 67, -275);
+        Vector3f pos = Vector3f.ZERO;
         int chunkX = pos.getFloorX() >> 4;
         int chunkZ = pos.getFloorX() >> 4;
 
@@ -161,12 +173,22 @@ public class PipePlayer {
                 data2.setChunkZ(chunkZ + z);
                 data2.setSubChunksLength(0);
                 data2.setData(EMPTY_LEVEL_CHUNK_DATA);
-                session.sendPacketImmediately(data2);
+                session.sendPacket(data2);
             }
         }
 
+        BiomeDefinitionListPacket biomePacket = new BiomeDefinitionListPacket();
+        biomePacket.setTag(CompoundTag.EMPTY);
+        session.sendPacket(biomePacket);
+        AvailableEntityIdentifiersPacket entityPacket = new AvailableEntityIdentifiersPacket();
+        entityPacket.setTag(CompoundTag.EMPTY);
+        session.sendPacket(entityPacket);
+
         PlayStatusPacket playStatus = new PlayStatusPacket();
         playStatus.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
-        session.sendPacketImmediately(playStatus);
+        session.sendPacket(playStatus);
+
+
+        System.out.println("play status sent");
     }
 }
