@@ -50,10 +50,6 @@
                                     <pattern>com.nukkitx.protocol</pattern>
                                     <shadedPattern>com.pyratron.pugmatt.protocol</shadedPattern>
                                 </relocation>
-                                <relocation>
-                                    <pattern>com.github.steveice10</pattern>
-                                    <shadedPattern>com.pyratron.pugmatt.javaprotocol</shadedPattern>
-                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -101,12 +97,6 @@
             <groupId>net.minidev</groupId>
             <artifactId>json-smart</artifactId>
             <version>2.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.steveice10</groupId>
-            <artifactId>packetlib</artifactId>
-            <version>1.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.nukkitx.protocol</groupId>

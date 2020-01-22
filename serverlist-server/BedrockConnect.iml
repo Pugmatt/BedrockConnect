@@ -12,8 +12,6 @@
     <orderEntry type="library" name="Maven: net.minidev:json-smart:2.3" level="project" />
     <orderEntry type="library" name="Maven: net.minidev:accessors-smart:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm:5.0.4" level="project" />
-    <orderEntry type="library" name="Maven: com.github.steveice10:packetlib:1.4-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-all:4.1.25.Final" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v389:2.4.4" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v388:2.4.4" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-common:2.4.4" level="project" />
