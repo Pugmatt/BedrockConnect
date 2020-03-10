@@ -11,6 +11,6 @@
   "dependencies": {
     "asyncawait": "^1.0.8",
     "dnsjack": "^1.0.0",
-    "sequelize": "^5.8.7"
+    "sequelize": "^5.15.1"
   }
 }
