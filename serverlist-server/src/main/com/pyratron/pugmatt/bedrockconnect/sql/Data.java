@@ -1,8 +1,6 @@
 package main.com.pyratron.pugmatt.bedrockconnect.sql;
 
-import com.nukkitx.protocol.bedrock.Bedrock;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
-import com.nukkitx.protocol.bedrock.BedrockSession;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.PipePlayer;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;

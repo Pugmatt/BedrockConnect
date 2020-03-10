@@ -146,12 +146,6 @@ public class ClientPacketHandler implements BedrockPacketHandler {
     }
 
     @Override
-    public boolean handle(LevelSoundEvent3Packet packet) {
-        System.out.println(packet.toString());
-        return false;
-    }
-
-    @Override
     public boolean handle(MapInfoRequestPacket packet) {
         System.out.println(packet.toString());
         return false;

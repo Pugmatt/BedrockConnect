@@ -90,7 +90,7 @@ public class Server {
             }
             @Nonnull
             public BedrockPong onQuery(InetSocketAddress address) {
-                System.out.println("Ping"); return pong;
+                return pong;
             }
             @Override
             public void onSessionCreation(BedrockServerSession session) {

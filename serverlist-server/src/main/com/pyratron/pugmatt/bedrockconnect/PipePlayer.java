@@ -13,7 +13,8 @@ import com.nukkitx.protocol.bedrock.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.data.Attribute;
 import com.nukkitx.protocol.bedrock.data.GamePublishSetting;
-import com.nukkitx.protocol.bedrock.data.GameRule;
+import com.nukkitx.protocol.bedrock.data.GameRuleData;
+import com.nukkitx.protocol.bedrock.data.PlayerPermission;
 import com.nukkitx.protocol.bedrock.packet.*;
 import com.nukkitx.math.vector.Vector3f;
 import com.nukkitx.protocol.bedrock.v388.Bedrock_v388;
@@ -125,7 +126,7 @@ public class PipePlayer {
         startGamePacket.setPlatformLockedContentConfirmed(false);
         startGamePacket.setMultiplayerGame(true);
         startGamePacket.setBroadcastingToLan(true);
-        startGamePacket.getGamerules().add((new GameRule<>("showcoordinates", true)));
+        startGamePacket.getGamerules().add((new GameRuleData<>("showcoordinates", true)));
         startGamePacket.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
         startGamePacket.setXblBroadcastMode(GamePublishSetting.PUBLIC);
         startGamePacket.setCommandsEnabled(true);
@@ -133,7 +134,7 @@ public class PipePlayer {
         startGamePacket.setBonusChestEnabled(false);
         startGamePacket.setStartingWithMap(false);
         startGamePacket.setTrustingPlayers(false);
-        startGamePacket.setDefaultPlayerPermission(1);
+        startGamePacket.setDefaultPlayerPermission(PlayerPermission.MEMBER);
         startGamePacket.setServerChunkTickRange(4);
         startGamePacket.setBehaviorPackLocked(false);
         startGamePacket.setResourcePackLocked(false);
@@ -187,8 +188,5 @@ public class PipePlayer {
         PlayStatusPacket playStatus = new PlayStatusPacket();
         playStatus.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         session.sendPacket(playStatus);
-
-
-        System.out.println("play status sent");
     }
 }

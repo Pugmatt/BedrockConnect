@@ -101,19 +101,7 @@
         <dependency>
             <groupId>com.nukkitx.protocol</groupId>
             <artifactId>bedrock-v389</artifactId>
-            <version>2.4.4</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.nukkitx</groupId>
-            <artifactId>fastutil-lite</artifactId>
-            <version>8.1.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.nukkitx.protocol</groupId>
-            <artifactId>common</artifactId>
-            <version>0.0.0</version>
+            <version>2.5.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

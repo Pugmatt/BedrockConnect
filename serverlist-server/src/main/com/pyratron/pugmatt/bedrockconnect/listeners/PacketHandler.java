@@ -12,7 +12,6 @@ import com.nukkitx.nbt.tag.CompoundTag;
 import com.nukkitx.network.util.Preconditions;
 import com.nukkitx.protocol.bedrock.BedrockClientSession;
 import com.nukkitx.protocol.bedrock.data.GamePublishSetting;
-import com.nukkitx.protocol.bedrock.data.GameRule;
 import com.nukkitx.protocol.bedrock.packet.*;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
@@ -214,13 +213,6 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(LevelSoundEventPacket packet) {
-        if(print)
-            System.out.println(packet.toString());
-        return false;
-    }
-
-    @Override
-    public boolean handle(LevelSoundEvent3Packet packet) {
         if(print)
             System.out.println(packet.toString());
         return false;
