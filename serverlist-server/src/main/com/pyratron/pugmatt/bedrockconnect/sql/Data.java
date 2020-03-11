@@ -1,10 +1,19 @@
 package main.com.pyratron.pugmatt.bedrockconnect.sql;
 
+import com.nukkitx.protocol.bedrock.Bedrock;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
+import com.nukkitx.protocol.bedrock.BedrockSession;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.PipePlayer;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,10 +28,12 @@ public class Data {
     public Data(String serverLimit) {
         this.serverLimit = serverLimit;
 
-        try {
-            createTables();
-        } catch(Exception e) {
-            errorAlert(e);
+        if(!BedrockConnect.noDB) {
+            try {
+                createTables();
+            } catch (Exception e) {
+                errorAlert(e);
+            }
         }
     }
 
@@ -64,40 +75,69 @@ public class Data {
 
     // If user exists
     public void userExists(String uuid, String name, BedrockServerSession session) {
-        Data db = this;
-        new Thread(() -> {
-                try
-                {
+        if(!BedrockConnect.noDB) {
+            Data db = this;
+            new Thread(() -> {
+                try {
                     PreparedStatement statement = BedrockConnect.connection.prepareStatement("SELECT EXISTS(SELECT 1 FROM servers WHERE uuid = '" + uuid + "')");
                     statement.executeQuery();
                     ResultSet RS = statement.executeQuery("SELECT COUNT(*) AS total FROM servers where uuid ='" + uuid + "'");
                     while (RS.next()) {
-                        if (RS.getInt("total") > 0)
-                        {
+                        if (RS.getInt("total") > 0) {
                             ResultSet rs = BedrockConnect.connection.createStatement().executeQuery("SELECT * FROM servers WHERE uuid = '" + uuid + "';");
                             while (rs.next()) {
                                 if (!rs.getString("name").equals(name)) {
                                     Basic_SQL("UPDATE servers SET name='" + name + "' WHERE uuid='" + uuid + "'");
                                 }
                                 PipePlayer p = getPlayer(rs, uuid, session);
-                                if(BedrockConnect.server == null)
-                                    System.out.println("??");
-                                if(p != null)
+                                if (p != null)
                                     BedrockConnect.server.addPlayer(p);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             addNewUser(uuid, name, session);
                         }
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     errorAlert(e);
                     session.disconnect("We had some trouble receiving your player data. Please report this to the BedrockConnect discord.");
                 }
-        }).start();
+            }).start();
+        } else {
+            try {
+                File f = new File("players");
+                f.mkdir();
+                File plyrFile = new File("players/" + uuid + ".json");
+                if (plyrFile.createNewFile()) {
+                    JSONObject jo = new JSONObject();
+                    jo.put("uuid", uuid);
+                    jo.put("name", name);
+                    jo.put("serverLimit", serverLimit);
+                    jo.put("servers", new JSONArray());
+
+                    PrintWriter pw = new PrintWriter("players/" + uuid + ".json");
+                    pw.write(jo.toJSONString());
+                    pw.flush();
+                    pw.close();
+
+                    PipePlayer pl = new PipePlayer(uuid, this, session, new ArrayList<>(), Integer.parseInt(serverLimit));
+                    BedrockConnect.server.addPlayer(pl);
+                } else {
+                    Object obj = new JSONParser().parse(new FileReader("players/" + uuid + ".json"));
+
+                    JSONObject jo = (JSONObject) obj;
+
+                    int serverLimit = Integer.parseInt((String) jo.get("serverLimit"));
+
+                    JSONArray servers = (JSONArray) jo.get("servers");
+
+                    PipePlayer p = new PipePlayer(uuid,this, session, servers, serverLimit);
+                    BedrockConnect.server.addPlayer(p);
+                }
+            } catch (Exception e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+        }
     }
 
     public void addNewUser(String uuid, String name, BedrockServerSession session)
@@ -120,17 +160,32 @@ public class Data {
         }).start();
     }
 
-    public void setValueString(String column, String value, String uuid) {
-        new Thread(() -> {
-                try
-                {
+    public void setValueString(String column, String value, List<String> serverList, String uuid) {
+        if(!BedrockConnect.noDB) {
+            new Thread(() -> {
+                try {
                     Basic_SQL("UPDATE servers SET " + column + "='" + value + "' WHERE uuid='" + uuid + "'");
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     errorAlert(e);
                 }
-        }).start();
+            }).start();
+        } else {
+            try {
+                Object obj = new JSONParser().parse(new FileReader("players/" + uuid + ".json"));
+
+                JSONObject jo = (JSONObject) obj;
+
+                jo.put("servers", serverList);
+
+                PrintWriter pw = new PrintWriter("players/" + uuid + ".json");
+                pw.write(jo.toJSONString());
+                pw.flush();
+                pw.close();
+            } catch (Exception e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setValueInt(String column, Integer value, String uuid) {

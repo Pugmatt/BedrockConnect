@@ -1082,7 +1082,7 @@ public class PacketHandler implements BedrockPacketHandler {
     }
 
     public void disconnect() {
-        System.out.println("Player disconnected");
+        System.out.println(name + " disconnected");
         server.removePlayer(server.getPlayer(uuid));
     }
 

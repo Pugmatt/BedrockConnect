@@ -77,7 +77,7 @@ public class PipePlayer {
     }
 
     public void setServerList(List<String> serverList) {
-        data.setValueString("servers", UIComponents.serversToFormData(serverList), uuid);
+        data.setValueString("servers", UIComponents.serversToFormData(serverList), serverList, uuid);
         this.serverList = serverList;
     }
 

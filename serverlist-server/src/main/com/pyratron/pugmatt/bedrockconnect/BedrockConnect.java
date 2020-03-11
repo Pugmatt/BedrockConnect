@@ -24,7 +24,10 @@ public class BedrockConnect {
 
     public static Server server;
 
+    public static boolean noDB = false;
+
     public static void main(String[] args) {
+        System.out.println("-= BedrockConnect =-");
         paletteManager =  new PaletteManager();
 
         try {
@@ -49,56 +52,70 @@ public class BedrockConnect {
                     serverLimit = getArgValue(str, "server_limit");
                 if(str.startsWith("port="))
                     port = getArgValue(str, "port");
+                if(str.startsWith("nodb="))
+                    noDB = true;
             }
 
+            if(!noDB)
             System.out.println("MySQL Host: " + hostname + "\n" +
             "MySQL Database: " + database + "\n" +
-            "MySQL User: " + username + "\n" +
-            "Server Limit: " + serverLimit + "\n" +
-            "Port: " + port + "\n");
+            "MySQL User: " + username);
 
-            MySQL = new MySQL(hostname, database, username, password);
+            System.out.println("\nServer Limit: " + serverLimit + "\n" + "Port: " + port + "\n");
 
-            connection = null;
+            if(!noDB) {
+                MySQL = new MySQL(hostname, database, username, password);
 
-            connection = MySQL.openConnection();
+                connection = null;
 
-            data = new Data(serverLimit);
+                connection = MySQL.openConnection();
 
-            // Keep MySQL connection alive
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                int sec;
+                data = new Data(serverLimit);
 
-                public void run() {
-                    try {
-                        if (connection == null || connection.isClosed()) {
-                            connection = MySQL.openConnection();
-                        } else {
-                            if (sec == 600) {
-                                try {
-                                    ResultSet rs = connection
-                                            .createStatement()
-                                            .executeQuery(
-                                                    "SELECT 1");
-                                    rs.next();
-                                } catch (SQLException e) {
-                                    // TODO Auto-generated
-                                    // catch block
-                                    e.printStackTrace();
+                // Keep MySQL connection alive
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    int sec;
+
+                    public void run() {
+                        try {
+                            if (connection == null || connection.isClosed()) {
+                                connection = MySQL.openConnection();
+                            } else {
+                                if (sec == 600) {
+                                    try {
+                                        ResultSet rs = connection
+                                                .createStatement()
+                                                .executeQuery(
+                                                        "SELECT 1");
+                                        rs.next();
+                                    } catch (SQLException e) {
+                                        // TODO Auto-generated
+                                        // catch block
+                                        e.printStackTrace();
+                                    }
+                                    sec = 0;
                                 }
-                                sec = 0;
                             }
+                        } catch (SQLException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
                         }
-                    } catch (SQLException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        sec++;
                     }
-                    sec++;
-                }
-            };
-            timer.scheduleAtFixedRate(task, 0L, 1200L);
-
+                };
+                timer.scheduleAtFixedRate(task, 0L, 1200L);
+            } else {
+                data = new Data(serverLimit);
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    int sec;
+                    public void run() {
+                        sec++;
+                    }
+                };
+                timer.scheduleAtFixedRate(task, 0L, 1200L);
+            }
 
             server = new Server(port);
         } catch(Exception e) {
