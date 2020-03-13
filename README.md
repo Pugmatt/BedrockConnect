@@ -28,7 +28,7 @@ The BedrockConnect serverlist server, is a specially made Minecraft server that 
 
 # Hosting your own serverlist server
 
-If you want a full tutorial on how to host your own BedrockConnect server with a DNS server, watch the following video: https://www.youtube.com/watch?v=AW5X7-qnvLk&t=1s
+If you want a full tutorial on how to host your own BedrockConnect server with a DNS server, watch the following video: https://www.youtube.com/watch?v=AW5X7-qnvLk
 
 The instructions below will show how to run the barebone JAR.
 
