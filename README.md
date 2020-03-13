@@ -28,19 +28,21 @@ The BedrockConnect serverlist server, is a specially made Minecraft server that 
 
 # Hosting your own serverlist server
 
-In the case where you want to host the BedrockConnect software yourself to host your own serverlist, here's how:
+If you want a full tutorial on how to host your own BedrockConnect server with a DNS server, watch the following video: https://www.youtube.com/watch?v=AW5X7-qnvLk&t=1s
+
+The instructions below will show how to run the barebone JAR.
 
 
 **Requirements:**
-- Have MySQL running on your computer. XAMPP is the easiest software to use to get one running: https://www.apachefriends.org/index.html
 - Java 8 or higher
 
 Download the latest release of the BedrockConnect serverlist software here: https://github.com/Pugmatt/BedrockConnect/releases
 
 Run the jar with the following command
 ```
-java -jar BedrockConnect-1.0-SNAPSHOT.jar
+java -jar BedrockConnect-1.0-SNAPSHOT.jar nodb=true
 ```
+(```nodb=true``` allows the software to run without a database. If you want to use a database, remove this argument)
 
 The following arguments can be placed in the startup command to ajust settings:
 
@@ -52,8 +54,10 @@ The following arguments can be placed in the startup command to ajust settings:
 | mysql_pass | MySQL Password  |  |
 | server_limit | How many servers a new player can have in their serverlist  | 100 |
 | port | Port of the server  | 19132 |
+| nodb | If true, use files for data instead of MySQL | false |
+| generatedns | If true, generate a DNS zone file using user input | false |
 
-Example:
+MySQL example:
 ```
 java -jar BedrockConnect-1.0-SNAPSHOT.jar mysql_pass=test123 server_limit=10
 ```
