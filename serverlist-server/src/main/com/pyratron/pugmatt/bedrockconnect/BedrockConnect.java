@@ -3,15 +3,17 @@ package main.com.pyratron.pugmatt.bedrockconnect;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.*;
+import java.net.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class BedrockConnect {
 
@@ -54,6 +56,50 @@ public class BedrockConnect {
                     port = getArgValue(str, "port");
                 if(str.startsWith("nodb="))
                     noDB = true;
+                if(str.startsWith("generatedns=")) {
+                    String ip;
+                    try {
+                        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+
+                        System.out.println("Local IPv4 IPs:");
+                        while (interfaces.hasMoreElements()) {
+                            NetworkInterface iface = interfaces.nextElement();
+
+                            if (iface.isLoopback() || !iface.isUp() || iface.isVirtual() || iface.isPointToPoint())
+                                continue;
+
+                            Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                            while(addresses.hasMoreElements()) {
+                                InetAddress addr = addresses.nextElement();
+
+                                if(!(addr instanceof Inet4Address)) continue;
+
+                                ip = addr.getHostAddress();
+                                System.out.println(iface.getDisplayName() + ": " + ip);
+                            }
+                        }
+
+                        Scanner reader = new Scanner(System.in);  // Reading from System.in
+                        System.out.print("\nWhich IP should be used for the DNS records: ");
+                        String selectedIP = reader.next().replaceAll("\\s+","");
+                        reader.close();
+
+                        BufferedWriter br = new BufferedWriter(new FileWriter(new File("bc_dns.conf")));
+                        br.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                                "<DNSMasqConfig xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
+                                "  <DNSMasqEntries>\n" +
+                                "    <DNSMasqHost name=\"hivebedrock.network\" a=\"" + selectedIP + "\" />\n" +
+                                "    <DNSMasqHost name=\"mco.mineplex.com\" a=\"" + selectedIP + "\" />\n" +
+                                "    <DNSMasqHost name=\"play.inpvp.net\" a=\"" + selectedIP + "\" />\n" +
+                                "    <DNSMasqHost name=\"mco.lbsg.net\" a=\"" + selectedIP + "\" />\n" +
+                                "    <DNSMasqHost name=\"mco.cubecraft.net\" a=\"" + selectedIP + "\" />\n" +
+                                "  </DNSMasqEntries>\n" +
+                                "</DNSMasqConfig>");
+                        br.close();
+                    } catch (SocketException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
 
             if(!noDB)
