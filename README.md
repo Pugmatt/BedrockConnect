@@ -2,9 +2,12 @@
 
 ![Logo](https://i.imgur.com/H9zVzGT.png)
 
-On Minecraft Bedrock Edition, players on Xbox One and Nintendo Switch are limited to playing on 'Featured Servers' approved by Mojang/Microsoft. These players are not able to join servers via an IP/address. This is an issue for me and others, as the server community on Java edition was one of the major parts that made Minecraft what it was, and what also made what the servers that are now considered 'Mojang Server Partners' what they are today. I wanted to fix this, so I made a solution that anyone can setup easily.
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![HitCount](http://hits.dwyl.com/Pugmatt/BedrockConnect.svg)](http://hits.dwyl.com/Pugmatt/BedrockConnect)
 
-BedrockConnect is an easy to use solution for Minecraft Bedrock Edition players on Xbox One and Nintendo Switch to join any server IP, while also having access to a serverlist that allows you to manage a list of servers. It doesn't require any downloads, just a few changes to settings.
+On Minecraft Bedrock Edition, players on Xbox One, Nintendo Switch, and PS4 are limited to playing on 'Featured Servers' approved by Mojang/Microsoft. These players are not able to join servers via an IP/address. This is an issue for me and others, as the server community on Java edition was one of the major parts that made Minecraft what it was, and what also made what the servers that are now considered 'Mojang Server Partners' what they are today. I wanted to fix this, so I made a solution that anyone can setup easily.
+
+BedrockConnect is an easy to use solution for Minecraft Bedrock Edition players on Xbox One, Nintendo Switch, PS4 to join any server IP, while also having access to a serverlist that allows you to manage a list of servers. It doesn't require any downloads, just a few changes to settings.
 
 Here's the final result in action: https://www.youtube.com/watch?v=Uz-XYXAxd8Q
 
@@ -13,6 +16,8 @@ Here's tutorials to get it setup yourself. It takes only a few minutes to get se
 Switch: https://www.youtube.com/watch?v=zalT_oR1nPM
 
 Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
+
+PS4: Although this is technically possible, I don't have a PS4 to make a tutorial video on. If anyone has a PS4 and would like to make a tutorial, send me the video and I'll put the link of the video here. :)
 
 # FAQ
 
