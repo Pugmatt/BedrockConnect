@@ -20,7 +20,6 @@ import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import com.nukkitx.protocol.bedrock.packet.LoginPacket;
 import com.nukkitx.protocol.bedrock.util.EncryptionUtils;
-import com.nukkitx.protocol.bedrock.v388.Bedrock_v388;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.Server;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
@@ -1146,7 +1145,6 @@ public class PacketHandler implements BedrockPacketHandler {
         if(print)
             System.out.println(packet.toString());
         int protocolVersion = packet.getProtocolVersion();
-
         if (protocolVersion != server.getProtocol()) {
             PlayStatusPacket status = new PlayStatusPacket();
             if (protocolVersion > server.getProtocol()) {
