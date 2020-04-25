@@ -60,7 +60,7 @@ The following arguments can be placed in the startup command to ajust settings:
 | server_limit | How many servers a new player can have in their serverlist  | 100 |
 | port | Port of the server  | 19132 |
 | nodb | If true, use files for data instead of MySQL | false |
-| generatedns | If true, generate a DNS zone file using user input | false |
+| generatedns | If true, generate a DNS zone file using user input (Only needed if you're using the mod0Umleitung DNS software) | false |
 
 MySQL example:
 ```
