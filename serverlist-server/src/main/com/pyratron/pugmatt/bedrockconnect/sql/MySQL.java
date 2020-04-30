@@ -47,7 +47,7 @@ public class MySQL extends Database {
     @Override
     public Connection openConnection() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://" + this.hostname + "/" + this.database, this.user, this.password);
             System.out.println("- MySQL Connection Started -");
 
