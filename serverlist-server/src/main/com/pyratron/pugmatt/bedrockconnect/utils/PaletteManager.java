@@ -42,7 +42,9 @@ public class PaletteManager {
         Map<String, Integer> blockIdToIdentifier = new HashMap<>();
         ListTag<CompoundTag> tag;
 
-        NBTInputStream nbtInputStream = NbtUtils.createReader(stream);
+        NBTInputStream nbtInputStream = NbtUtils.createNetworkReader(stream);
+
+        ListTag<CompoundTag> blocksTag;
         try {
             tag = (ListTag<CompoundTag>) nbtInputStream.readTag();
             nbtInputStream.close();
