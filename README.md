@@ -76,6 +76,7 @@ In the case where you want to use your own DNS server instead of the one I suppl
 
 | Domain  | IP |
 | ------------- | ------------- |
+| geo.hivebedrock.network  | 104.238.130.180  |
 | hivebedrock.network  | 104.238.130.180  |
 | mco.mineplex.com | 104.238.130.180  | 
 | play.inpvp.net | 104.238.130.180  |
