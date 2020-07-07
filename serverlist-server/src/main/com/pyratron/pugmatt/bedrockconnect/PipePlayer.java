@@ -11,10 +11,8 @@ import com.nukkitx.nbt.tag.ListTag;
 import com.nukkitx.protocol.bedrock.Bedrock;
 import com.nukkitx.protocol.bedrock.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
-import com.nukkitx.protocol.bedrock.data.Attribute;
-import com.nukkitx.protocol.bedrock.data.GamePublishSetting;
-import com.nukkitx.protocol.bedrock.data.GameRuleData;
-import com.nukkitx.protocol.bedrock.data.PlayerPermission;
+import com.nukkitx.protocol.bedrock.data.*;
+import com.nukkitx.protocol.bedrock.data.inventory.ContainerId;
 import com.nukkitx.protocol.bedrock.packet.*;
 import com.nukkitx.math.vector.Vector3f;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
@@ -95,6 +93,10 @@ public class PipePlayer {
 
     public void joinGame() {
 
+        /** for(BedrockPacket packet : BedrockConnect.server.packets) {
+            session.sendPacket(packet);
+        } **/
+
         MovePlayerPacket mp = new MovePlayerPacket();
         mp.setRuntimeEntityId(1);
         mp.setOnGround(false);
@@ -106,23 +108,25 @@ public class PipePlayer {
         StartGamePacket startGamePacket = new StartGamePacket();
         startGamePacket.setUniqueEntityId(1);
         startGamePacket.setRuntimeEntityId(1);
-        startGamePacket.setPlayerGamemode(1);
+        startGamePacket.setPlayerGameType(GameType.SURVIVAL);
         startGamePacket.setPlayerPosition(Vector3f.from(0, 0, 0));
         startGamePacket.setRotation(Vector2f.from(1, 1));
 
         startGamePacket.setSeed(-1);
         startGamePacket.setDimensionId(0);
         startGamePacket.setGeneratorId(1);
-        startGamePacket.setLevelGamemode(1);
+        startGamePacket.setLevelGameType(GameType.SURVIVAL);
         startGamePacket.setDifficulty(1);
-        startGamePacket.setDefaultSpawn(Vector3i.from(0, 0, 0));
+        startGamePacket.setDefaultSpawn(Vector3i.ZERO);
         startGamePacket.setAchievementsDisabled(false);
-        startGamePacket.setTime(-1);
-        startGamePacket.setEduFeaturesEnabled(false);
+        startGamePacket.setCurrentTick(-1);
+        //startGamePacket.setUnknownInt0(-1);
+        //startGamePacket.setUnknownInt1(-1);
+        startGamePacket.setEduEditionOffers(0);
         startGamePacket.setEduFeaturesEnabled(false);
         startGamePacket.setRainLevel(0);
         startGamePacket.setLightningLevel(0);
-        startGamePacket.setPlatformLockedContentConfirmed(false);
+        //startGamePacket.setPlatformLockedContentConfirmed(false);
         startGamePacket.setMultiplayerGame(true);
         startGamePacket.setBroadcastingToLan(true);
         startGamePacket.getGamerules().add((new GameRuleData<>("showcoordinates", true)));
@@ -132,7 +136,7 @@ public class PipePlayer {
         startGamePacket.setTexturePacksRequired(false);
         startGamePacket.setBonusChestEnabled(false);
         startGamePacket.setStartingWithMap(false);
-        startGamePacket.setTrustingPlayers(false);
+        startGamePacket.setTrustingPlayers(true);
         startGamePacket.setDefaultPlayerPermission(PlayerPermission.MEMBER);
         startGamePacket.setServerChunkTickRange(4);
         startGamePacket.setBehaviorPackLocked(false);
@@ -141,14 +145,16 @@ public class PipePlayer {
         startGamePacket.setUsingMsaGamertagsOnly(false);
         startGamePacket.setFromWorldTemplate(false);
         startGamePacket.setWorldTemplateOptionLocked(false);
-        startGamePacket.setOnlySpawningV1Villagers(false);
-        startGamePacket.setMovementServerAuthoritative(false);
-        startGamePacket.setTrial(false);
-        startGamePacket.setVanillaVersion(Server.codec.getMinecraftVersion());
 
-        startGamePacket.setLevelId("");
-        startGamePacket.setWorldName("world");
-        startGamePacket.setPremiumWorldTemplateId("");
+        //startGamePacket.setOnlySpawningV1Villagers(false);
+        //startGamePacket.setMovementServerAuthoritative(false);
+        //startGamePacket.setTrial(false);
+        startGamePacket.setVanillaVersion("*");
+
+        startGamePacket.setLevelId("world");
+        startGamePacket.setLevelName("world");
+        //startGamePacket.setWorldName("world");
+        startGamePacket.setPremiumWorldTemplateId("00000000-0000-0000-0000-000000000000");
         startGamePacket.setCurrentTick(0);
         startGamePacket.setEnchantmentSeed(0);
         startGamePacket.setMultiplayerCorrelationId("");
@@ -178,14 +184,29 @@ public class PipePlayer {
         }
 
         BiomeDefinitionListPacket biomePacket = new BiomeDefinitionListPacket();
-        biomePacket.setTag(CompoundTag.EMPTY);
+        biomePacket.setTag(BedrockConnect.paletteManager.BIOMES);
         session.sendPacket(biomePacket);
+
         AvailableEntityIdentifiersPacket entityPacket = new AvailableEntityIdentifiersPacket();
-        entityPacket.setTag(CompoundTag.EMPTY);
+        entityPacket.setTag(BedrockConnect.paletteManager.ENTITY_IDENTIFIERS);
         session.sendPacket(entityPacket);
+
+        InventoryContentPacket creativePacket = new InventoryContentPacket();
+        creativePacket.setContainerId(ContainerId.CREATIVE); //TODO: Why is this deprecated?
+        creativePacket.setContents(BedrockConnect.paletteManager.CREATIVE_ITEMS);
+        session.sendPacket(creativePacket);
 
         PlayStatusPacket playStatus = new PlayStatusPacket();
         playStatus.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         session.sendPacket(playStatus);
+
+        UpdateAttributesPacket attributesPacket = new UpdateAttributesPacket();
+        attributesPacket.setRuntimeEntityId(0);
+        List<AttributeData> attributes = new ArrayList<>();
+        // Default move speed
+        // Bedrock clients move very fast by default until they get an attribute packet correcting the speed
+        attributes.add(new AttributeData("minecraft:movement", 0.0f, 1024f, 0.1f, 0.1f));
+        attributesPacket.setAttributes(attributes);
+        session.sendPacket(attributesPacket);
     }
 }

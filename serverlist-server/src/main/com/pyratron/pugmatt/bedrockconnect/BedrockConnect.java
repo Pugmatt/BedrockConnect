@@ -1,5 +1,6 @@
 package main.com.pyratron.pugmatt.bedrockconnect;
 
+import main.com.pyratron.pugmatt.bedrockconnect.dns.DNS;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
@@ -40,6 +41,12 @@ public class BedrockConnect {
             String port = "19132";
 
             String serverLimit = "100";
+
+            String localIP = null;
+            String publicIP = null;
+            String localIPV6 = null;
+            String publicIPV6 = null;
+            boolean enableDNS = false;
 
             for(String str : args) {
                 if(str.startsWith("mysql_host="))
@@ -100,6 +107,68 @@ public class BedrockConnect {
                         throw new RuntimeException(e);
                     }
                 }
+                if(str.startsWith("localipv4=")) {
+                    localIP = getArgValue(str, "localipv4");
+                }
+                if(str.startsWith("localipv6=")) {
+                    localIPV6 = getArgValue(str, "localipv6");
+                }
+                if(str.startsWith("publicipv4=")) {
+                    publicIP = getArgValue(str, "publicipv4");
+                }
+                if(str.startsWith("publicipv6=")) {
+                    publicIPV6 = getArgValue(str, "publicipv6");
+                }
+                if(str.startsWith("enabledns=")) {
+                    enableDNS = true;
+                }
+            }
+
+            if(enableDNS) {
+                if(localIP == null) {
+                    String ip;
+
+                    try {
+                        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+
+                        System.out.println("Local IPv4 IPs:");
+                        while (interfaces.hasMoreElements()) {
+                            NetworkInterface iface = interfaces.nextElement();
+
+                            if (iface.isLoopback() || !iface.isUp() || iface.isVirtual() || iface.isPointToPoint())
+                                continue;
+
+                            Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                            while (addresses.hasMoreElements()) {
+                                InetAddress addr = addresses.nextElement();
+
+                                if (!(addr instanceof Inet4Address)) continue;
+
+                                ip = addr.getHostAddress();
+                                System.out.println(iface.getDisplayName() + ": " + ip);
+                            }
+                        }
+
+                        Scanner reader = new Scanner(System.in);  // Reading from System.in
+                        System.out.print("\nEnter the local IPv4 that players inside your WiFi network will connect to: ");
+                        localIP = reader.next().replaceAll("\\s+", "");
+                        reader.close();
+                    } catch (SocketException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+
+                if(publicIP == null) {
+                    URL whatismyip = new URL("http://checkip.amazonaws.com");
+                    BufferedReader in = new BufferedReader(new InputStreamReader(
+                            whatismyip.openStream()));
+
+                    publicIP = in.readLine();
+                }
+
+                DNS dnsServer = new DNS(localIP, publicIP, localIPV6, publicIPV6, 53);
+                dnsServer.start();
             }
 
             if(!noDB)
