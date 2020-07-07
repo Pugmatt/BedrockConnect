@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UIForms {
-    public static final int ERROR = 2, MAIN = 0, DIRECT_CONNECT = 1, REMOVE_SERVER = 3;
+    public static final int ERROR = 2, MAIN = 0, DIRECT_CONNECT = 1, REMOVE_SERVER = 3, DONATION = 4;
 
     public static int currentForm = 0;
+
+    public static final char ESCAPE = '\u00a7';
 
     public static ModalFormRequestPacket createMain(List<String> servers) {
         currentForm = MAIN;
@@ -83,6 +85,20 @@ public class UIForms {
         form.addProperty("title", "Error");
         JsonArray content = new JsonArray();
         content.add(UIComponents.createLabel(text));
+        form.add("content", content);
+        mf.setFormData(form.toString());
+        return mf;
+    }
+
+    public static ModalFormRequestPacket createDonatelink() {
+        currentForm = DONATION;
+        ModalFormRequestPacket mf = new ModalFormRequestPacket();
+        mf.setFormId(UIForms.DONATION);
+        JsonObject form = new JsonObject();
+        form.addProperty("type", "custom_form");
+        form.addProperty("title", "Thank you!");
+        JsonArray content = new JsonArray();
+        content.add(UIComponents.createLabel(""));
         form.add("content", content);
         mf.setFormData(form.toString());
         return mf;

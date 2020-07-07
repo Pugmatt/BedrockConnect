@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
 
 
 
@@ -48,7 +47,7 @@ public class MySQL extends Database {
     public Connection openConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://" + this.hostname + "/" + this.database, this.user, this.password);
+            connection = DriverManager.getConnection("jdbc:mysql://" + this.hostname + "/" + this.database + "?serverTimezone=UTC&useLegacyDatetimeCode=false", this.user, this.password);
             System.out.println("- MySQL Connection Started -");
 
         } catch (SQLException e) {

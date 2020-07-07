@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.nukkitx.protocol.bedrock.*;
+import com.nukkitx.protocol.bedrock.v407.Bedrock_v407;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 
@@ -19,11 +20,6 @@ public class Server {
     public BedrockPong pong;
 
     public static BedrockPacketCodec codec;
-
-    public boolean recordingDone = false;
-    public List<BedrockPacket> packets = new ArrayList<>();
-
-
 
     public int getProtocol() {
         return codec.getProtocolVersion();
@@ -42,6 +38,9 @@ public class Server {
         return players;
     }
 
+    public boolean recordingDone = false;
+    public List<BedrockPacket> packets = new ArrayList<>();
+
     public PipePlayer getPlayer(String uuid) {
         for(int i=0;i<players.size();i++) {
             if(players.get(i).getUuid() == uuid)
@@ -51,6 +50,11 @@ public class Server {
     }
 
     public void addPlayer(PipePlayer player) {
+        //System.gc();
+        //Runtime rt = Runtime.getRuntime();
+        //long usedMB = (rt.totalMemory() - rt.freeMemory()) / 1024 / 1024;
+        //System.out.println("Memory usage: " + usedMB);
+        System.out.println("Total users connected: " + this.players.size());
         this.players.add(player);
     }
 
@@ -70,7 +74,7 @@ public class Server {
         players = new ArrayList<>();
 
         InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", Integer.parseInt(port));
-        codec = Bedrock_v390.V390_CODEC;
+        codec = Bedrock_v407.V407_CODEC;
         server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
         pong.setEdition("MCPE");
@@ -93,7 +97,12 @@ public class Server {
             }
             @Override
             public void onSessionCreation(BedrockServerSession session) {
-                session.setPacketHandler(new PacketHandler(session, current));
+               // if(!recordingDone)
+              //      session.setPacketHandler(new PacketHandler(session, current, true));
+               // else {
+                    session.setPacketHandler(new PacketHandler(session, current, false));
+               // }
+                //session.setPacketHandler(new PacketHandler(session, current));
             }
         });
         // Start server up

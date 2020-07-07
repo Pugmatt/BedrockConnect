@@ -1,17 +1,14 @@
 package main.com.pyratron.pugmatt.bedrockconnect.listeners;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import com.nukkitx.math.vector.Vector2f;
+import com.nimbusds.jwt.SignedJWT;
 import com.nukkitx.math.vector.Vector3f;
-import com.nukkitx.math.vector.Vector3i;
-import com.nukkitx.nbt.CompoundTagBuilder;
 import com.nukkitx.nbt.NbtUtils;
-import com.nukkitx.nbt.stream.NBTOutputStream;
-import com.nukkitx.nbt.tag.CompoundTag;
 import com.nukkitx.network.util.Preconditions;
-import com.nukkitx.protocol.bedrock.BedrockClientSession;
-import com.nukkitx.protocol.bedrock.data.GamePublishSetting;
+import com.nukkitx.protocol.bedrock.BedrockClient;
 import com.nukkitx.protocol.bedrock.packet.*;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
@@ -20,6 +17,10 @@ import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import com.nukkitx.protocol.bedrock.packet.LoginPacket;
 import com.nukkitx.protocol.bedrock.util.EncryptionUtils;
+import com.nukkitx.protocol.bedrock.v388.Bedrock_v388;
+import com.nukkitx.protocol.bedrock.v407.Bedrock_v407;
+import io.netty.util.AsciiString;
+import io.netty.util.internal.ThreadLocalRandom;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.Server;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
@@ -28,9 +29,13 @@ import net.minidev.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.security.interfaces.ECPublicKey;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 // Heavily referenced from https://github.com/NukkitX/ProxyPass/blob/master/src/main/java/com/nukkitx/proxypass/network/bedrock/session/UpstreamPacketHandler.java
 
@@ -44,24 +49,12 @@ public class PacketHandler implements BedrockPacketHandler {
 
     private JSONObject extraData;
 
+    private JSONObject skinData;
+    private ArrayNode chainData;
+
     private boolean print = false;
 
-    private static final CompoundTag EMPTY_TAG = CompoundTagBuilder.builder().buildRootTag();
-    private static final byte[] EMPTY_LEVEL_CHUNK_DATA;
-
-    static {
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            outputStream.write(new byte[258]); // Biomes + Border Size + Extra Data Size
-
-            try (NBTOutputStream stream = NbtUtils.createNetworkWriter(outputStream)) {
-                stream.write(EMPTY_TAG);
-            }
-
-            EMPTY_LEVEL_CHUNK_DATA = outputStream.toByteArray();
-        }catch (IOException e) {
-            throw new AssertionError("Unable to generate empty level chunk data");
-        }
-    }
+    private boolean packetListening;
 
     @Override
     public boolean handle(AdventureSettingsPacket packet) {
@@ -1054,6 +1047,9 @@ public class PacketHandler implements BedrockPacketHandler {
                 case UIForms.ERROR:
                     session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
                     break;
+                case UIForms.DONATION:
+                    session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
+                    break;
             }
         return false;
     }
@@ -1073,9 +1069,10 @@ public class PacketHandler implements BedrockPacketHandler {
         return false;
     }
 
-    public PacketHandler(BedrockServerSession session, Server server) {
+    public PacketHandler(BedrockServerSession session, Server server, boolean packetListening) {
         this.session = session;
         this.server = server;
+        this.packetListening = packetListening;
 
         session.addDisconnectHandler((DisconnectReason) -> disconnect());
     }
@@ -1142,15 +1139,13 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(LoginPacket packet) {
-        if(print)
-            System.out.println(packet.toString());
         int protocolVersion = packet.getProtocolVersion();
         if (protocolVersion != server.getProtocol()) {
             PlayStatusPacket status = new PlayStatusPacket();
             if (protocolVersion > server.getProtocol()) {
-                status.setStatus(PlayStatusPacket.Status.FAILED_SERVER);
+                status.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
             } else {
-                status.setStatus(PlayStatusPacket.Status.FAILED_CLIENT);
+                status.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
             }
             session.sendPacket(status);
         }
@@ -1167,6 +1162,7 @@ public class PacketHandler implements BedrockPacketHandler {
         if (certChainData.getNodeType() != JsonNodeType.ARRAY) {
             throw new RuntimeException("Certificate data is not valid");
         }
+        chainData = (ArrayNode) certChainData;
 
         boolean validChain;
         try {
@@ -1191,28 +1187,40 @@ public class PacketHandler implements BedrockPacketHandler {
 
             System.out.println("Made it through login - " + "User: " + extraData.getAsString("displayName") + " (" + extraData.getAsString("identity") + ")");
 
-            name = extraData.getAsString("displayName");
-            uuid = extraData.getAsString("identity");
+
+                name = extraData.getAsString("displayName");
+                uuid = extraData.getAsString("identity");
 
 
-            PlayStatusPacket status = new PlayStatusPacket();
-            status.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
-            session.sendPacket(status);
+                PlayStatusPacket status = new PlayStatusPacket();
+                status.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
+                session.sendPacket(status);
 
-            SetEntityMotionPacket motion = new SetEntityMotionPacket();
-            motion.setRuntimeEntityId(1);
-            motion.setMotion(Vector3f.ZERO);
-            session.sendPacket(motion);
+                SetEntityMotionPacket motion = new SetEntityMotionPacket();
+                motion.setRuntimeEntityId(1);
+                motion.setMotion(Vector3f.ZERO);
+                session.sendPacket(motion);
 
-            ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
-            resourcePacksInfo.setForcedToAccept(false);
-            resourcePacksInfo.setScriptingEnabled(false);
-            session.sendPacket(resourcePacksInfo);
+                ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
+                resourcePacksInfo.setForcedToAccept(false);
+                resourcePacksInfo.setScriptingEnabled(false);
+                session.sendPacket(resourcePacksInfo);
         } catch (Exception e) {
             session.disconnect("disconnectionScreen.internalError.cantConnect");
             throw new RuntimeException("Unable to complete login", e);
         }
         return true;
     }
+
+    public Set<BedrockClient> clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
+
+    public BedrockClient newClient() {
+        InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", ThreadLocalRandom.current().nextInt(20000, 60000));
+        BedrockClient client = new BedrockClient(bindAddress);
+        this.clients.add(client);
+        client.bind().join();
+        return client;
+    }
+
 
 }
