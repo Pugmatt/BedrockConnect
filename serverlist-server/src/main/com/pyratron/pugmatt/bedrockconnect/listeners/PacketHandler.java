@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.nimbusds.jwt.SignedJWT;
 import com.nukkitx.math.vector.Vector3f;
-import com.nukkitx.nbt.CompoundTagBuilder;
 import com.nukkitx.nbt.NbtUtils;
-import com.nukkitx.nbt.stream.NBTOutputStream;
-import com.nukkitx.nbt.tag.CompoundTag;
 import com.nukkitx.network.util.Preconditions;
 import com.nukkitx.protocol.bedrock.BedrockClient;
 import com.nukkitx.protocol.bedrock.packet.*;
@@ -58,23 +55,6 @@ public class PacketHandler implements BedrockPacketHandler {
     private boolean print = false;
 
     private boolean packetListening;
-
-    private static final CompoundTag EMPTY_TAG = CompoundTagBuilder.builder().buildRootTag();
-    private static final byte[] EMPTY_LEVEL_CHUNK_DATA;
-
-    static {
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            outputStream.write(new byte[258]); // Biomes + Border Size + Extra Data Size
-
-            try (NBTOutputStream stream = NbtUtils.createNetworkWriter(outputStream)) {
-                stream.write(EMPTY_TAG);
-            }
-
-            EMPTY_LEVEL_CHUNK_DATA = outputStream.toByteArray();
-        }catch (IOException e) {
-            throw new AssertionError("Unable to generate empty level chunk data");
-        }
-    }
 
     @Override
     public boolean handle(AdventureSettingsPacket packet) {

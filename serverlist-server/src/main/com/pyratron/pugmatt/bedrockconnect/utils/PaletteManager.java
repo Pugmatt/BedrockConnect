@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nukkitx.nbt.NBTInputStream;
+import com.nukkitx.nbt.NbtList;
+import com.nukkitx.nbt.NbtMap;
 import com.nukkitx.nbt.NbtUtils;
-import com.nukkitx.nbt.stream.NBTInputStream;
-import com.nukkitx.nbt.tag.CompoundTag;
-import com.nukkitx.nbt.tag.ListTag;
 import com.nukkitx.protocol.bedrock.data.inventory.ItemData;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -26,32 +26,32 @@ public class PaletteManager {
 
     private ByteBuf cachedPalette;
 
-    public ListTag<CompoundTag> CACHED_PALLETE;
+    public NbtList<NbtMap> CACHED_PALLETE;
 
-    public static final CompoundTag BIOMES;
+    public static final NbtMap BIOMES;
 
     static {
         InputStream stream = BedrockConnect.class.getClassLoader().getResourceAsStream("tables/biome_definitions.dat");
 
-        CompoundTag biomesTag;
+        NbtMap biomesTag;
 
         try (NBTInputStream biomenbtInputStream = NbtUtils.createNetworkReader(stream)){
-            biomesTag = (CompoundTag) biomenbtInputStream.readTag();
+            biomesTag = (NbtMap) biomenbtInputStream.readTag();
             BIOMES = biomesTag;
         } catch (Exception ex) {
             throw new AssertionError(ex);
         }
     }
 
-    public static final CompoundTag ENTITY_IDENTIFIERS;
+    public static final NbtMap ENTITY_IDENTIFIERS;
 
     static {
         InputStream stream = BedrockConnect.class.getClassLoader().getResourceAsStream("tables/entity_identifiers.dat");
 
-        CompoundTag entityTag;
+        NbtMap entityTag;
 
         try (NBTInputStream entitynbtInputStream = NbtUtils.createNetworkReader(stream)){
-            entityTag = (CompoundTag) entitynbtInputStream.readTag();
+            entityTag = (NbtMap) entitynbtInputStream.readTag();
             ENTITY_IDENTIFIERS = entityTag;
         } catch (Exception ex) {
             throw new AssertionError(ex);
@@ -83,7 +83,7 @@ public class PaletteManager {
                 byte[] bytes = Base64.getDecoder().decode(itemNode.get("nbt_b64").asText());
                 ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
                 try {
-                    com.nukkitx.nbt.tag.CompoundTag tag = (com.nukkitx.nbt.tag.CompoundTag) NbtUtils.createReaderLE(bais).readTag();
+                    NbtMap tag = (NbtMap) NbtUtils.createReaderLE(bais).readTag();
                     creativeItems.add(ItemData.of(itemNode.get("id").asInt(), damage, 1, tag));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -104,13 +104,13 @@ public class PaletteManager {
         }
 
         Map<String, Integer> blockIdToIdentifier = new HashMap<>();
-        ListTag<CompoundTag> tag;
+        NbtList<NbtMap> tag;
 
         NBTInputStream nbtInputStream = NbtUtils.createNetworkReader(stream);
 
-        ListTag<CompoundTag> blocksTag;
+        NbtList<NbtMap> blocksTag;
         try {
-            tag = (ListTag<CompoundTag>) nbtInputStream.readTag();
+            tag = (NbtList<NbtMap>) nbtInputStream.readTag();
             nbtInputStream.close();
         } catch (Exception ex) {
             System.out.println("Failed to receive blocks palette");

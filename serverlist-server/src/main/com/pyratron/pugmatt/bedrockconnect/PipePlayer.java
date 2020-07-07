@@ -2,12 +2,10 @@ package main.com.pyratron.pugmatt.bedrockconnect;
 
 import com.nukkitx.math.vector.Vector2f;
 import com.nukkitx.math.vector.Vector3i;
-import com.nukkitx.nbt.CompoundTagBuilder;
+import com.nukkitx.nbt.NBTOutputStream;
+import com.nukkitx.nbt.NbtMap;
+import com.nukkitx.nbt.NbtMapBuilder;
 import com.nukkitx.nbt.NbtUtils;
-import com.nukkitx.nbt.stream.NBTInputStream;
-import com.nukkitx.nbt.stream.NBTOutputStream;
-import com.nukkitx.nbt.tag.CompoundTag;
-import com.nukkitx.nbt.tag.ListTag;
 import com.nukkitx.protocol.bedrock.Bedrock;
 import com.nukkitx.protocol.bedrock.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
@@ -37,7 +35,7 @@ public class PipePlayer {
 
     private String uuid;
 
-    private static final CompoundTag EMPTY_TAG = CompoundTagBuilder.builder().buildRootTag();
+    private static final NbtMap EMPTY_TAG = NbtMap.EMPTY;
     private static final byte[] EMPTY_LEVEL_CHUNK_DATA;
 
     static {
@@ -45,7 +43,7 @@ public class PipePlayer {
             outputStream.write(new byte[258]); // Biomes + Border Size + Extra Data Size
 
             try (NBTOutputStream stream = NbtUtils.createNetworkWriter(outputStream)) {
-                stream.write(EMPTY_TAG);
+                stream.writeTag(EMPTY_TAG);
             }
 
             EMPTY_LEVEL_CHUNK_DATA = outputStream.toByteArray();
@@ -184,11 +182,11 @@ public class PipePlayer {
         }
 
         BiomeDefinitionListPacket biomePacket = new BiomeDefinitionListPacket();
-        biomePacket.setTag(BedrockConnect.paletteManager.BIOMES);
+        biomePacket.setDefinitions(BedrockConnect.paletteManager.BIOMES);
         session.sendPacket(biomePacket);
 
         AvailableEntityIdentifiersPacket entityPacket = new AvailableEntityIdentifiersPacket();
-        entityPacket.setTag(BedrockConnect.paletteManager.ENTITY_IDENTIFIERS);
+        entityPacket.setIdentifiers(BedrockConnect.paletteManager.ENTITY_IDENTIFIERS);
         session.sendPacket(entityPacket);
 
         InventoryContentPacket creativePacket = new InventoryContentPacket();
