@@ -960,6 +960,9 @@ public class PacketHandler implements BedrockPacketHandler {
                                         case 5: // Mineville
                                             transfer("52.234.131.7", 19132);
                                             break;
+                                        case 6: // Galaxite
+                                            transfer("51.89.152.241", 19132);
+                                            break;
                                     }
                                 } else { // If server chosen is not a featured server
                                     String address = server.getPlayer(uuid).getServerList().get(chosen-2);
