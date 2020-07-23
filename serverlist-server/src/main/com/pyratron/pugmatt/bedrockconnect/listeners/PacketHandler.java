@@ -945,23 +945,11 @@ public class PacketHandler implements BedrockPacketHandler {
                                     int featuredServer = (chosen - 2) - (server.getPlayer(uuid).getServerList().size() - 1);
 
                                     switch (featuredServer) {
-                                        case 1: // Hive
-                                            transfer("54.39.75.136", 19132);
+                                        case 1: // Geyser
+                                            transfer("techax.sk", 19133);
                                             break;
-                                        case 2: // Mineplex
-                                            transfer("108.178.12.125", 19132);
-                                            break;
-                                        case 3: // Cubecraft
-                                            transfer("213.32.11.233", 19132);
-                                            break;
-                                        case 4: // Lifeboat
-                                            transfer("63.143.40.66", 19132);
-                                            break;
-                                        case 5: // Mineville
-                                            transfer("52.234.131.7", 19132);
-                                            break;
-                                        case 6: // Galaxite
-                                            transfer("51.89.152.241", 19132);
+                                        case 2:// DragonProxy
+                                            transfer("techax.sk", 19134);
                                             break;
                                     }
                                 } else { // If server chosen is not a featured server
