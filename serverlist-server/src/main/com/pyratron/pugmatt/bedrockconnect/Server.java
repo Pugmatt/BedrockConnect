@@ -78,8 +78,8 @@ public class Server {
         server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
         pong.setEdition("MCPE");
-        pong.setMotd("Join to open Server List");
-        pong.setSubMotd("BedrockConnect Server List");
+        pong.setMotd("TECHAX");
+        pong.setSubMotd("TECHAX");
         pong.setPlayerCount(0);
         pong.setMaximumPlayerCount(20);
         pong.setGameType("Survival");
