@@ -31,7 +31,7 @@ public class UIForms {
             buttons.add(UIComponents.createButton(servers.get(i), "https://i.imgur.com/3BmFZRE.png", "url"));
         }
         buttons.add(UIComponents.createButton("Geyser Proxy", "https://i.imgur.com/Pr5k7QL.png", "url"));
-        buttons.add(UIComponents.createButton("Galaxite", "Dragon Proxy", "https://i.imgur.com/u27hOuv.png", "url"));
+        buttons.add(UIComponents.createButton("Dragon Proxy", "https://i.imgur.com/u27hOuv.png", "url"));
         out.add("buttons", buttons);
 
         mf.setFormData(out.toString());
