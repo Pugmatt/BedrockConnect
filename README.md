@@ -80,6 +80,7 @@ In the case where you want to use your own DNS server instead of the one I suppl
 | play.inpvp.net | 104.238.130.180  |
 | mco.lbsg.net | 104.238.130.180  |
 | mco.cubecraft.net | 104.238.130.180  |
+| play.galaxite.net | 104.238.130.180 |
 
 *104.238.130.180 is the IP to the BedrockConnect serverlist server. If you are hosting your own BedrockConnect serverlist server as well, obviously use that IP instead*
 
