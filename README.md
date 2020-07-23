@@ -27,9 +27,7 @@ The BedrockConnect serverlist server, is a specially made Minecraft server that 
 
 **What is a DNS server?** A DNS server is what devices uses to know what domain names go with what IP address. Your device sends the DNS server a domain name and asks what IP is associated with it, and the DNS server sends an IP back for the device to connect to. Commonly used ones include Google or Cloudflare DNS. Anyone can technically create a DNS server, and have it associate whatever IP they want to a domain. In this case, we make the 'Featured Server' domains direct to our own server.
 
-**I don't trust your DNS server...** It's understandable why some might not want to use a random DNS server. Keep in mind, that a DNS server does not have any access to the information you send to a server/website. It only knows the domains you are currently trying to use so it can respond back with an IP to connect to, but nothing that has to do with information you send to an actual server. If you still don't feel comfortable using the BedrockConnect DNS server, you can also make your own. Look under 'Using your own DNS server' further down this page for more on that.
-
-
+**I don't trust your DNS server...** The public BedrockConnect DNS server only redirects the domains of the "Featured Servers" in Minecraft to the BedrockConnect serverlist. (Full list of records under the "Using your own DNS server" section) It's understandable though why some might not want to use a random DNS server.  If you fear a MITM attack, you can also verify any domains you fear the DNS server are overriding by pinging them in command line or another tool. If you still don't feel comfortable using the BedrockConnect DNS server, you can also make your own. Look under 'Using your own DNS server' further down this page for more on that.
 
 # Hosting your own serverlist server
 
