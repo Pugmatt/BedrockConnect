@@ -1,4 +1,4 @@
-sudo apt install bind9
+yum install bind9
 
 (Optional. Some hosts like Vultr don't allow hosting DNS servers with recursion)
 sudo vi /etc/bind/named.conf.options
@@ -14,7 +14,7 @@ zone "hivebedrock.network" IN {
 
 
 cd /var/cache/bind
-sudo vi db.hivebedrock.network
+vi db.hivebedrock.network
 @       in      SOA  hivebedrock.network. admin.hivebedrock.network. (
                                 2014030801      ; serial
                                         1D      ; refresh
@@ -28,5 +28,5 @@ sudo vi db.hivebedrock.network
 
 
 
-sudo service bind9 restart
+service bind9 restart
 dig @104.238.179.174 hivebedrock.network any
