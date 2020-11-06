@@ -3,20 +3,19 @@ package main.com.pyratron.pugmatt.bedrockconnect.gui;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.nukkitx.protocol.bedrock.packet.ModalFormRequestPacket;
+import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UIForms {
-    public static final int ERROR = 2, MAIN = 0, DIRECT_CONNECT = 1, REMOVE_SERVER = 3, DONATION = 4;
-
-    public static int currentForm = 0;
+    public static final int ERROR = 2, MAIN = 0, DIRECT_CONNECT = 1, OPEN_SERVER = 3, DONATION = 4, MODIFY_SERVER = 5, REMOVE_SERVER = 6;
 
     public static final char ESCAPE = '\u00a7';
 
-    public static ModalFormRequestPacket createMain(List<String> servers) {
-        currentForm = MAIN;
+    public static ModalFormRequestPacket createMain(List<String> servers, PacketHandler handler) {
+        handler.setForm(UIForms.MAIN);
         ModalFormRequestPacket mf = new ModalFormRequestPacket();
         mf.setFormId(UIForms.MAIN);
 
@@ -26,7 +25,6 @@ public class UIForms {
         JsonArray buttons = new JsonArray();
 
         buttons.add(UIComponents.createButton("Connect to a Server"));
-        buttons.add(UIComponents.createButton("Remove a Server"));
         for(int i=0;i<servers.size();i++) {
             buttons.add(UIComponents.createButton(servers.get(i), "https://i.imgur.com/3BmFZRE.png", "url"));
         }
@@ -43,8 +41,8 @@ public class UIForms {
         return mf;
     }
 
-    public static ModalFormRequestPacket createDirectConnect() {
-        currentForm = DIRECT_CONNECT;
+    public static ModalFormRequestPacket createDirectConnect(PacketHandler handler) {
+        handler.setForm(DIRECT_CONNECT);
         ModalFormRequestPacket mf = new ModalFormRequestPacket();
         mf.setFormId(UIForms.DIRECT_CONNECT);
         JsonObject out = UIComponents.createForm("custom_form", "Connect to a Server");
@@ -61,11 +59,50 @@ public class UIForms {
         return mf;
     }
 
-    public static ModalFormRequestPacket createRemoveServer(List<String> servers) {
-        currentForm = REMOVE_SERVER;
+    public static ModalFormRequestPacket createOpenServer(String server, PacketHandler handler) {
+        handler.setForm(UIForms.OPEN_SERVER);
+        ModalFormRequestPacket mf = new ModalFormRequestPacket();
+        mf.setFormId(OPEN_SERVER);
+
+        JsonObject out = UIComponents.createForm("form", server);
+        out.addProperty("content", "");
+
+        JsonArray buttons = new JsonArray();
+
+        buttons.add(UIComponents.createButton("Connect"));
+        buttons.add(UIComponents.createButton("Modify Server"));
+        buttons.add(UIComponents.createButton("Remove Server"));
+        out.add("buttons", buttons);
+
+        mf.setFormData(out.toString());
+
+        return mf;
+    }
+
+    public static ModalFormRequestPacket createRemoveServer(PacketHandler handler) {
+        handler.setForm(UIForms.REMOVE_SERVER);
+        ModalFormRequestPacket mf = new ModalFormRequestPacket();
+        mf.setFormId(REMOVE_SERVER);
+
+        JsonObject out = UIComponents.createForm("form", "Are you sure?");
+        out.addProperty("content", "");
+
+        JsonArray buttons = new JsonArray();
+
+        buttons.add(UIComponents.createButton("Yes, remove"));
+        buttons.add(UIComponents.createButton("No"));
+        out.add("buttons", buttons);
+
+        mf.setFormData(out.toString());
+
+        return mf;
+    }
+
+    /** public static ModalFormRequestPacket createModifyServer() {
+        currentForm = MODIFY_SERVER;
         ModalFormRequestPacket mf = new ModalFormRequestPacket();
         mf.setFormId(UIForms.REMOVE_SERVER);
-        JsonObject out = UIComponents.createForm("custom_form", "Remove Server");
+        JsonObject out = UIComponents.createForm("custom_form", "Modify Server");
 
         JsonArray inputs = new JsonArray();
 
@@ -75,10 +112,10 @@ public class UIForms {
         mf.setFormData(out.toString());
 
         return mf;
-    }
+    } **/
 
-    public static ModalFormRequestPacket createError(String text) {
-        currentForm = ERROR;
+    public static ModalFormRequestPacket createError(String text, PacketHandler handler) {
+        handler.setForm(UIForms.ERROR);
         ModalFormRequestPacket mf = new ModalFormRequestPacket();
         mf.setFormId(UIForms.ERROR);
         JsonObject form = new JsonObject();
@@ -91,8 +128,8 @@ public class UIForms {
         return mf;
     }
 
-    public static ModalFormRequestPacket createDonatelink() {
-        currentForm = DONATION;
+    public static ModalFormRequestPacket createDonatelink(PacketHandler handler) {
+        handler.setForm(UIForms.DONATION);
         ModalFormRequestPacket mf = new ModalFormRequestPacket();
         mf.setFormId(UIForms.DONATION);
         JsonObject form = new JsonObject();
