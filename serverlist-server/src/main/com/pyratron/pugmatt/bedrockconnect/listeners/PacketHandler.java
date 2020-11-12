@@ -952,7 +952,7 @@ public class PacketHandler implements BedrockPacketHandler {
                                             transfer("108.178.12.125", 19132);
                                             break;
                                         case 3: // Cubecraft
-                                            transfer("213.32.11.233", 19132);
+                                            transfer("play.cubecraft.net", 19132);
                                             break;
                                         case 4: // Lifeboat
                                             transfer("63.143.40.66", 19132);
