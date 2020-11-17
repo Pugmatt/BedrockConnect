@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.nukkitx.protocol.bedrock.*;
 import com.nukkitx.protocol.bedrock.v408.Bedrock_v408;
+import com.nukkitx.protocol.bedrock.v419.Bedrock_v419;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 
@@ -74,7 +75,7 @@ public class Server {
         players = new ArrayList<>();
 
         InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", Integer.parseInt(port));
-        codec = Bedrock_v408.V408_CODEC;
+        codec = Bedrock_v419.V419_CODEC;
         server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
         pong.setEdition("MCPE");

@@ -11,6 +11,7 @@ import com.nukkitx.protocol.bedrock.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.data.*;
 import com.nukkitx.protocol.bedrock.data.inventory.ContainerId;
+import com.nukkitx.protocol.bedrock.data.inventory.ItemData;
 import com.nukkitx.protocol.bedrock.packet.*;
 import com.nukkitx.math.vector.Vector3f;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
@@ -145,7 +146,7 @@ public class PipePlayer {
         startGamePacket.setWorldTemplateOptionLocked(false);
 
         //startGamePacket.setOnlySpawningV1Villagers(false);
-        //startGamePacket.setMovementServerAuthoritative(false);
+        startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.CLIENT);
         //startGamePacket.setTrial(false);
         startGamePacket.setVanillaVersion("*");
 
@@ -160,6 +161,11 @@ public class PipePlayer {
         startGamePacket.setBlockPalette(BedrockConnect.paletteManager.CACHED_PALLETE);
 
         session.sendPacket(startGamePacket);
+
+        // Required to be sent for 1.16.100
+        CreativeContentPacket creativeContentPacket = new CreativeContentPacket();
+        creativeContentPacket.setContents(new ItemData[0]);
+        session.sendPacket(creativeContentPacket);
 
         spawn();
     }
