@@ -945,9 +945,10 @@ public class PacketHandler implements BedrockPacketHandler {
                                     int featuredServer = (chosen - 2) - (server.getPlayer(uuid).getServerList().size() - 1);
 
                                     switch (featuredServer) {
+
                                         case 1: // techax
                                             transfer("techax.sk", 19133);
-                                            break;
+                                        break;
                                     }
                                 } else { // If server chosen is not a featured server
                                     String address = server.getPlayer(uuid).getServerList().get(chosen-2);
