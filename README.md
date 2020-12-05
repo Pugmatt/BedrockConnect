@@ -17,7 +17,7 @@ Switch: https://www.youtube.com/watch?v=zalT_oR1nPM
 
 Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
 
-PS4: Although this is technically possible, I don't have a PS4 to make a tutorial video on. If anyone has a PS4 and would like to make a tutorial, send me the video and I'll put the link of the video here. :)
+PS4: https://www.youtube.com/watch?v=ND_VFaAXC8M
 
 # FAQ
 
