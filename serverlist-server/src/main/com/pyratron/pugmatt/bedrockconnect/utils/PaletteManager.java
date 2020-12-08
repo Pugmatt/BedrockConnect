@@ -60,7 +60,7 @@ public class PaletteManager {
 
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-    public static final ItemData[] CREATIVE_ITEMS;
+    public static final List<ItemData> CREATIVE_ITEMS;
 
     static {
         /* Load creative items */
@@ -92,7 +92,7 @@ public class PaletteManager {
                 creativeItems.add(ItemData.of(itemNode.get("id").asInt(), damage, 1));
             }
         }
-        CREATIVE_ITEMS = creativeItems.toArray(new ItemData[0]);
+        CREATIVE_ITEMS = creativeItems;
     }
 
 
