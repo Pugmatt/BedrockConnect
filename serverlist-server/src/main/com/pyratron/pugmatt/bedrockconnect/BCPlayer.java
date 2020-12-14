@@ -20,12 +20,11 @@ import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Duration;
+import java.time.LocalTime;
+import java.util.*;
 
-public class PipePlayer {
+public class BCPlayer {
 
     private BedrockServerSession session;
     private List<String> serverList = new ArrayList<>();
@@ -35,6 +34,8 @@ public class PipePlayer {
     private Data data;
 
     private String uuid;
+
+    private LocalTime lastAction;
 
     private static final NbtMap EMPTY_TAG = NbtMap.EMPTY;
     private static final byte[] EMPTY_LEVEL_CHUNK_DATA;
@@ -54,12 +55,13 @@ public class PipePlayer {
     }
 
 
-    public PipePlayer(String uuid, Data data, BedrockServerSession session, List<String> serverList, int serverLimit) {
+    public BCPlayer(String uuid, Data data, BedrockServerSession session, List<String> serverList, int serverLimit) {
         this.uuid = uuid;
         this.data = data;
         this.session = session;
         this.serverList = serverList;
         this.serverLimit = serverLimit;
+        this.lastAction = LocalTime.now();
 
         joinGame();
     }
@@ -90,11 +92,11 @@ public class PipePlayer {
         this.serverLimit = serverLimit;
     }
 
-    public void joinGame() {
+    public boolean isActive() { return Duration.between(lastAction, LocalTime.now()).toMillis() <= 300000; }
 
-        /** for(BedrockPacket packet : BedrockConnect.server.packets) {
-            session.sendPacket(packet);
-        } **/
+    public void setActive() { lastAction = LocalTime.now(); }
+
+    public void joinGame() {
 
         MovePlayerPacket mp = new MovePlayerPacket();
         mp.setRuntimeEntityId(1);

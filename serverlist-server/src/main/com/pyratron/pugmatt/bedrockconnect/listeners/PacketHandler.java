@@ -49,12 +49,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
     private JSONObject extraData;
 
-    private JSONObject skinData;
-    private ArrayNode chainData;
-
     private boolean print = false;
-
-    private boolean packetListening;
 
     @Override
     public boolean handle(AdventureSettingsPacket packet) {
@@ -924,6 +919,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(ModalFormResponsePacket packet) {
+        server.getPlayer(uuid).setActive();
         if(print)
             System.out.println(packet.toString());
             switch (packet.getFormId()) {
@@ -1075,7 +1071,6 @@ public class PacketHandler implements BedrockPacketHandler {
     public PacketHandler(BedrockServerSession session, Server server, boolean packetListening) {
         this.session = session;
         this.server = server;
-        this.packetListening = packetListening;
 
         session.addDisconnectHandler((DisconnectReason) -> disconnect());
     }
@@ -1165,7 +1160,6 @@ public class PacketHandler implements BedrockPacketHandler {
         if (certChainData.getNodeType() != JsonNodeType.ARRAY) {
             throw new RuntimeException("Certificate data is not valid");
         }
-        chainData = (ArrayNode) certChainData;
 
         boolean validChain;
         try {
@@ -1191,38 +1185,28 @@ public class PacketHandler implements BedrockPacketHandler {
             System.out.println("Made it through login - " + "User: " + extraData.getAsString("displayName") + " (" + extraData.getAsString("identity") + ")");
 
 
-                name = extraData.getAsString("displayName");
-                uuid = extraData.getAsString("identity");
+            name = extraData.getAsString("displayName");
+            uuid = extraData.getAsString("identity");
 
 
-                PlayStatusPacket status = new PlayStatusPacket();
-                status.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
-                session.sendPacket(status);
+            PlayStatusPacket status = new PlayStatusPacket();
+            status.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
+            session.sendPacket(status);
 
-                SetEntityMotionPacket motion = new SetEntityMotionPacket();
-                motion.setRuntimeEntityId(1);
-                motion.setMotion(Vector3f.ZERO);
-                session.sendPacket(motion);
+            SetEntityMotionPacket motion = new SetEntityMotionPacket();
+            motion.setRuntimeEntityId(1);
+            motion.setMotion(Vector3f.ZERO);
+            session.sendPacket(motion);
 
-                ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
-                resourcePacksInfo.setForcedToAccept(false);
-                resourcePacksInfo.setScriptingEnabled(false);
-                session.sendPacket(resourcePacksInfo);
+            ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
+            resourcePacksInfo.setForcedToAccept(false);
+            resourcePacksInfo.setScriptingEnabled(false);
+            session.sendPacket(resourcePacksInfo);
         } catch (Exception e) {
             session.disconnect("disconnectionScreen.internalError.cantConnect");
             throw new RuntimeException("Unable to complete login", e);
         }
         return true;
-    }
-
-    public Set<BedrockClient> clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
-
-    public BedrockClient newClient() {
-        InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", ThreadLocalRandom.current().nextInt(20000, 60000));
-        BedrockClient client = new BedrockClient(bindAddress);
-        this.clients.add(client);
-        client.bind().join();
-        return client;
     }
 
 
