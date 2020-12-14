@@ -63,11 +63,17 @@ public class BCPlayer {
         this.serverLimit = serverLimit;
         this.lastAction = LocalTime.now();
 
+        if(session != null)
         joinGame();
     }
 
     public BedrockServerSession getSession() {
         return session;
+    }
+
+    public void disconnect(String reason, Server server) {
+        session.disconnect(reason);
+        server.removePlayer(this);
     }
 
     public List<String> getServerList() {
@@ -92,7 +98,7 @@ public class BCPlayer {
         this.serverLimit = serverLimit;
     }
 
-    public boolean isActive() { return Duration.between(lastAction, LocalTime.now()).toMillis() <= 300000; }
+    public boolean isActive() { return Duration.between(lastAction, LocalTime.now()).toMillis() <= 600000; }
 
     public void setActive() { lastAction = LocalTime.now(); }
 

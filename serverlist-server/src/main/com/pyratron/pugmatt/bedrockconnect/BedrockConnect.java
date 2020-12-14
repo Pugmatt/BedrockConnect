@@ -23,6 +23,7 @@ public class BedrockConnect {
     public static Server server;
 
     public static boolean noDB = false;
+    public static boolean kickInactive = true;
 
     public static void main(String[] args) {
         System.out.println("-= BedrockConnect =-");
@@ -117,6 +118,9 @@ public class BedrockConnect {
                 }
                 if(str.startsWith("publicipv6=")) {
                     publicIPV6 = getArgValue(str, "publicipv6");
+                }
+                if(str.startsWith("kick_inactive=")) {
+                    kickInactive = getArgValue(str, "kick_inactive").equals("true");
                 }
             }
 

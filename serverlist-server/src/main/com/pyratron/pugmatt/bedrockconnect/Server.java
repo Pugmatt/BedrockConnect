@@ -41,7 +41,7 @@ public class Server {
 
     public BCPlayer getPlayer(String uuid) {
         for(int i=0;i<players.size();i++) {
-            if(players.get(i).getUuid() == uuid)
+            if(players.get(i) != null && players.get(i).getUuid() != null && players.get(i).getUuid() == uuid)
                 return players.get(i);
         }
         return null;
@@ -53,7 +53,8 @@ public class Server {
     }
 
     public void removePlayer(BCPlayer player) {
-        this.players.remove(player);
+        if(this.players.contains(player))
+            this.players.remove(player);
     }
 
 
@@ -93,15 +94,18 @@ public class Server {
         // Start server up
         server.bind().join();
         System.out.println("Bedrock Connection Started: localhost:19132");
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            public void run() {
-                for(int i = 0; i < players.size(); i++) {
-                    if(players.get(i) != null && !players.get(i).isActive())
-                        players.get(i).getSession().disconnect("Kicked for AFK");
+        if(BedrockConnect.kickInactive) {
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                public void run() {
+                    for (int i = 0; i < players.size(); i++) {
+                        if (players.get(i) != null && !players.get(i).isActive())
+                            players.get(i).disconnect("Kicked for inactivity", current);
+                    }
                 }
-            }
-        };
-        timer.scheduleAtFixedRate(task, 0L, 1200L);
+            };
+            timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
+        }
+
     }
 }
