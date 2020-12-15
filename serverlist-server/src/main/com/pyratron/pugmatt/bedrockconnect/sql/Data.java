@@ -1,18 +1,16 @@
 package main.com.pyratron.pugmatt.bedrockconnect.sql;
 
-import com.nukkitx.protocol.bedrock.Bedrock;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
-import com.nukkitx.protocol.bedrock.BedrockSession;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
-import main.com.pyratron.pugmatt.bedrockconnect.PipePlayer;
+import main.com.pyratron.pugmatt.bedrockconnect.BCPlayer;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
+import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -62,9 +60,9 @@ public class Data {
         ).start();
     }
 
-    public PipePlayer getPlayer(ResultSet rs, String uuid, BedrockServerSession session) {
+    public BCPlayer getPlayer(ResultSet rs, String uuid, BedrockServerSession session) {
         try {
-            PipePlayer p = new PipePlayer(uuid,this, session, UIComponents.getFormData(rs.getString("servers")), rs.getInt("serverLimit"));
+            BCPlayer p = new BCPlayer(uuid,this, session, UIComponents.getFormData(rs.getString("servers")), rs.getInt("serverLimit"));
             return p;
         }
         catch(SQLException e) {
@@ -74,7 +72,7 @@ public class Data {
     }
 
     // If user exists
-    public void userExists(String uuid, String name, BedrockServerSession session) {
+    public void userExists(String uuid, String name, BedrockServerSession session, PacketHandler packetHandler) {
         if(!BedrockConnect.noDB) {
             Data db = this;
             new Thread(() -> {
@@ -89,12 +87,13 @@ public class Data {
                                 if (!rs.getString("name").equals(name)) {
                                     Basic_SQL("UPDATE servers SET name='" + name + "' WHERE uuid='" + uuid + "'");
                                 }
-                                PipePlayer p = getPlayer(rs, uuid, session);
+                                BCPlayer p = getPlayer(rs, uuid, session);
+                                packetHandler.setPlayer(p);
                                 if (p != null)
                                     BedrockConnect.server.addPlayer(p);
                             }
                         } else {
-                            addNewUser(uuid, name, session);
+                            addNewUser(uuid, name, session, packetHandler);
                         }
                     }
                 } catch (Exception e) {
@@ -119,7 +118,8 @@ public class Data {
                     pw.flush();
                     pw.close();
 
-                    PipePlayer pl = new PipePlayer(uuid, this, session, new ArrayList<>(), Integer.parseInt(serverLimit));
+                    BCPlayer pl = new BCPlayer(uuid, this, session, new ArrayList<>(), Integer.parseInt(serverLimit));
+                    packetHandler.setPlayer(pl);
                     BedrockConnect.server.addPlayer(pl);
                 } else {
                     Object obj = new JSONParser().parse(new FileReader("players/" + uuid + ".json"));
@@ -130,7 +130,8 @@ public class Data {
 
                     JSONArray servers = (JSONArray) jo.get("servers");
 
-                    PipePlayer p = new PipePlayer(uuid,this, session, servers, serverLimit);
+                    BCPlayer p = new BCPlayer(uuid,this, session, servers, serverLimit);
+                    packetHandler.setPlayer(p);
                     BedrockConnect.server.addPlayer(p);
                 }
             } catch (Exception e) {
@@ -140,7 +141,7 @@ public class Data {
         }
     }
 
-    public void addNewUser(String uuid, String name, BedrockServerSession session)
+    public void addNewUser(String uuid, String name, BedrockServerSession session, PacketHandler packetHandler)
     {
         Data db = this;
         new Thread(() -> {
@@ -149,7 +150,8 @@ public class Data {
                     PreparedStatement s = BedrockConnect.connection.prepareStatement("INSERT INTO servers (uuid, name, serverLimit) VALUES ('" + uuid + "', '" + name + "', 10)");
                     s.executeUpdate();
                     System.out.println("[BedrockConnect] Added new user '" + name + "' (" + uuid + ") to Database.");
-                    PipePlayer pl = new PipePlayer(uuid, db, session, new ArrayList<>(), Integer.parseInt(serverLimit));
+                    BCPlayer pl = new BCPlayer(uuid, db, session, new ArrayList<>(), Integer.parseInt(serverLimit));
+                    packetHandler.setPlayer(pl);
                     BedrockConnect.server.addPlayer(pl);
                 }
                 catch (Exception e)

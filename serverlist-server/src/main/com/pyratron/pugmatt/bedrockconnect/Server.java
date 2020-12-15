@@ -4,17 +4,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.nukkitx.protocol.bedrock.*;
-import com.nukkitx.protocol.bedrock.v408.Bedrock_v408;
-import com.nukkitx.protocol.bedrock.v419.Bedrock_v419;
 import com.nukkitx.protocol.bedrock.v422.Bedrock_v422;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
-import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 
 
 import javax.annotation.Nonnull;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Server {
 
@@ -34,40 +33,28 @@ public class Server {
     public static final ObjectMapper JSON_MAPPER = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     public static final YAMLMapper YAML_MAPPER = (YAMLMapper) new YAMLMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-    private List<PipePlayer> players;
+    private List<BCPlayer> players;
 
-    public List<PipePlayer> getPlayers() {
+    public List<BCPlayer> getPlayers() {
         return players;
     }
 
-    public boolean recordingDone = false;
-    public List<BedrockPacket> packets = new ArrayList<>();
-
-    public PipePlayer getPlayer(String uuid) {
+    public BCPlayer getPlayer(String uuid) {
         for(int i=0;i<players.size();i++) {
-            if(players.get(i).getUuid() == uuid)
+            if(players.get(i) != null && players.get(i).getUuid() != null && players.get(i).getUuid() == uuid)
                 return players.get(i);
         }
         return null;
     }
 
-    public void addPlayer(PipePlayer player) {
-        //System.gc();
-        //Runtime rt = Runtime.getRuntime();
-        //long usedMB = (rt.totalMemory() - rt.freeMemory()) / 1024 / 1024;
-        //System.out.println("Memory usage: " + usedMB);
+    public void addPlayer(BCPlayer player) {
         System.out.println("Total users connected: " + this.players.size());
         this.players.add(player);
     }
 
-    public PipePlayer addPlayer(String uuid, Data data, BedrockServerSession session, List<String> serverList, int serverLimit) {
-        PipePlayer player = new PipePlayer(uuid, data, session, serverList, serverLimit);
-        this.players.add(player);
-        return player;
-    }
-
-    public void removePlayer(PipePlayer player) {
-        this.players.remove(player);
+    public void removePlayer(BCPlayer player) {
+        if(this.players.contains(player))
+            this.players.remove(player);
     }
 
 
@@ -80,7 +67,7 @@ public class Server {
         server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
         pong.setEdition("MCPE");
-        pong.setMotd("Join to open Server List");
+        pong.setMotd("Join To Open Server List");
         pong.setSubMotd("BedrockConnect Server List");
         pong.setPlayerCount(0);
         pong.setMaximumPlayerCount(20);
@@ -93,22 +80,32 @@ public class Server {
             public boolean onConnectionRequest(InetSocketAddress address) {
                 return true; // Connection will be accepted
             }
+
             @Nonnull
             public BedrockPong onQuery(InetSocketAddress address) {
                 return pong;
             }
+
             @Override
             public void onSessionCreation(BedrockServerSession session) {
-               // if(!recordingDone)
-              //      session.setPacketHandler(new PacketHandler(session, current, true));
-               // else {
                     session.setPacketHandler(new PacketHandler(session, current, false));
-               // }
-                //session.setPacketHandler(new PacketHandler(session, current));
             }
         });
         // Start server up
         server.bind().join();
         System.out.println("Bedrock Connection Started: localhost:19132");
+        if(BedrockConnect.kickInactive) {
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                public void run() {
+                    for (int i = 0; i < players.size(); i++) {
+                        if (players.get(i) != null && !players.get(i).isActive())
+                            players.get(i).disconnect("Kicked for inactivity", current);
+                    }
+                }
+            };
+            timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
+        }
+
     }
 }

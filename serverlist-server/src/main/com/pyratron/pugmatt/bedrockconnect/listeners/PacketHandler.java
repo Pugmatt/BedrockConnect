@@ -21,6 +21,7 @@ import com.nukkitx.protocol.bedrock.v388.Bedrock_v388;
 import com.nukkitx.protocol.bedrock.v407.Bedrock_v407;
 import io.netty.util.AsciiString;
 import io.netty.util.internal.ThreadLocalRandom;
+import main.com.pyratron.pugmatt.bedrockconnect.BCPlayer;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.CustomServer;
 import main.com.pyratron.pugmatt.bedrockconnect.CustomServerHandler;
@@ -49,14 +50,15 @@ public class PacketHandler implements BedrockPacketHandler {
     private String name;
     private String uuid;
 
-    private JSONObject extraData;
+    private BCPlayer player;
 
-    private JSONObject skinData;
-    private ArrayNode chainData;
+    private JSONObject extraData;
 
     private boolean print = false;
 
-    private boolean packetListening;
+    public void setPlayer(BCPlayer player) {
+        this.player = player;
+    }
 
     @Override
     public boolean handle(AdventureSettingsPacket packet) {
@@ -926,6 +928,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(ModalFormResponsePacket packet) {
+        player.setActive();
         if(print)
             System.out.println(packet.toString());
             switch (packet.getFormId()) {
@@ -933,13 +936,13 @@ public class PacketHandler implements BedrockPacketHandler {
                     if(UIForms.currentForm == UIForms.MAIN) {
                         // If exiting main window
                         if (packet.getFormData().contains("null")) {
-                            session.disconnect("Exiting Server List");
+                            player.disconnect("Exiting Server List", server);
                         } else { // If selecting button
                             int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
                             if (chosen == 0) { // Add Server
                                 session.sendPacketImmediately(UIForms.createDirectConnect());
                             } else if (chosen == 1) { // Remove Server
-                                session.sendPacketImmediately(UIForms.createRemoveServer(server.getPlayer(uuid).getServerList()));
+                                session.sendPacketImmediately(UIForms.createRemoveServer(player.getServerList()));
                             } else { // Choosing Server
 
                                 CustomServer[] customServers = CustomServerHandler.getServers();
@@ -997,7 +1000,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 case UIForms.DIRECT_CONNECT:
                     try {
                         if(packet.getFormData().contains("null"))
-                            session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
+                            session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
                         else {
                             ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
                             if(data.size() > 1) {
@@ -1016,12 +1019,12 @@ public class PacketHandler implements BedrockPacketHandler {
                                 else {
                                     boolean addServer = Boolean.parseBoolean(data.get(2));
                                     if (addServer) {
-                                        List<String> serverList = server.getPlayer(uuid).getServerList();
-                                        if (serverList.size() >= server.getPlayer(uuid).getServerLimit())
-                                            session.sendPacketImmediately(UIForms.createError("You have hit your serverlist limit of " + server.getPlayer(uuid).getServerLimit() + " servers. Remove some to add more."));
+                                        List<String> serverList = player.getServerList();
+                                        if (serverList.size() >= player.getServerLimit())
+                                            session.sendPacketImmediately(UIForms.createError("You have hit your serverlist limit of " + player.getServerLimit() + " servers. Remove some to add more."));
                                         else {
                                             serverList.add(data.get(0) + ":" + data.get(1));
-                                            server.getPlayer(uuid).setServerList(serverList);
+                                            player.setServerList(serverList);
                                             transfer(data.get(0).replace(" ", ""), Integer.parseInt(data.get(1)));
                                         }
                                     } else {
@@ -1040,16 +1043,16 @@ public class PacketHandler implements BedrockPacketHandler {
                 case UIForms.REMOVE_SERVER:
                     try {
                         if(packet.getFormData().contains("null"))
-                            session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
+                            session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
                         else {
                             ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
 
                             int chosen = Integer.parseInt(data.get(0));
 
-                            List<String> serverList = server.getPlayer(uuid).getServerList();
+                            List<String> serverList = player.getServerList();
                             serverList.remove(chosen);
 
-                            server.getPlayer(uuid).setServerList(serverList);
+                            player.setServerList(serverList);
 
                             session.sendPacketImmediately(UIForms.createMain(serverList));
                         }
@@ -1058,10 +1061,10 @@ public class PacketHandler implements BedrockPacketHandler {
                     }
                     break;
                 case UIForms.ERROR:
-                    session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
+                    session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
                     break;
                 case UIForms.DONATION:
-                    session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
+                    session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
                     break;
             }
         return false;
@@ -1078,21 +1081,21 @@ public class PacketHandler implements BedrockPacketHandler {
     public boolean handle(SetLocalPlayerAsInitializedPacket packet) {
         if(print)
             System.out.println(packet.toString());
-        session.sendPacketImmediately(UIForms.createMain(server.getPlayer(uuid).getServerList()));
+        session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
         return false;
     }
 
     public PacketHandler(BedrockServerSession session, Server server, boolean packetListening) {
         this.session = session;
         this.server = server;
-        this.packetListening = packetListening;
 
         session.addDisconnectHandler((DisconnectReason) -> disconnect());
     }
 
     public void disconnect() {
         System.out.println(name + " disconnected");
-        server.removePlayer(server.getPlayer(uuid));
+        if(player != null)
+            server.removePlayer(player);
     }
 
     private static boolean validateChainData(JsonNode data) throws Exception {
@@ -1133,7 +1136,7 @@ public class PacketHandler implements BedrockPacketHandler {
             System.out.println(packet.toString());
         switch (packet.getStatus()) {
             case COMPLETED:
-                BedrockConnect.data.userExists(uuid, name, session);
+                BedrockConnect.data.userExists(uuid, name, session, this);
                 break;
             case HAVE_ALL_PACKS:
                 ResourcePackStackPacket rs = new ResourcePackStackPacket();
@@ -1175,7 +1178,6 @@ public class PacketHandler implements BedrockPacketHandler {
         if (certChainData.getNodeType() != JsonNodeType.ARRAY) {
             throw new RuntimeException("Certificate data is not valid");
         }
-        chainData = (ArrayNode) certChainData;
 
         boolean validChain;
         try {
@@ -1201,38 +1203,28 @@ public class PacketHandler implements BedrockPacketHandler {
             System.out.println("Made it through login - " + "User: " + extraData.getAsString("displayName") + " (" + extraData.getAsString("identity") + ")");
 
 
-                name = extraData.getAsString("displayName");
-                uuid = extraData.getAsString("identity");
+            name = extraData.getAsString("displayName");
+            uuid = extraData.getAsString("identity");
 
 
-                PlayStatusPacket status = new PlayStatusPacket();
-                status.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
-                session.sendPacket(status);
+            PlayStatusPacket status = new PlayStatusPacket();
+            status.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
+            session.sendPacket(status);
 
-                SetEntityMotionPacket motion = new SetEntityMotionPacket();
-                motion.setRuntimeEntityId(1);
-                motion.setMotion(Vector3f.ZERO);
-                session.sendPacket(motion);
+            SetEntityMotionPacket motion = new SetEntityMotionPacket();
+            motion.setRuntimeEntityId(1);
+            motion.setMotion(Vector3f.ZERO);
+            session.sendPacket(motion);
 
-                ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
-                resourcePacksInfo.setForcedToAccept(false);
-                resourcePacksInfo.setScriptingEnabled(false);
-                session.sendPacket(resourcePacksInfo);
+            ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
+            resourcePacksInfo.setForcedToAccept(false);
+            resourcePacksInfo.setScriptingEnabled(false);
+            session.sendPacket(resourcePacksInfo);
         } catch (Exception e) {
             session.disconnect("disconnectionScreen.internalError.cantConnect");
             throw new RuntimeException("Unable to complete login", e);
         }
         return true;
-    }
-
-    public Set<BedrockClient> clients = Collections.newSetFromMap(new ConcurrentHashMap<>());
-
-    public BedrockClient newClient() {
-        InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", ThreadLocalRandom.current().nextInt(20000, 60000));
-        BedrockClient client = new BedrockClient(bindAddress);
-        this.clients.add(client);
-        client.bind().join();
-        return client;
     }
 
 
