@@ -22,6 +22,8 @@ import com.nukkitx.protocol.bedrock.v407.Bedrock_v407;
 import io.netty.util.AsciiString;
 import io.netty.util.internal.ThreadLocalRandom;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
+import main.com.pyratron.pugmatt.bedrockconnect.CustomServer;
+import main.com.pyratron.pugmatt.bedrockconnect.CustomServerHandler;
 import main.com.pyratron.pugmatt.bedrockconnect.Server;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIForms;
@@ -940,31 +942,39 @@ public class PacketHandler implements BedrockPacketHandler {
                                 session.sendPacketImmediately(UIForms.createRemoveServer(server.getPlayer(uuid).getServerList()));
                             } else { // Choosing Server
 
+                                CustomServer[] customServers = CustomServerHandler.getServers();
+                                List<String> playerServers = server.getPlayer(uuid).getServerList();
+                                int serverIndex = chosen - 2;
+
                                 // If server chosen is a featued server
-                                if(chosen-2 > server.getPlayer(uuid).getServerList().size()-1) {
-                                    int featuredServer = (chosen - 2) - (server.getPlayer(uuid).getServerList().size() - 1);
+                                if(serverIndex + 1 > playerServers.size() + customServers.length) {
+                                    int featuredServer = serverIndex - playerServers.size() - customServers.length;
 
                                     switch (featuredServer) {
-                                        case 1: // Hive
+                                        case 0: // Hive
                                             transfer("54.39.75.136", 19132);
                                             break;
-                                        case 2: // Mineplex
+                                        case 1: // Mineplex
                                             transfer("108.178.12.125", 19132);
                                             break;
-                                        case 3: // Cubecraft
+                                        case 2: // Cubecraft
                                             transfer("play.cubecraft.net", 19132);
                                             break;
-                                        case 4: // Lifeboat
+                                        case 3: // Lifeboat
                                             transfer("63.143.40.66", 19132);
                                             break;
-                                        case 5: // Mineville
+                                        case 4: // Mineville
                                             transfer("52.234.131.7", 19132);
                                             break;
-                                        case 6: // Galaxite
+                                        case 5: // Galaxite
                                             transfer("51.89.152.241", 19132);
                                             break;
                                     }
-                                } else { // If server chosen is not a featured server
+                                } else if (serverIndex + 1 > playerServers.size() && serverIndex - playerServers.size() < customServers.length) {    // if server is a custom server
+                                    CustomServer server = customServers[serverIndex - playerServers.size()];
+                                    transfer(server.getAddress(), server.getPort());
+
+                                } else {   // if server is a player server
                                     String address = server.getPlayer(uuid).getServerList().get(chosen-2);
 
                                     if (address.split(":").length > 1) {

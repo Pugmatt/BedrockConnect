@@ -1,6 +1,8 @@
 package main.com.pyratron.pugmatt.bedrockconnect;
 
 public class CustomServer {
+	public final String DEFAULT_ICON = "https://i.imgur.com/3BmFZRE.png";
+
 	private String name;
 	private String iconUrl;
 	private String address;
@@ -20,7 +22,10 @@ public class CustomServer {
 	}
 
 	public String getIconUrl() {
-		return iconUrl;
+		if (iconUrl == null)
+			return DEFAULT_ICON;
+		else
+			return iconUrl;
 	}
 
 	public String getAddress() {
