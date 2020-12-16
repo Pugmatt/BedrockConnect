@@ -23,6 +23,7 @@ public class BedrockConnect {
     public static Server server;
 
     public static boolean noDB = false;
+    public static String customServers = null;
     public static boolean kickInactive = true;
 
     public static void main(String[] args) {
@@ -59,6 +60,8 @@ public class BedrockConnect {
                     port = getArgValue(str, "port");
                 if(str.startsWith("nodb="))
                     noDB = true;
+                if(str.startsWith("custom_servers="))
+                    customServers = getArgValue(str, "custom_servers");
                 if(str.startsWith("generatedns=")) {
                     String ip;
                     try {
@@ -130,6 +133,9 @@ public class BedrockConnect {
             "MySQL User: " + username);
 
             System.out.println("\nServer Limit: " + serverLimit + "\n" + "Port: " + port + "\n");
+
+            CustomServerHandler.initialize();
+            System.out.printf("Loaded %d custom servers\n", CustomServerHandler.getServers().length);
 
             if(!noDB) {
                 MySQL = new MySQL(hostname, database, username, password);

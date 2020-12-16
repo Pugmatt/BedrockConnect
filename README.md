@@ -60,11 +60,36 @@ The following arguments can be placed in the startup command to ajust settings:
 | nodb | If true, use JSON files for data instead of MySQL | false |
 | generatedns | If true, generate a DNS zone file using user input (Only needed if you're using the mod0Umleitung DNS software) | false |
 | kick_inactive | If true, players will be kicked after 10 minutes of inactivity with the serverlist UI | true |
+| custom_servers| Sets the path to a custom server file, for specifying your servers in the list for all players. See [custom servers](#defining-your-own-custom-servers). |  |
 
 MySQL example:
 ```
 java -jar BedrockConnect-1.0-SNAPSHOT.jar mysql_pass=test123 server_limit=10
 ```
+
+# Defining your own custom servers
+
+When hosting your own serverlist server, you add your own custom servers to the top of the serverlist for all players. To get started, create a JSON file and follow this format:
+```json
+[
+	{
+		"name": "My Custom Server 1",
+		"iconUrl": "https://i.imgur.com/3BmFZRE.png",
+		"address": "mc1.example.com",
+		"port": 19132
+	},
+	{
+		"name": "My Custom Server 2",
+		"iconUrl": "https://i.imgur.com/3BmFZRE.png",
+		"address": "mc2.example.com",
+		"port": 19132
+	}
+]
+```
+
+Then, add this argument to your startup script: `custom_servers=[path to json file]`
+
+The icon URL is not required, if omitted it will show the default icon.
 
 # Libraries used
 - [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)

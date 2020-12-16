@@ -4,6 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.nukkitx.protocol.bedrock.packet.ModalFormRequestPacket;
 
+import main.com.pyratron.pugmatt.bedrockconnect.CustomServer;
+import main.com.pyratron.pugmatt.bedrockconnect.CustomServerHandler;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +27,15 @@ public class UIForms {
         out.addProperty("content", "");
 
         JsonArray buttons = new JsonArray();
+        CustomServer[] customServers = CustomServerHandler.getServers();
 
         buttons.add(UIComponents.createButton("Connect to a Server"));
         buttons.add(UIComponents.createButton("Remove a Server"));
         for(int i=0;i<servers.size();i++) {
             buttons.add(UIComponents.createButton(servers.get(i), "https://i.imgur.com/3BmFZRE.png", "url"));
+        }
+        for (CustomServer cs : customServers) {
+            buttons.add(UIComponents.createButton(cs.getName(), cs.getIconUrl(), "url"));
         }
         buttons.add(UIComponents.createButton("The Hive", "https://forum.playhive.com/uploads/default/original/1X/0d05e3240037f7592a0f16b11b57c08eba76f19c.png", "url"));
         buttons.add(UIComponents.createButton("Mineplex", "https://www.mineplex.com/assets/www-mp/img/footer/footer_smalllogo.png", "url"));
