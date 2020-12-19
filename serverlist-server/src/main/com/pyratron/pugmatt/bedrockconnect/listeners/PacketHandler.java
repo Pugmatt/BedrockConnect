@@ -27,6 +27,7 @@ import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.CustomServer;
 import main.com.pyratron.pugmatt.bedrockconnect.CustomServerHandler;
 import main.com.pyratron.pugmatt.bedrockconnect.Server;
+import main.com.pyratron.pugmatt.bedrockconnect.gui.MainFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIForms;
 import net.minidev.json.JSONObject;
@@ -55,17 +56,12 @@ public class PacketHandler implements BedrockPacketHandler {
 
     private JSONObject extraData;
 
-    private boolean print = false;
-
     public void setPlayer(BCPlayer player) {
         this.player = player;
     }
 
     @Override
     public boolean handle(RequestChunkRadiusPacket packet) {
-        if(print)
-            System.out.println(packet.toString());
-
         ChunkRadiusUpdatedPacket chunkRadiusUpdatePacket = new ChunkRadiusUpdatedPacket();
         chunkRadiusUpdatePacket.setRadius(packet.getRadius());
         session.sendPacketImmediately(chunkRadiusUpdatePacket);
@@ -79,59 +75,34 @@ public class PacketHandler implements BedrockPacketHandler {
     @Override
     public boolean handle(ModalFormResponsePacket packet) {
         player.setActive();
-        if(print)
-            System.out.println(packet.toString());
-            switch (packet.getFormId()) {
+        switch (packet.getFormId()) {
                 case UIForms.MAIN:
                     if(UIForms.currentForm == UIForms.MAIN) {
-                        // If exiting main window
-                        System.out.println(packet.getFormData());
+                        // Re-open window if closed
                         if (packet.getFormData().contains("null")) {
                             session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
                         } else { // If selecting button
                             int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
-                            if (chosen == 0) { // Add Server
-                                session.sendPacketImmediately(UIForms.createDirectConnect());
-                            } else if (chosen == 1) { // Remove Server
-                                session.sendPacketImmediately(UIForms.createRemoveServer(player.getServerList()));
-                            } else if (chosen == 2) { // Exit Server List
-                                player.disconnect("Exiting Server List", server);
-                            } else { // Choosing Server
 
-                                CustomServer[] customServers = CustomServerHandler.getServers();
-                                List<String> playerServers = server.getPlayer(uuid).getServerList();
-                                int serverIndex = chosen - 3;
+                            CustomServer[] customServers = CustomServerHandler.getServers();
+                            List<String> playerServers = server.getPlayer(uuid).getServerList();
 
-                                // If server chosen is a featued server
-                                if(serverIndex + 1 > playerServers.size() + customServers.length) {
-                                    int featuredServer = serverIndex - playerServers.size() - customServers.length;
+                            MainFormButton button = UIForms.getMainFormButton(chosen, customServers, playerServers);
 
-                                    switch (featuredServer) {
-                                        case 0: // Hive
-                                            transfer("54.39.75.136", 19132);
-                                            break;
-                                        case 1: // Mineplex
-                                            transfer("108.178.12.125", 19132);
-                                            break;
-                                        case 2: // Cubecraft
-                                            transfer("play.cubecraft.net", 19132);
-                                            break;
-                                        case 3: // Lifeboat
-                                            transfer("63.143.40.66", 19132);
-                                            break;
-                                        case 4: // Mineville
-                                            transfer("play.cubecraft.net", 19132);
-                                            break;
-                                        case 5: // Galaxite
-                                            transfer("51.89.152.241", 19132);
-                                            break;
-                                    }
-                                } else if (serverIndex + 1 > playerServers.size() && serverIndex - playerServers.size() < customServers.length) {    // if server is a custom server
-                                    CustomServer server = customServers[serverIndex - playerServers.size()];
-                                    transfer(server.getAddress(), server.getPort());
+                            int serverIndex = UIForms.getServerIndex(chosen, customServers, playerServers);
 
-                                } else {   // if server is a player server
-                                    String address = server.getPlayer(uuid).getServerList().get(chosen-3);
+                            switch(button) {
+                                case CONNECT:
+                                    session.sendPacketImmediately(UIForms.createDirectConnect());
+                                    break;
+                                case REMOVE:
+                                    session.sendPacketImmediately(UIForms.createRemoveServer(player.getServerList()));
+                                    break;
+                                case EXIT:
+                                    player.disconnect("Exiting Server List", server);
+                                    break;
+                                case USER_SERVER:
+                                    String address = server.getPlayer(uuid).getServerList().get(serverIndex);
 
                                     if (address.split(":").length > 1) {
                                         String ip = address.split(":")[0];
@@ -145,7 +116,35 @@ public class PacketHandler implements BedrockPacketHandler {
                                     } else {
                                         session.sendPacketImmediately(UIForms.createError("Invalid server address"));
                                     }
-                                }
+                                    break;
+                                case CUSTOM_SERVER:
+                                    CustomServer server = customServers[serverIndex - playerServers.size()];
+                                    transfer(server.getAddress(), server.getPort());
+                                    break;
+                                case FEATURED_SERVER:
+                                    int featuredServer = serverIndex - playerServers.size() - customServers.length;
+
+                                    switch (featuredServer) {
+                                        case 0: // Hive
+                                            transfer("54.39.75.136", 19132);
+                                            break;
+                                        case 1: // Mineplex
+                                            transfer("108.178.12.125", 19132);
+                                            break;
+                                        case 2: // Cubecraft
+                                            transfer("play.cubecraft.net", 19132);
+                                            break;
+                                        case 3: // Lifeboat
+                                            transfer("51.222.26.28", 19132);
+                                            break;
+                                        case 4: // Mineville
+                                            transfer("168.62.164.235", 19132);
+                                            break;
+                                        case 5: // Galaxite
+                                            transfer("51.222.8.223", 19132);
+                                            break;
+                                    }
+                                    break;
                             }
                         }
                     }
@@ -219,7 +218,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 case UIForms.DONATION:
                     session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
                     break;
-            }
+        }
         return false;
     }
 
@@ -232,8 +231,6 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(SetLocalPlayerAsInitializedPacket packet) {
-        if(print)
-            System.out.println(packet.toString());
         session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
         return false;
     }
@@ -285,8 +282,6 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(ResourcePackClientResponsePacket packet) {
-        if(print)
-            System.out.println(packet.toString());
         switch (packet.getStatus()) {
             case COMPLETED:
                 BedrockConnect.data.userExists(uuid, name, session, this);

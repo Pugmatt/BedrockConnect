@@ -25,6 +25,7 @@ public class BedrockConnect {
     public static boolean noDB = false;
     public static String customServers = null;
     public static boolean kickInactive = true;
+    public static boolean userServers = true;
 
     public static void main(String[] args) {
         System.out.println("-= BedrockConnect =-");
@@ -38,12 +39,6 @@ public class BedrockConnect {
             String port = "19132";
 
             String serverLimit = "100";
-
-            String localIP = null;
-            String publicIP = null;
-            String localIPV6 = null;
-            String publicIPV6 = null;
-            boolean enableDNS = false;
 
             for(String str : args) {
                 if(str.startsWith("mysql_host="))
@@ -110,20 +105,11 @@ public class BedrockConnect {
                         throw new RuntimeException(e);
                     }
                 }
-                if(str.startsWith("localipv4=")) {
-                    localIP = getArgValue(str, "localipv4");
-                }
-                if(str.startsWith("localipv6=")) {
-                    localIPV6 = getArgValue(str, "localipv6");
-                }
-                if(str.startsWith("publicipv4=")) {
-                    publicIP = getArgValue(str, "publicipv4");
-                }
-                if(str.startsWith("publicipv6=")) {
-                    publicIPV6 = getArgValue(str, "publicipv6");
-                }
                 if(str.startsWith("kick_inactive=")) {
-                    kickInactive = getArgValue(str, "kick_inactive").equals("true");
+                    kickInactive = getArgValue(str, "kick_inactive").toLowerCase().equals("true");
+                }
+                if(str.startsWith("user_servers=")) {
+                    userServers = getArgValue(str, "user_servers").toLowerCase().equals("true");
                 }
             }
 
