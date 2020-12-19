@@ -178,15 +178,12 @@ public class BedrockConnect {
                         sec++;
                     }
                 };
-                timer.scheduleAtFixedRate(task, 0L, 1200L);
+                timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
             } else {
                 data = new Data(serverLimit);
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask() {
-                    int sec;
-                    public void run() {
-                        sec++;
-                    }
+                    public void run() { }
                 };
                 timer.scheduleAtFixedRate(task, 0L, 1200L);
             }

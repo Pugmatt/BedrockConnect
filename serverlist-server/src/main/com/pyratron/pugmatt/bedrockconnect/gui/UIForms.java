@@ -31,6 +31,7 @@ public class UIForms {
 
         buttons.add(UIComponents.createButton("Connect to a Server"));
         buttons.add(UIComponents.createButton("Remove a Server"));
+        buttons.add(UIComponents.createButton("Exit Server List"));
         for(int i=0;i<servers.size();i++) {
             buttons.add(UIComponents.createButton(servers.get(i), "https://i.imgur.com/3BmFZRE.png", "url"));
         }
