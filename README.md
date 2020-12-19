@@ -61,6 +61,7 @@ The following arguments can be placed in the startup command to ajust settings:
 | generatedns | If true, generate a DNS zone file using user input (Only needed if you're using the mod0Umleitung DNS software) | false |
 | kick_inactive | If true, players will be kicked after 10 minutes of inactivity with the serverlist UI | true |
 | custom_servers| Sets the path to a custom server file, for specifying your servers in the list for all players. See [custom servers](#defining-your-own-custom-servers). |  |
+| user_servers | If true, players can add and remove servers on the serverlist. If false, the options are hidden. | true |
 
 MySQL example:
 ```
