@@ -92,7 +92,6 @@ public class BedrockConnect {
                                 "    <DNSMasqHost name=\"hivebedrock.network\" a=\"" + selectedIP + "\" />\n" +
                                 "    <DNSMasqHost name=\"mco.mineplex.com\" a=\"" + selectedIP + "\" />\n" +
                                 "    <DNSMasqHost name=\"play.mineplex.com\" a=\"" + selectedIP + "\" />\n" +
-                                "    <DNSMasqHost name=\"play.mineplex.com\" a=\"" + selectedIP + "\" />\n" +
                                 "    <DNSMasqHost name=\"play.inpvp.net\" a=\"" + selectedIP + "\" />\n" +
                                 "    <DNSMasqHost name=\"mco.lbsg.net\" a=\"" + selectedIP + "\" />\n" +
                                 "    <DNSMasqHost name=\"play.lbsg.net\" a=\"" + selectedIP + "\" />\n" +
