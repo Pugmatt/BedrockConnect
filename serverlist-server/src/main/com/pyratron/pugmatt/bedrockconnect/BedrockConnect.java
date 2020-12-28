@@ -26,6 +26,7 @@ public class BedrockConnect {
     public static String customServers = null;
     public static boolean kickInactive = true;
     public static boolean userServers = true;
+    public static boolean featuredServers = true;
 
     public static void main(String[] args) {
         System.out.println("-= BedrockConnect =-");
@@ -109,6 +110,9 @@ public class BedrockConnect {
                 }
                 if(str.startsWith("user_servers=")) {
                     userServers = getArgValue(str, "user_servers").toLowerCase().equals("true");
+                }
+                if (str.startsWith("featured_servers=")) {
+                    featuredServers = getArgValue(str, "featured_servers").toLowerCase().equals("true");
                 }
             }
 

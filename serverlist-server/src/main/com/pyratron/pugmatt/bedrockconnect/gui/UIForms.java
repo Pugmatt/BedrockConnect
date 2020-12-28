@@ -17,11 +17,19 @@ public class UIForms {
     public static int currentForm = 0;
 
     public static JsonArray mainMenuButtons = new JsonArray();
+    public static JsonArray featuredServerButtons = new JsonArray();
 
     static {
         mainMenuButtons.add(UIComponents.createButton("Connect to a Server"));
         mainMenuButtons.add(UIComponents.createButton("Remove a Server"));
         mainMenuButtons.add(UIComponents.createButton("Exit Server List"));
+
+        featuredServerButtons.add(UIComponents.createButton("The Hive", "https://forum.playhive.com/uploads/default/original/1X/0d05e3240037f7592a0f16b11b57c08eba76f19c.png", "url"));
+        featuredServerButtons.add(UIComponents.createButton("Mineplex", "https://www.mineplex.com/assets/www-mp/img/footer/footer_smalllogo.png", "url"));
+        featuredServerButtons.add(UIComponents.createButton("CubeCraft Games", "https://i.imgur.com/aFH1NUr.png", "url"));
+        featuredServerButtons.add(UIComponents.createButton("Lifeboat Network", "https://lbsg.net/wp-content/uploads/2017/06/lifeboat-square.png", "url"));
+        featuredServerButtons.add(UIComponents.createButton("Mineville", "https://i.imgur.com/0K4TDut.png", "url"));
+        featuredServerButtons.add(UIComponents.createButton("Galaxite", "https://i.imgur.com/VxXO8Of.png", "url"));
     }
 
     public static ModalFormRequestPacket createMain(List<String> servers) {
@@ -48,12 +56,10 @@ public class UIForms {
             buttons.add(UIComponents.createButton(cs.getName(), cs.getIconUrl(), "url"));
         }
 
-        buttons.add(UIComponents.createButton("The Hive", "https://forum.playhive.com/uploads/default/original/1X/0d05e3240037f7592a0f16b11b57c08eba76f19c.png", "url"));
-        buttons.add(UIComponents.createButton("Mineplex", "https://www.mineplex.com/assets/www-mp/img/footer/footer_smalllogo.png", "url"));
-        buttons.add(UIComponents.createButton("CubeCraft Games", "https://i.imgur.com/aFH1NUr.png", "url"));
-        buttons.add(UIComponents.createButton("Lifeboat Network", "https://lbsg.net/wp-content/uploads/2017/06/lifeboat-square.png", "url"));
-        buttons.add(UIComponents.createButton("Mineville", "https://i.imgur.com/0K4TDut.png", "url"));
-        buttons.add(UIComponents.createButton("Galaxite", "https://i.imgur.com/VxXO8Of.png", "url"));
+        if(BedrockConnect.featuredServers) {
+            buttons.addAll(featuredServerButtons);
+        }
+
         out.add("buttons", buttons);
 
         mf.setFormData(out.toString());
