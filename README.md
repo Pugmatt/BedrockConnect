@@ -29,6 +29,10 @@ The BedrockConnect serverlist server, is a specially made Minecraft server that 
 
 **I don't trust your DNS server...** The public BedrockConnect DNS server only redirects the domains of the "Featured Servers" in Minecraft to the BedrockConnect serverlist. (Full list of records under the "Using your own DNS server" section) It's understandable though why some might not want to use a random DNS server.  If you fear a MITM attack, you can also verify any domains you fear the DNS server are overriding by pinging them in command line or another tool. If you still don't feel comfortable using the BedrockConnect DNS server, you can also make your own. Look under 'Using your own DNS server' further down this page for more on that.
 
+**Some featured server aren't redirecting to the serverlist** If some featured servers are redirecting to the BedrockConnect serverlist, and some aren't, this can be an issue with the DNS cache on the device/game console not updating. Nothing can really be done except wait when on the game console for the cache to clear, as there isn't a manual way to do it on these devices.
+
+Another possible issue is that some of the featured servers such the Hive, use DNSSEC, which is used to protect itself from being overidden by DNS servers such as BedrockConnect. This is still being tested, and seems to work on some people's consoles and not on others.
+
 # Hosting your own serverlist server
 
 If you want a full tutorial on how to host your own BedrockConnect server with a DNS server, watch the following video: https://www.youtube.com/watch?v=AW5X7-qnvLk
