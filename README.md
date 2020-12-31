@@ -33,6 +33,19 @@ The BedrockConnect serverlist server, is a specially made Minecraft server that 
 
 Another possible issue is that some of the featured servers such the Hive, use DNSSEC, which is used to protect itself from being overidden by DNS servers such as BedrockConnect. This is still being tested, and seems to work on some people's consoles and not on others.
 
+# Publicly available BedrockConnect instances
+
+There are multiple BedrockConnect serverlist servers available that can be used, giving you multiple options to connect to. Currently, they do NOT share the same player database, so if you have added a server to your list on any of the given servers and connect to a different one, you will need to save that data again.
+
+| IP Address | Location | Maintainer | Note |
+| ------------- | ------------- | ------------- | ------------- |
+| 104.238.130.180 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers |
+| 173.82.100.84 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/us.svg" height="20"> | [jdextraze](https://github.com/jdextraze) | |
+| 213.171.211.142 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
+| 217.160.58.93 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
+
+If you are currently hosting a BedrockConnect instance and are interested in adding it to this list, create a pull request adding it to the table above.
+
 # Hosting your own serverlist server
 
 If you want a full tutorial on how to host your own BedrockConnect server with a DNS server, watch the following video: https://www.youtube.com/watch?v=AW5X7-qnvLk
@@ -114,15 +127,6 @@ In the case where you want to use your own DNS server instead of the one I suppl
 | play.galaxite.net | 104.238.130.180 |
 
 *104.238.130.180 is the IP to the BedrockConnect serverlist server. If you are hosting your own BedrockConnect serverlist server as well, obviously use that IP instead*
-
-There are multiple BedrockConnect serverlist servers available that can be used, giving you multiple options for ping and load. Currently, they do NOT share the same player database, so if you have added a server to your list on any of the given servers and connect to a different one, you will need to save that data again.
-
-| IP Address | Location | Maintainer | Note |
-| ------------- | ------------- | ------------- | ------------- |
-| 104.238.130.180 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Multiple load balanced servers |
-| 173.82.100.84 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/us.svg" height="20"> | [jdextraze](https://github.com/jdextraze) | |
-| 213.171.211.142 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
-| 217.160.58.93 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
 
 Here's an easy way to setup BIND (DNS server software) on Linux: https://github.com/Pugmatt/BedrockConnect/blob/master/BIND_Install.txt
 
