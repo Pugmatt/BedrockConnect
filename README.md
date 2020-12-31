@@ -19,6 +19,17 @@ Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
 
 PS4: https://www.youtube.com/watch?v=ND_VFaAXC8M
 
+Table of contents
+=================
+
+   * [FAQ](#faq)
+   * [Publicly available BedrockConnect instances](#publicly-available-bedrockconnect-instances)
+   * [Hosting your own serverlist server](#hosting-your-own-serverlist-server)
+   * [Defining your own custom servers](#defining-your-own-custom-servers)
+   * [Using your own DNS server](#using-your-own-dns-server)
+   * [Libraries used](#libraries-used)
+   * [Donations](#donations)
+
 # FAQ
 
 **How does it work?** In Minecraft Bedrock Edition, players on any version can join the available 'Featured Servers'. By using a DNS server, we can make the domains that are used to join these servers, and make them direct to the BedrockConnect serverlist server, rather than their actual servers.
@@ -109,9 +120,6 @@ Then, add this argument to your startup script: `custom_servers=[path to json fi
 
 The icon URL is not required, if omitted it will show the default icon.
 
-# Libraries used
-- [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)
-
 # Using your own DNS server
 
 In the case where you want to use your own DNS server instead of the one I supplied, this is what zones you'll need to set your DNS to in order for BedrockConnect to work:
@@ -130,10 +138,13 @@ In the case where you want to use your own DNS server instead of the one I suppl
 
 Here's an easy way to setup BIND (DNS server software) on Linux: https://github.com/Pugmatt/BedrockConnect/blob/master/BIND_Install.txt
 
+# Libraries used
+- [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)
+
 
 # Donations
 
-If you like what you see, feel free to throw a few bucks. I won't ever charge for this service, so currently everything is out of pocket.
+If you like what you see, feel free to throw a few bucks. I won't ever charge for this service, so currently everything is out of pocket. Donations go toward hosting the main BedrockConnect instance, 104.238.130.180.
 
 http://paypal.me/Pugmatt
 
