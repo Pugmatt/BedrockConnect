@@ -115,6 +115,15 @@ In the case where you want to use your own DNS server instead of the one I suppl
 
 *104.238.130.180 is the IP to the BedrockConnect serverlist server. If you are hosting your own BedrockConnect serverlist server as well, obviously use that IP instead*
 
+There are multiple BedrockConnect serverlist servers available that can be used, giving you multiple options for ping and load. Currently, they do NOT share the same player database, so if you have added a server to your list on any of the given servers and connect to a different one, you will need to save that data again.
+
+| IP Address | Location | Maintainer | Note |
+| ------------- | ------------- | ------------- | ------------- |
+| 104.238.130.180 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Multiple load balanced servers |
+| 173.82.100.84 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/us.svg" height="20"> | [jdextraze](https://github.com/jdextraze) | |
+| 213.171.211.142 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
+| 217.160.58.93 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
+
 Here's an easy way to setup BIND (DNS server software) on Linux: https://github.com/Pugmatt/BedrockConnect/blob/master/BIND_Install.txt
 
 
