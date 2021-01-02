@@ -19,6 +19,17 @@ Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
 
 PS4: https://www.youtube.com/watch?v=ND_VFaAXC8M
 
+Table of contents
+=================
+
+   * [FAQ](#faq)
+   * [Publicly available BedrockConnect instances](#publicly-available-bedrockconnect-instances)
+   * [Hosting your own serverlist server](#hosting-your-own-serverlist-server)
+   * [Defining your own custom servers](#defining-your-own-custom-servers)
+   * [Using your own DNS server](#using-your-own-dns-server)
+   * [Libraries used](#libraries-used)
+   * [Donations](#donations)
+
 # FAQ
 
 **How does it work?** In Minecraft Bedrock Edition, players on any version can join the available 'Featured Servers'. By using a DNS server, we can make the domains that are used to join these servers, and make them direct to the BedrockConnect serverlist server, rather than their actual servers.
@@ -28,6 +39,23 @@ The BedrockConnect serverlist server, is a specially made Minecraft server that 
 **What is a DNS server?** A DNS server is what devices uses to know what domain names go with what IP address. Your device sends the DNS server a domain name and asks what IP is associated with it, and the DNS server sends an IP back for the device to connect to. Commonly used ones include Google or Cloudflare DNS. Anyone can technically create a DNS server, and have it associate whatever IP they want to a domain. In this case, we make the 'Featured Server' domains direct to our own server.
 
 **I don't trust your DNS server...** The public BedrockConnect DNS server only redirects the domains of the "Featured Servers" in Minecraft to the BedrockConnect serverlist. (Full list of records under the "Using your own DNS server" section) It's understandable though why some might not want to use a random DNS server.  If you fear a MITM attack, you can also verify any domains you fear the DNS server are overriding by pinging them in command line or another tool. If you still don't feel comfortable using the BedrockConnect DNS server, you can also make your own. Look under 'Using your own DNS server' further down this page for more on that.
+
+**Some featured server aren't redirecting to the serverlist** If some featured servers are redirecting to the BedrockConnect serverlist, and some aren't, this can be an issue with the DNS cache on the device/game console not updating. Nothing can really be done except wait when on the game console for the cache to clear, as there isn't a manual way to do it on these devices.
+
+Another possible issue is that some of the featured servers such the Hive, use DNSSEC, which is used to protect itself from being overidden by DNS servers such as BedrockConnect. This is still being tested, and seems to work on some people's consoles and not on others.
+
+# Publicly available BedrockConnect instances
+
+There are multiple BedrockConnect serverlist servers available that can be used, giving you multiple options to connect to. Currently, they do NOT share the same player database, so if you have added a server to your list on any of the given servers and connect to a different one, you will need to save that data again.
+
+| IP Address | Location | Maintainer | Note |
+| ------------- | ------------- | ------------- | ------------- |
+| 104.238.130.180 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers |
+| 173.82.100.84 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/us.svg" height="20"> | [jdextraze](https://github.com/jdextraze) | |
+| 213.171.211.142 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
+| 217.160.58.93 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
+
+If you are currently hosting a BedrockConnect instance and are interested in adding it to this list, create a pull request adding it to the table above.
 
 # Hosting your own serverlist server
 
@@ -93,9 +121,6 @@ Then, add this argument to your startup script: `custom_servers=[path to json fi
 
 The icon URL is not required, if omitted it will show the default icon.
 
-# Libraries used
-- [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)
-
 # Using your own DNS server
 
 In the case where you want to use your own DNS server instead of the one I supplied, this is what zones you'll need to set your DNS to in order for BedrockConnect to work:
@@ -114,10 +139,13 @@ In the case where you want to use your own DNS server instead of the one I suppl
 
 Here's an easy way to setup BIND (DNS server software) on Linux: https://github.com/Pugmatt/BedrockConnect/blob/master/BIND_Install.txt
 
+# Libraries used
+- [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)
+
 
 # Donations
 
-If you like what you see, feel free to throw a few bucks. I won't ever charge for this service, so currently everything is out of pocket.
+If you like what you see, feel free to throw a few bucks. I won't ever charge for this service, so currently everything is out of pocket. Donations go toward hosting the main BedrockConnect instance, 104.238.130.180.
 
 http://paypal.me/Pugmatt
 

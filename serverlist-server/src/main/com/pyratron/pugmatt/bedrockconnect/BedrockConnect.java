@@ -55,7 +55,7 @@ public class BedrockConnect {
                 if(str.startsWith("port="))
                     port = getArgValue(str, "port");
                 if(str.startsWith("nodb="))
-                    noDB = true;
+                    noDB = getArgValue(str, "nodb").toLowerCase().equals("true");
                 if(str.startsWith("custom_servers="))
                     customServers = getArgValue(str, "custom_servers");
                 if(str.startsWith("generatedns=")) {

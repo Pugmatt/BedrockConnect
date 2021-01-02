@@ -136,7 +136,7 @@ public class BCPlayer {
         //startGamePacket.setPlatformLockedContentConfirmed(false);
         startGamePacket.setMultiplayerGame(true);
         startGamePacket.setBroadcastingToLan(true);
-        startGamePacket.getGamerules().add((new GameRuleData<>("showcoordinates", true)));
+        startGamePacket.getGamerules().add((new GameRuleData<>("showcoordinates", false)));
         startGamePacket.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
         startGamePacket.setXblBroadcastMode(GamePublishSetting.PUBLIC);
         startGamePacket.setCommandsEnabled(true);
