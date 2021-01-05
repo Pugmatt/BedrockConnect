@@ -19,6 +19,8 @@ Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
 
 PS4: https://www.youtube.com/watch?v=ND_VFaAXC8M
 
+If you're having trouble connecting to the serverlist, take a look at the troubleshooting page: https://github.com/Pugmatt/BedrockConnect/wiki/Troubleshooting
+
 Table of contents
 =================
 
@@ -144,7 +146,7 @@ Here's an easy way to setup BIND (DNS server software) on Linux: https://github.
 
 # Donations
 
-If you like what you see, feel free to throw a few bucks. I won't ever charge for this service, so currently everything is out of pocket. Donations go toward hosting the main BedrockConnect instance, 104.238.130.180.
+If you like what you see, feel free to throw a few bucks. I won't ever charge for this service. Donations go toward hosting the main BedrockConnect instance, 104.238.130.180.
 
 http://paypal.me/Pugmatt
 
