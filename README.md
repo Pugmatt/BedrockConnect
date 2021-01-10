@@ -138,7 +138,7 @@ In the case where you want to use your own DNS server instead of the one I suppl
 
 *104.238.130.180 is the IP to the BedrockConnect serverlist server. If you are hosting your own BedrockConnect serverlist server as well, obviously use that IP instead*
 
-Here's an easy way to setup BIND (DNS server software) on Linux: https://github.com/Pugmatt/BedrockConnect/blob/master/BIND_Install.txt
+Here's a script to setup BIND (DNS server software) on Linux: https://github.com/Pugmatt/BedrockConnect/blob/master/scripts/install-bind.sh
 
 # Libraries used
 - [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)
