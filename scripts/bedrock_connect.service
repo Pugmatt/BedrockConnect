@@ -1,0 +1,18 @@
+[Unit]
+Description=Bedrock Connect
+After=syslog.target
+After=network.target
+#Uncomment line below if using MySQL
+#Requires=mysql.service
+
+[Service]
+RestartSec=2s
+Type=simple
+User=mcbc
+Group=mcbc
+WorkingDirectory=/home/mcbc
+ExecStart=/usr/bin/java -jar BedrockConnect-1.0-SNAPSHOT.jar nodb=true
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
