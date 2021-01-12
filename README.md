@@ -19,6 +19,8 @@ Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
 
 PS4: https://www.youtube.com/watch?v=ND_VFaAXC8M
 
+Joining Java Edition Servers: https://www.youtube.com/watch?v=B_oPHl5gz_c
+
 If you're having trouble connecting to the serverlist, take a look at the troubleshooting page: https://github.com/Pugmatt/BedrockConnect/wiki/Troubleshooting
 
 Table of contents
