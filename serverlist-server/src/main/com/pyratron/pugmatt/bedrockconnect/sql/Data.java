@@ -42,7 +42,9 @@ public class Data {
                 + "   uuid            TEXT,"
                 + "   name            TEXT,"
                 + "   servers         TEXT,"
-                + "   serverLimit     INTEGER)";
+                + "   serverLimit     INTEGER,"
+                + "   INDEX (uuid(255))"
+                + ");";
 
         Statement stmt = BedrockConnect.connection.createStatement();
         stmt.execute(sqlCreate);
