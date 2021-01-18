@@ -63,7 +63,7 @@ public class BCPlayer {
         this.serverLimit = serverLimit;
         this.lastAction = LocalTime.now();
 
-        if(session != null)
+        if(session != null && !session.isClosed())
         joinGame();
     }
 
