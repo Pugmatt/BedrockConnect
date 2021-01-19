@@ -65,6 +65,8 @@ If you are currently hosting a BedrockConnect instance and are interested in add
 
 If you want a full tutorial on how to host your own BedrockConnect server with a DNS server, watch the following video: https://www.youtube.com/watch?v=AW5X7-qnvLk
 
+Or, if you're on Linux: https://github.com/Pugmatt/BedrockConnect/wiki/Setting-up-on-Linux
+
 The instructions below will show how to run the barebone JAR.
 
 
