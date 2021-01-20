@@ -79,15 +79,20 @@ public class Data {
             Data db = this;
             new Thread(() -> {
                 try {
-                    PreparedStatement statement = BedrockConnect.connection.prepareStatement("SELECT EXISTS(SELECT 1 FROM servers WHERE uuid = '" + uuid + "')");
-                    statement.executeQuery();
-                    ResultSet RS = statement.executeQuery("SELECT COUNT(*) AS total FROM servers where uuid ='" + uuid + "'");
+                    PreparedStatement searchUUID = BedrockConnect.connection.prepareStatement("SELECT COUNT(*) AS total FROM servers where uuid = ?");
+                    searchUUID.setString(1, uuid);
+                    ResultSet RS = searchUUID.executeQuery();
                     while (RS.next()) {
                         if (RS.getInt("total") > 0) {
-                            ResultSet rs = BedrockConnect.connection.createStatement().executeQuery("SELECT * FROM servers WHERE uuid = '" + uuid + "';");
+                            PreparedStatement getUser = BedrockConnect.connection.prepareStatement("SELECT * FROM servers WHERE uuid = ?;");
+                            getUser.setString(1, uuid);
+                            ResultSet rs = getUser.executeQuery();
                             while (rs.next()) {
                                 if (!rs.getString("name").equals(name)) {
-                                    Basic_SQL("UPDATE servers SET name='" + name + "' WHERE uuid='" + uuid + "'");
+                                    PreparedStatement updateUUID = BedrockConnect.connection.prepareStatement("UPDATE servers SET name = ? WHERE uuid = ?");
+                                    updateUUID.setString(1, uuid);
+                                    updateUUID.setString(2, uuid);
+                                    updateUUID.executeUpdate();
                                 }
                                 BCPlayer p = getPlayer(rs, uuid, session);
                                 packetHandler.setPlayer(p);
@@ -149,7 +154,10 @@ public class Data {
         new Thread(() -> {
                 try
                 {
-                    PreparedStatement s = BedrockConnect.connection.prepareStatement("INSERT INTO servers (uuid, name, serverLimit) VALUES ('" + uuid + "', '" + name + "', 10)");
+                    PreparedStatement s = BedrockConnect.connection.prepareStatement("INSERT INTO servers (uuid, name, serverLimit) VALUES (?, ?, ?)");
+                    s.setString(1, uuid);
+                    s.setString(2, name);
+                    s.setInt(3, Integer.parseInt(serverLimit));
                     s.executeUpdate();
                     System.out.println("[BedrockConnect] Added new user '" + name + "' (" + uuid + ") to Database.");
                     BCPlayer pl = new BCPlayer(uuid, db, session, new ArrayList<>(), Integer.parseInt(serverLimit));
@@ -168,6 +176,11 @@ public class Data {
         if(!BedrockConnect.noDB) {
             new Thread(() -> {
                 try {
+                    PreparedStatement s = BedrockConnect.connection.prepareStatement("UPDATE servers SET " + column + "='" + value + "' WHERE uuid='" + uuid + "'");
+                    s.setString(1, column);
+                    s.setString(2, value);
+                    s.setString(3, uuid);
+
                     Basic_SQL("UPDATE servers SET " + column + "='" + value + "' WHERE uuid='" + uuid + "'");
                 } catch (Exception e) {
                     errorAlert(e);
