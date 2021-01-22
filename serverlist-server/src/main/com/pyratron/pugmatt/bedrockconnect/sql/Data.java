@@ -176,12 +176,11 @@ public class Data {
         if(!BedrockConnect.noDB) {
             new Thread(() -> {
                 try {
-                    PreparedStatement s = BedrockConnect.connection.prepareStatement("UPDATE servers SET " + column + "='" + value + "' WHERE uuid='" + uuid + "'");
-                    s.setString(1, column);
-                    s.setString(2, value);
-                    s.setString(3, uuid);
+                    PreparedStatement s = BedrockConnect.connection.prepareStatement("UPDATE servers SET " + column + "= ? WHERE uuid= ?");
+                    s.setString(1, value);
+                    s.setString(2, uuid);
 
-                    Basic_SQL("UPDATE servers SET " + column + "='" + value + "' WHERE uuid='" + uuid + "'");
+                    s.executeUpdate();
                 } catch (Exception e) {
                     errorAlert(e);
                 }
@@ -209,7 +208,11 @@ public class Data {
         new Thread(() -> {
                 try
                 {
-                    Basic_SQL("UPDATE servers SET " + column + "=" + value + " WHERE uuid='" + uuid + "'");
+                    PreparedStatement s = BedrockConnect.connection.prepareStatement("UPDATE servers SET " + column + "= ? WHERE uuid= ?");
+                    s.setInt(1, value);
+                    s.setString(2, uuid);
+
+                    s.executeUpdate();
                 }
                 catch (Exception e)
                 {
