@@ -15,6 +15,7 @@ import com.nukkitx.protocol.bedrock.data.inventory.ItemData;
 import com.nukkitx.protocol.bedrock.packet.*;
 import com.nukkitx.math.vector.Vector3f;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
+import main.com.pyratron.pugmatt.bedrockconnect.gui.UIForms;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 
 import java.io.ByteArrayOutputStream;
@@ -36,6 +37,9 @@ public class BCPlayer {
     private String uuid;
 
     private LocalTime lastAction;
+
+    private int currentForm = 0;
+    private LocalTime movementOpenCoolDown = LocalTime.now();
 
     private static final NbtMap EMPTY_TAG = NbtMap.EMPTY;
     private static final byte[] EMPTY_LEVEL_CHUNK_DATA;
@@ -98,9 +102,48 @@ public class BCPlayer {
         this.serverLimit = serverLimit;
     }
 
+    public int getCurrentForm() {
+        return currentForm;
+    }
+
+    public void setCurrentForm(int form) {
+        currentForm = form;
+    }
+
     public boolean isActive() { return Duration.between(lastAction, LocalTime.now()).toMillis() <= 600000; }
 
+    public boolean canMovementOpen() { return Duration.between(movementOpenCoolDown, LocalTime.now()).toMillis() > 1000; }
+
+    public void resetMovementOpen() { movementOpenCoolDown = LocalTime.now(); }
+
     public void setActive() { lastAction = LocalTime.now(); }
+
+    public void movementOpen() {
+
+        if(canMovementOpen()) {
+
+            ModalFormRequestPacket form;
+
+            switch (getCurrentForm()) {
+                case UIForms.MAIN:
+                    form = UIForms.createMain(getServerList());
+                    break;
+                case UIForms.DIRECT_CONNECT:
+                    form = UIForms.createDirectConnect();
+                    break;
+                case UIForms.REMOVE_SERVER:
+                    form = UIForms.createRemoveServer(getServerList());
+                    break;
+                default:
+                    form = UIForms.createMain(getServerList());
+                    break;
+            }
+
+            session.sendPacketImmediately(form);
+
+            movementOpenCoolDown = LocalTime.now();
+        }
+    }
 
     public void joinGame() {
 

@@ -93,7 +93,7 @@ public class Server {
         });
         // Start server up
         server.bind().join();
-        System.out.println("Bedrock Connection Started: localhost:19132");
+        System.out.println("Bedrock Connection Started: 0.0.0.0:19132");
         if(BedrockConnect.kickInactive) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {

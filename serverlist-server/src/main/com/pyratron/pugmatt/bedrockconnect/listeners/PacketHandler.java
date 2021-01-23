@@ -20,6 +20,7 @@ import com.nukkitx.protocol.bedrock.packet.LoginPacket;
 import com.nukkitx.protocol.bedrock.util.EncryptionUtils;
 import com.nukkitx.protocol.bedrock.v388.Bedrock_v388;
 import com.nukkitx.protocol.bedrock.v407.Bedrock_v407;
+import io.netty.handler.codec.MessageAggregationException;
 import io.netty.util.AsciiString;
 import io.netty.util.internal.ThreadLocalRandom;
 import main.com.pyratron.pugmatt.bedrockconnect.BCPlayer;
@@ -41,8 +42,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-// Heavily referenced from https://github.com/NukkitX/ProxyPass/blob/master/src/main/java/com/nukkitx/proxypass/network/bedrock/session/UpstreamPacketHandler.java
 
 public class PacketHandler implements BedrockPacketHandler {
 
@@ -72,15 +71,32 @@ public class PacketHandler implements BedrockPacketHandler {
         return false;
     }
 
+    // Occasionally, a sent form will not correctly send to a player for whatever reason, and they float in space. This works as a way to open the form back up.
+
+    @Override
+    public boolean handle(PlayerActionPacket packet) {
+        player.movementOpen();
+        return false;
+    }
+    @Override
+    public boolean handle(MovePlayerPacket packet) {
+        if(packet.getMode() == MovePlayerPacket.Mode.NORMAL || packet.getMode() == MovePlayerPacket.Mode.HEAD_ROTATION)
+            player.movementOpen();
+        return false;
+    }
+
     @Override
     public boolean handle(ModalFormResponsePacket packet) {
         player.setActive();
+        player.resetMovementOpen();
+
         switch (packet.getFormId()) {
                 case UIForms.MAIN:
                     if(UIForms.currentForm == UIForms.MAIN) {
                         // Re-open window if closed
                         if (packet.getFormData().contains("null")) {
-                            session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
+                            //session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
+                            player.setCurrentForm(UIForms.MAIN);
                         } else { // If selecting button
                             int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
 
@@ -94,9 +110,11 @@ public class PacketHandler implements BedrockPacketHandler {
                             switch(button) {
                                 case CONNECT:
                                     session.sendPacketImmediately(UIForms.createDirectConnect());
+                                    player.setCurrentForm(UIForms.DIRECT_CONNECT);
                                     break;
                                 case REMOVE:
                                     session.sendPacketImmediately(UIForms.createRemoveServer(player.getServerList()));
+                                    player.setCurrentForm(UIForms.REMOVE_SERVER);
                                     break;
                                 case EXIT:
                                     player.disconnect("Exiting Server List", server);
@@ -151,8 +169,10 @@ public class PacketHandler implements BedrockPacketHandler {
                     break;
                 case UIForms.DIRECT_CONNECT:
                     try {
-                        if(packet.getFormData().contains("null"))
+                        if(packet.getFormData().contains("null")) {
                             session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
+                            player.setCurrentForm(UIForms.MAIN);
+                        }
                         else {
                             ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
                             if(data.size() > 1) {
@@ -194,8 +214,10 @@ public class PacketHandler implements BedrockPacketHandler {
                     break;
                 case UIForms.REMOVE_SERVER:
                     try {
-                        if(packet.getFormData().contains("null"))
+                        if(packet.getFormData().contains("null")) {
                             session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
+                            player.setCurrentForm(UIForms.MAIN);
+                        }
                         else {
                             ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
 
@@ -300,6 +322,8 @@ public class PacketHandler implements BedrockPacketHandler {
 
         return true;
     }
+
+    // Heavily referenced from https://github.com/NukkitX/ProxyPass/blob/master/src/main/java/com/nukkitx/proxypass/network/bedrock/session/UpstreamPacketHandler.java
 
     @Override
     public boolean handle(LoginPacket packet) {
