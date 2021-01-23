@@ -108,6 +108,12 @@ public class BCPlayer {
 
     public void setCurrentForm(int form) {
         currentForm = form;
+
+        TextPacket text = new TextPacket();
+        text.setType(TextPacket.Type.TIP);
+        text.setMessage("If the serverlist popup appears to be gone, \nmove around to re-trigger the popup.");
+        text.setXuid(uuid);
+        session.sendPacket(text);
     }
 
     public boolean isActive() { return Duration.between(lastAction, LocalTime.now()).toMillis() <= 600000; }
