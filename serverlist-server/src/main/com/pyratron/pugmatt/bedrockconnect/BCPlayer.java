@@ -111,9 +111,15 @@ public class BCPlayer {
 
         TextPacket text = new TextPacket();
         text.setType(TextPacket.Type.TIP);
-        text.setMessage("If the serverlist popup appears to be gone, \nmove around to re-trigger the popup.");
+        text.setMessage("==!!== Move around to re-trigger the popup ==!!==");
         text.setXuid(uuid);
         session.sendPacket(text);
+
+        TextPacket text2 = new TextPacket();
+        text2.setType(TextPacket.Type.RAW);
+        text2.setMessage("\n\n\n\n\n\n\n\n\n\n\n\n\n\n==!!== Move around to re-trigger the popup ==!!==\n\n\n\n\n\n\n\n\n\n\n");
+        text2.setXuid(uuid);
+        session.sendPacket(text2);
     }
 
     public boolean isActive() { return Duration.between(lastAction, LocalTime.now()).toMillis() <= 600000; }
