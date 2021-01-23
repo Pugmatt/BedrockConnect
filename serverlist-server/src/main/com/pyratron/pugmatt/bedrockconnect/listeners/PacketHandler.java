@@ -95,7 +95,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     if(UIForms.currentForm == UIForms.MAIN) {
                         // Re-open window if closed
                         if (packet.getFormData().contains("null")) {
-                            //session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
+                            session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
                             player.setCurrentForm(UIForms.MAIN);
                         } else { // If selecting button
                             int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
