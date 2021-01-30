@@ -6,6 +6,7 @@ import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,10 +24,12 @@ public class BedrockConnect {
     public static Server server;
 
     public static boolean noDB = false;
+    public static boolean whitelist = false;
     public static String customServers = null;
     public static boolean kickInactive = true;
     public static boolean userServers = true;
     public static boolean featuredServers = true;
+    public static File whitelistfile;
 
     public static void main(String[] args) {
         System.out.println("-= BedrockConnect =-");
@@ -114,6 +117,16 @@ public class BedrockConnect {
                 if (str.startsWith("featured_servers=")) {
                     featuredServers = getArgValue(str, "featured_servers").toLowerCase().equals("true");
                 }
+                if (str.startsWith("whitelist=")) {
+                	try {
+                		whitelistfile = new File(getArgValue(str, "whitelist"));
+                		Whitelist.loadWhitelist(whitelistfile);
+                	}
+                	catch(Exception e) {
+                		System.out.println("Unable to load whitelist file: " + whitelistfile.getName());
+                		e.printStackTrace();
+                	}
+                }
             }
 
             if(!noDB)
@@ -125,7 +138,11 @@ public class BedrockConnect {
 
             CustomServerHandler.initialize();
             System.out.printf("Loaded %d custom servers\n", CustomServerHandler.getServers().length);
-
+            
+            if (Whitelist.hasWhitelist()) {
+            	System.out.printf("There are %d whitelisted players\n", Whitelist.getWhitelist().size());
+            }
+            
             if(!noDB) {
                 MySQL = new MySQL(hostname, database, username, password);
 
