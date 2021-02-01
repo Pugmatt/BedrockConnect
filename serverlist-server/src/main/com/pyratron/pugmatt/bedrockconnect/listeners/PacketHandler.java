@@ -28,6 +28,7 @@ import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.CustomServer;
 import main.com.pyratron.pugmatt.bedrockconnect.CustomServerHandler;
 import main.com.pyratron.pugmatt.bedrockconnect.Server;
+import main.com.pyratron.pugmatt.bedrockconnect.Whitelist;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.MainFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIForms;
@@ -377,8 +378,15 @@ public class PacketHandler implements BedrockPacketHandler {
 
             name = extraData.getAsString("displayName");
             uuid = extraData.getAsString("identity");
-
-
+            
+            
+            //whitelist check
+            if (!Whitelist.isPlayerWhitelisted(name)) {
+            	session.disconnect(Whitelist.getWhitelistMessage());
+            	System.out.println("Kicked " + name + ": \"" + Whitelist.getWhitelistMessage() + "\"");
+            }
+            
+            
             PlayStatusPacket status = new PlayStatusPacket();
             status.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
             session.sendPacket(status);
