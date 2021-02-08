@@ -1,7 +1,7 @@
 # BedrockConnect on Docker
 
 - Install `docker` and `docker-compose`
-- Run `docker-compose up -d`
+- Run `docker-compose up` (`docker-compose up -d` for detached mode)
 
 # Extra
 [Customer Servers](custom-servers/README.md)
