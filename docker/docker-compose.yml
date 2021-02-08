@@ -1,0 +1,6 @@
+version: "2"
+services:
+  app:
+    build: .
+    ports:
+      - "19132:19132/udp"
