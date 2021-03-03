@@ -14,7 +14,7 @@
     "is-reachable": "^3.1.0",
     "morgan": "~1.9.1",
     "mysql2": "^1.6.5",
-    "pug": "2.0.0-beta11",
+    "pug": "3.0.1",
     "sequelize": "^5.8.7"
   }
 }
