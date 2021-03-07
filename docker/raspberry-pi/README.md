@@ -1,6 +1,22 @@
 # BedrockConnect on Docker on Raspberry Pi
 
-- Put the `Dockerfile` and the `BedrockConnect-1.0-SNAPSHOT.jar` in one directory
+- Grab the `Dockerfile`
 - Configure the `CMD` line in the `Dockerfile` to fit your needs
 - run `docker build -t bedrock-connect .`
 - run `docker run --name "bedrock-c" -d --restart always -p 19132:19132/udp bedrock-connect`
+
+# Docker compose example
+```
+  bedrock-connect:
+    container_name: bedrock-connect
+    build:
+      context: /home/pi/BedrockConnect/docker/raspberrypi
+      dockerfile: ./Dockerfile
+    volumes:
+      - /home/pi/BedrockConnect/docker/raspberrypi/custom_servers.json:/brc/custom_servers.json
+    ports:
+      - 19132:19132/udp
+    restart: unless-stopped
+```
+
+Replace "/home/pi/BedrockConnect/docker/raspberrypi" with the location of the Dockerfile, and custom_servers.json.
