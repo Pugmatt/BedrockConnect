@@ -381,12 +381,11 @@ public class PacketHandler implements BedrockPacketHandler {
             
             
             //whitelist check
-            if (!Whitelist.isPlayerWhitelisted(name)) {
+            if (Whitelist.hasWhitelist() && !Whitelist.isPlayerWhitelisted(name)) {
             	session.disconnect(Whitelist.getWhitelistMessage());
             	System.out.println("Kicked " + name + ": \"" + Whitelist.getWhitelistMessage() + "\"");
             }
-            
-            
+
             PlayStatusPacket status = new PlayStatusPacket();
             status.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
             session.sendPacket(status);
