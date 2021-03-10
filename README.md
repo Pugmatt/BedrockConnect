@@ -97,6 +97,7 @@ The following arguments can be placed in the startup command to ajust settings:
 | custom_servers| Sets the path to a custom server file, for specifying your servers in the list for all players. See [custom servers](#defining-your-own-custom-servers). |  |
 | user_servers | If true, players can add and remove servers on the serverlist. If false, the options are hidden. | true |
 | featured_servers | If true, the featured servers will be displayed in the serverlist.  If false, the servers are hidden. | true |
+| whitelist | Specify file containing list of whitelisted players. (Should be a text file with the player names specified on seperate lines) | |
 
 MySQL example:
 ```
