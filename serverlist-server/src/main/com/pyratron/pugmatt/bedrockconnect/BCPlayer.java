@@ -210,6 +210,11 @@ public class BCPlayer {
 
         //startGamePacket.setOnlySpawningV1Villagers(false);
         startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.CLIENT);
+        SyncedPlayerMovementSettings settings = new SyncedPlayerMovementSettings();
+        settings.setMovementMode(AuthoritativeMovementMode.CLIENT);
+        settings.setRewindHistorySize(0);
+        settings.setServerAuthoritativeBlockBreaking(false);
+        startGamePacket.setPlayerMovementSettings(settings);
         //startGamePacket.setTrial(false);
         startGamePacket.setVanillaVersion("*");
 
