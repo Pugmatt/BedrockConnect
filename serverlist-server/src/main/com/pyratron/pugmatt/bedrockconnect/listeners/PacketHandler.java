@@ -9,6 +9,7 @@ import com.nukkitx.math.vector.Vector3f;
 import com.nukkitx.nbt.NbtUtils;
 import com.nukkitx.network.util.Preconditions;
 import com.nukkitx.protocol.bedrock.BedrockClient;
+import com.nukkitx.protocol.bedrock.BedrockPacketCodec;
 import com.nukkitx.protocol.bedrock.data.AttributeData;
 import com.nukkitx.protocol.bedrock.packet.*;
 import com.nimbusds.jose.JOSEException;
@@ -32,6 +33,7 @@ import main.com.pyratron.pugmatt.bedrockconnect.Whitelist;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.MainFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIForms;
+import main.com.pyratron.pugmatt.bedrockconnect.utils.BedrockProtocol;
 import net.minidev.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -313,7 +315,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 ResourcePackStackPacket rs = new ResourcePackStackPacket();
                 //rs.setExperimental(false);
                 rs.setForcedToAccept(false);
-                rs.setGameVersion(Server.codec.getMinecraftVersion());
+                rs.setGameVersion("*");
                 session.sendPacket(rs);
                 break;
             default:
@@ -328,17 +330,24 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(LoginPacket packet) {
-        int protocolVersion = packet.getProtocolVersion();
-        if (protocolVersion != server.getProtocol()) {
+        BedrockPacketCodec packetCodec = BedrockProtocol.getBedrockCodec(packet.getProtocolVersion());
+
+        if (packetCodec == null) {
+            session.setPacketCodec(BedrockProtocol.DEFAULT_BEDROCK_CODEC);
+
             PlayStatusPacket status = new PlayStatusPacket();
-            if (protocolVersion > server.getProtocol()) {
+
+            if (packet.getProtocolVersion() > BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
                 status.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
-            } else {
+            }
+            else if (packet.getProtocolVersion() < BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
                 status.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
             }
+
             session.sendPacket(status);
         }
-        session.setPacketCodec(server.getCodec());
+
+        session.setPacketCodec(packetCodec);
 
         JsonNode certData;
         try {
