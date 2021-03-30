@@ -187,7 +187,7 @@ public class PacketHandler implements BedrockPacketHandler {
                                     session.sendPacketImmediately(UIForms.createError("Address is too large. (Must be less than 253)"));
                                 else if(data.get(1).length() >= 10)
                                     session.sendPacketImmediately(UIForms.createError("Port is too large. (Must be less than 10)"));
-                                else if (!data.get(0).matches("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$") && !data.get(0).matches("^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,6}$"))
+                                else if (!data.get(0).matches("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$") && !data.get(0).matches("^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,64}$"))
                                     session.sendPacketImmediately(UIForms.createError("Enter a valid address. (E.g. play.example.net, 172.16.254.1)"));
                                 else if (!data.get(1).matches("[0-9]+"))
                                     session.sendPacketImmediately(UIForms.createError("Enter a valid port that contains only numbers"));
