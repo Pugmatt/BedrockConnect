@@ -84,12 +84,19 @@ public class PaletteManager {
                 ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
                 try {
                     NbtMap tag = (NbtMap) NbtUtils.createReaderLE(bais).readTag();
-                    creativeItems.add(ItemData.of(itemNode.get("id").asInt(), damage, 1, tag));
+                    creativeItems.add(ItemData.builder()
+                            .id(itemNode.get("id").asInt())
+                            .damage(damage)
+                            .count(1)
+                            .tag(tag).build());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
-                creativeItems.add(ItemData.of(itemNode.get("id").asInt(), damage, 1));
+                creativeItems.add(ItemData.builder()
+                        .id(itemNode.get("id").asInt())
+                        .damage(damage)
+                        .count(1).build());
             }
         }
         CREATIVE_ITEMS = creativeItems;
