@@ -11,10 +11,7 @@ import main.com.pyratron.pugmatt.bedrockconnect.utils.BedrockProtocol;
 
 import javax.annotation.Nonnull;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class Server {
 
@@ -97,6 +94,25 @@ public class Server {
             };
             timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
         }
+
+        new Thread() {
+            public void run() {
+                try {
+                    Scanner sc = new Scanner(System.in);
+                    while(sc.hasNextLine()) {
+                        String cmd = sc.next();
+                        switch(cmd) {
+                            case "end":
+                            case "stop":
+                                System.exit(0);
+                                break;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
 
     }
 }
