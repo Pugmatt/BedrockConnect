@@ -225,6 +225,7 @@ public class BCPlayer {
         startGamePacket.setCurrentTick(0);
         startGamePacket.setEnchantmentSeed(0);
         startGamePacket.setMultiplayerCorrelationId("");
+        startGamePacket.setServerEngine("");
 
         startGamePacket.setBlockPalette(BedrockConnect.paletteManager.CACHED_PALLETE);
 
