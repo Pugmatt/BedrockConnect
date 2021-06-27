@@ -184,21 +184,31 @@ public class PacketHandler implements BedrockPacketHandler {
                                 data.set(1, data.get(1).replaceAll("\\s",""));
 
                                 if(data.get(0).length() >= 253)
-                                    session.sendPacketImmediately(UIForms.createError("Address is too large. (Must be less than 253)"));
+                                    session.sendPacketImmediately(UIForms.createError("Address is too large. (Must be 253 characters or less)"));
                                 else if(data.get(1).length() >= 10)
-                                    session.sendPacketImmediately(UIForms.createError("Port is too large. (Must be less than 10)"));
+                                    session.sendPacketImmediately(UIForms.createError("Port is too large. (Must be less than 10 characters)"));
+                                else if(data.get(2).length() >= 36)
+                                    session.sendPacketImmediately(UIForms.createError("Display name is too large. (Must be 36 characters or less)"));
                                 else if (!data.get(0).matches("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$") && !data.get(0).matches("^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,64}$"))
                                     session.sendPacketImmediately(UIForms.createError("Enter a valid address. (E.g. play.example.net, 172.16.254.1)"));
                                 else if (!data.get(1).matches("[0-9]+"))
                                     session.sendPacketImmediately(UIForms.createError("Enter a valid port that contains only numbers"));
+                                else if (!data.get(2).isEmpty() && !data.get(2).matches("^[a-zA-Z0-9]+( +[a-zA-Z0-9]+)*$"))
+                                    session.sendPacketImmediately(UIForms.createError("Display name can only contain letters, numbers, and spaces between characters"));
                                 else {
-                                    boolean addServer = Boolean.parseBoolean(data.get(2));
+                                    boolean addServer = Boolean.parseBoolean(data.get(3));
                                     if (addServer) {
                                         List<String> serverList = player.getServerList();
                                         if (serverList.size() >= player.getServerLimit())
                                             session.sendPacketImmediately(UIForms.createError("You have hit your serverlist limit of " + player.getServerLimit() + " servers. Remove some to add more."));
                                         else {
-                                            serverList.add(data.get(0) + ":" + data.get(1));
+                                            String server;
+                                            // If display name is included from form input, add as parameter
+                                            if(!data.get(2).isEmpty())
+                                                server = data.get(0) + ":" + data.get(1) + ":" + data.get(2);
+                                            else
+                                                server = data.get(0) + ":" + data.get(1);
+                                            serverList.add(server);
                                             player.setServerList(serverList);
                                             transfer(data.get(0).replace(" ", ""), Integer.parseInt(data.get(1)));
                                         }

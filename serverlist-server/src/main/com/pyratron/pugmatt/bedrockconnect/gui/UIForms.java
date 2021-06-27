@@ -9,6 +9,7 @@ import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.CustomServer;
 import main.com.pyratron.pugmatt.bedrockconnect.CustomServerHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UIForms {
@@ -49,7 +50,7 @@ public class UIForms {
             buttons.add(UIComponents.createButton("Exit Server List"));
 
         for(int i=0;i<servers.size();i++) {
-            buttons.add(UIComponents.createButton(servers.get(i), "https://i.imgur.com/3BmFZRE.png", "url"));
+            buttons.add(UIComponents.createButton(UIComponents.getServerDisplayName(servers.get(i)), "https://i.imgur.com/3BmFZRE.png", "url"));
         }
 
         for (CustomServer cs : customServers) {
@@ -114,6 +115,7 @@ public class UIForms {
 
         inputs.add(UIComponents.createInput("Server Address", "Please enter IP or Address"));
         inputs.add(UIComponents.createInput("Server Port", "Please enter Port", "19132"));
+        inputs.add(UIComponents.createInput("(Optional) Display Name on Server List", "", ""));
         inputs.add(UIComponents.createToggle("Add to server list"));
 
         out.add("content", inputs);
@@ -130,7 +132,11 @@ public class UIForms {
 
         JsonArray inputs = new JsonArray();
 
-        inputs.add(UIComponents.createDropdown(servers,"Servers", "0"));
+        List<String> displayServers = new ArrayList<>();
+        for(int i = 0; i < servers.size(); i++) {
+            displayServers.add(UIComponents.getServerDisplayName(servers.get(i)));
+        }
+        inputs.add(UIComponents.createDropdown(displayServers,"Servers", "0"));
 
         out.add("content", inputs);
         mf.setFormData(out.toString());
@@ -147,20 +153,6 @@ public class UIForms {
         form.addProperty("title", "Error");
         JsonArray content = new JsonArray();
         content.add(UIComponents.createLabel(text));
-        form.add("content", content);
-        mf.setFormData(form.toString());
-        return mf;
-    }
-
-    public static ModalFormRequestPacket createDonatelink() {
-        currentForm = DONATION;
-        ModalFormRequestPacket mf = new ModalFormRequestPacket();
-        mf.setFormId(UIForms.DONATION);
-        JsonObject form = new JsonObject();
-        form.addProperty("type", "custom_form");
-        form.addProperty("title", "Thank you!");
-        JsonArray content = new JsonArray();
-        content.add(UIComponents.createLabel(""));
         form.add("content", content);
         mf.setFormData(form.toString());
         return mf;
