@@ -9,6 +9,7 @@ import com.nukkitx.math.vector.Vector3f;
 import com.nukkitx.nbt.NbtUtils;
 import com.nukkitx.network.util.Preconditions;
 import com.nukkitx.protocol.bedrock.BedrockClient;
+import com.nukkitx.protocol.bedrock.BedrockPacketCodec;
 import com.nukkitx.protocol.bedrock.data.AttributeData;
 import com.nukkitx.protocol.bedrock.packet.*;
 import com.nimbusds.jose.JOSEException;
@@ -32,6 +33,7 @@ import main.com.pyratron.pugmatt.bedrockconnect.Whitelist;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.MainFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIForms;
+import main.com.pyratron.pugmatt.bedrockconnect.utils.BedrockProtocol;
 import net.minidev.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -182,21 +184,31 @@ public class PacketHandler implements BedrockPacketHandler {
                                 data.set(1, data.get(1).replaceAll("\\s",""));
 
                                 if(data.get(0).length() >= 253)
-                                    session.sendPacketImmediately(UIForms.createError("Address is too large. (Must be less than 253)"));
+                                    session.sendPacketImmediately(UIForms.createError("Address is too large. (Must be 253 characters or less)"));
                                 else if(data.get(1).length() >= 10)
-                                    session.sendPacketImmediately(UIForms.createError("Port is too large. (Must be less than 10)"));
-                                else if (!data.get(0).matches("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$") && !data.get(0).matches("^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,6}$"))
+                                    session.sendPacketImmediately(UIForms.createError("Port is too large. (Must be less than 10 characters)"));
+                                else if(data.get(2).length() >= 36)
+                                    session.sendPacketImmediately(UIForms.createError("Display name is too large. (Must be 36 characters or less)"));
+                                else if (!data.get(0).matches("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$") && !data.get(0).matches("^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,64}$"))
                                     session.sendPacketImmediately(UIForms.createError("Enter a valid address. (E.g. play.example.net, 172.16.254.1)"));
                                 else if (!data.get(1).matches("[0-9]+"))
                                     session.sendPacketImmediately(UIForms.createError("Enter a valid port that contains only numbers"));
+                                else if (!data.get(2).isEmpty() && !data.get(2).matches("^[a-zA-Z0-9]+( +[a-zA-Z0-9]+)*$"))
+                                    session.sendPacketImmediately(UIForms.createError("Display name can only contain letters, numbers, and spaces between characters"));
                                 else {
-                                    boolean addServer = Boolean.parseBoolean(data.get(2));
+                                    boolean addServer = Boolean.parseBoolean(data.get(3));
                                     if (addServer) {
                                         List<String> serverList = player.getServerList();
                                         if (serverList.size() >= player.getServerLimit())
                                             session.sendPacketImmediately(UIForms.createError("You have hit your serverlist limit of " + player.getServerLimit() + " servers. Remove some to add more."));
                                         else {
-                                            serverList.add(data.get(0) + ":" + data.get(1));
+                                            String server;
+                                            // If display name is included from form input, add as parameter
+                                            if(!data.get(2).isEmpty())
+                                                server = data.get(0) + ":" + data.get(1) + ":" + data.get(2);
+                                            else
+                                                server = data.get(0) + ":" + data.get(1);
+                                            serverList.add(server);
                                             player.setServerList(serverList);
                                             transfer(data.get(0).replace(" ", ""), Integer.parseInt(data.get(1)));
                                         }
@@ -313,7 +325,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 ResourcePackStackPacket rs = new ResourcePackStackPacket();
                 //rs.setExperimental(false);
                 rs.setForcedToAccept(false);
-                rs.setGameVersion(Server.codec.getMinecraftVersion());
+                rs.setGameVersion("*");
                 session.sendPacket(rs);
                 break;
             default:
@@ -328,17 +340,24 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(LoginPacket packet) {
-        int protocolVersion = packet.getProtocolVersion();
-        if (protocolVersion != server.getProtocol()) {
+        BedrockPacketCodec packetCodec = BedrockProtocol.getBedrockCodec(packet.getProtocolVersion());
+
+        if (packetCodec == null) {
+            session.setPacketCodec(BedrockProtocol.DEFAULT_BEDROCK_CODEC);
+
             PlayStatusPacket status = new PlayStatusPacket();
-            if (protocolVersion > server.getProtocol()) {
+
+            if (packet.getProtocolVersion() > BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
                 status.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
-            } else {
+            }
+            else if (packet.getProtocolVersion() < BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
                 status.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
             }
+
             session.sendPacket(status);
         }
-        session.setPacketCodec(server.getCodec());
+
+        session.setPacketCodec(packetCodec);
 
         JsonNode certData;
         try {

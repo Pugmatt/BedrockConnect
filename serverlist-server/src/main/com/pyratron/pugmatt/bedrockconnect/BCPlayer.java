@@ -225,6 +225,7 @@ public class BCPlayer {
         startGamePacket.setCurrentTick(0);
         startGamePacket.setEnchantmentSeed(0);
         startGamePacket.setMultiplayerCorrelationId("");
+        startGamePacket.setServerEngine("");
 
         startGamePacket.setBlockPalette(BedrockConnect.paletteManager.CACHED_PALLETE);
 
@@ -262,11 +263,6 @@ public class BCPlayer {
         AvailableEntityIdentifiersPacket entityPacket = new AvailableEntityIdentifiersPacket();
         entityPacket.setIdentifiers(BedrockConnect.paletteManager.ENTITY_IDENTIFIERS);
         session.sendPacket(entityPacket);
-
-        InventoryContentPacket creativePacket = new InventoryContentPacket();
-        creativePacket.setContainerId(ContainerId.CREATIVE); //TODO: Why is this deprecated?
-        creativePacket.setContents(BedrockConnect.paletteManager.CREATIVE_ITEMS);
-        session.sendPacket(creativePacket);
 
         PlayStatusPacket playStatus = new PlayStatusPacket();
         playStatus.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);

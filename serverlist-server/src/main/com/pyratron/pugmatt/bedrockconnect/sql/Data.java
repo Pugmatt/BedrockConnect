@@ -41,6 +41,7 @@ public class Data {
                 + "  (id         INTEGER PRIMARY KEY AUTO_INCREMENT,"
                 + "   uuid            TEXT,"
                 + "   name            TEXT,"
+                + "   serverName      TEXT,"
                 + "   servers         TEXT,"
                 + "   serverLimit     INTEGER,"
                 + "   INDEX (uuid(255))"
@@ -105,7 +106,7 @@ public class Data {
                     }
                 } catch (Exception e) {
                     errorAlert(e);
-                    session.disconnect("We had some trouble receiving your player data. Please report this to the BedrockConnect discord.");
+                    session.disconnect("We had some trouble receiving your player data. Please report this to the BedrockConnect GitHub if the issue continues.");
                 }
             }).start();
         } else {
@@ -167,7 +168,7 @@ public class Data {
                 catch (Exception e)
                 {
                     errorAlert(e);
-                    session.disconnect("We had some trouble receiving your player data. Please report this to the BedrockConnect discord.");
+                    session.disconnect("We had some trouble receiving your player data. Please report this to the BedrockConnect GitHub if the issue continues.");
                 }
         }).start();
     }

@@ -6,29 +6,17 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.nukkitx.protocol.bedrock.*;
 import com.nukkitx.protocol.bedrock.v428.Bedrock_v428;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
+import main.com.pyratron.pugmatt.bedrockconnect.utils.BedrockProtocol;
 
 
 import javax.annotation.Nonnull;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class Server {
 
     public BedrockServer server;
     public BedrockPong pong;
-
-    public static BedrockPacketCodec codec;
-
-    public int getProtocol() {
-        return codec.getProtocolVersion();
-    }
-
-    public BedrockPacketCodec getCodec() {
-        return codec;
-    }
 
     public static final ObjectMapper JSON_MAPPER = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     public static final YAMLMapper YAML_MAPPER = (YAMLMapper) new YAMLMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -63,7 +51,7 @@ public class Server {
         players = new ArrayList<>();
 
         InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", Integer.parseInt(port));
-        codec = Bedrock_v428.V428_CODEC;
+
         server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
         pong.setEdition("MCPE");
@@ -73,8 +61,8 @@ public class Server {
         pong.setMaximumPlayerCount(20);
         pong.setGameType("Survival");
         pong.setIpv4Port(Integer.parseInt(port));
-        pong.setProtocolVersion(codec.getProtocolVersion());
-        pong.setVersion(codec.getMinecraftVersion());
+        pong.setProtocolVersion(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion());
+        pong.setVersion(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion());
         server.setHandler(new BedrockServerEventHandler() {
             @Override
             public boolean onConnectionRequest(InetSocketAddress address) {
@@ -106,6 +94,25 @@ public class Server {
             };
             timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
         }
+
+        new Thread() {
+            public void run() {
+                try {
+                    Scanner sc = new Scanner(System.in);
+                    while(sc.hasNextLine()) {
+                        String cmd = sc.next();
+                        switch(cmd) {
+                            case "end":
+                            case "stop":
+                                System.exit(0);
+                                break;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
 
     }
 }

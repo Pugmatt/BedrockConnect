@@ -124,4 +124,20 @@ public class UIComponents {
 
         return null;
     }
+
+    /**
+     * If server display name is included in server data, return this value
+     * If not stored, use server address as display name
+     * @param server
+     * @return
+     */
+    public static String getServerDisplayName(String server) {
+        String displayName;
+        String[] serverParts = server.split(":");
+        if(serverParts.length > 2)
+            displayName = serverParts[2];
+        else
+            displayName = server;
+        return displayName;
+    }
 }

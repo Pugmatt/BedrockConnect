@@ -56,8 +56,8 @@ There are multiple BedrockConnect serverlist servers available that can be used,
 | ------------- | ------------- | ------------- | ------------- |
 | 104.238.130.180 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers |
 | 173.82.100.84 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/us.svg" height="20"> | [jdextraze](https://github.com/jdextraze) | |
-| 213.171.211.142 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
-| 217.160.58.93 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
+| 213.171.211.142 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
+| 217.160.58.93 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
 | 188.165.49.178 | <img src="https://lipis.github.io/flag-icon-css/flags/4x3/fr.svg" height="20"> | [Darkmoi3108](https://github.com/darkmoi3108) | |
 
 If you are currently hosting a BedrockConnect instance and are interested in adding it to this list, create a pull request adding it to the table above.
