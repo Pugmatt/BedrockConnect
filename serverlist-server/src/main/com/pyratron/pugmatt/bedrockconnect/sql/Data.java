@@ -41,7 +41,6 @@ public class Data {
                 + "  (id         INTEGER PRIMARY KEY AUTO_INCREMENT,"
                 + "   uuid            TEXT,"
                 + "   name            TEXT,"
-                + "   serverName      TEXT,"
                 + "   servers         TEXT,"
                 + "   serverLimit     INTEGER,"
                 + "   INDEX (uuid(255))"
