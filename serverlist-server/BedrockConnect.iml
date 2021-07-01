@@ -14,27 +14,25 @@
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-resolver-dns:4.1.43.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-codec-dns:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: net.minidev:json-smart:2.3" level="project" />
-    <orderEntry type="library" name="Maven: net.minidev:accessors-smart:1.2" level="project" />
-    <orderEntry type="library" name="Maven: org.ow2.asm:asm:5.0.4" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v440:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v431:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v428:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v422:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v419:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v408:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v407:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v390:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v389:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v388:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v361:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v354:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v340:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v332:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v313:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v291:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-common:2.8.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:common:2.8.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v448:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v440:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v431:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v428:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v422:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v419:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v408:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v407:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v390:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v389:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v388:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v361:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v354:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v340:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v332:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v313:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v291:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-common:2.8.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx.protocol:common:2.8.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.network:common:1.6.26-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.43.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport-native-epoll:linux-x86_64:4.1.43.Final" level="project" />
@@ -64,6 +62,9 @@
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.5" level="project" />
     <orderEntry type="library" name="Maven: com.nimbusds:nimbus-jose-jwt:4.39.2" level="project" />
     <orderEntry type="library" name="Maven: com.github.stephenc.jcip:jcip-annotations:1.0-1" level="project" />
+    <orderEntry type="library" name="Maven: net.minidev:json-smart:2.3" level="project" />
+    <orderEntry type="library" name="Maven: net.minidev:accessors-smart:1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.ow2.asm:asm:5.0.4" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />

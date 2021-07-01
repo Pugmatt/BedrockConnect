@@ -147,7 +147,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
                                     switch (featuredServer) {
                                         case 0: // Hive
-                                            transfer("54.39.75.136", 19132);
+                                            transfer("167.114.81.89", 19132);
                                             break;
                                         case 1: // Mineplex
                                             transfer("108.178.12.125", 19132);
