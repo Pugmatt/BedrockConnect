@@ -68,6 +68,7 @@ if [[ -f /etc/os-release ]]; then
   source /etc/os-release
   if [[ "$ID" == "ubuntu" || "$ID_LIKE" == "ubuntu" ]]; then
     PKG_MGR=apt
+    PKG_MGR_SYNTAX="install"
     PKGS="bind9 dnsutils"
     NAMED_OPTIONS="/etc/bind/named.conf.options"
     NAMED_ZONES="/etc/bind/named.conf.local"
@@ -75,7 +76,16 @@ if [[ -f /etc/os-release ]]; then
     SERVICE_NAME="bind9"
   elif [[ "$ID" == "centos" ]]; then
     PKG_MGR=yum
+    PKG_MGR_SYNTAX="install"
     PKGS="bind bind-utils"
+    NAMED_OPTIONS="/etc/named.conf"
+    NAMED_ZONES="/etc/named.conf"
+    NAMED_DBS="/var/named"
+    SERVICE_NAME="named"
+  elif [[ "$ID" == "arch" ]]; then
+    PKG_MGR=pacman
+    PKG_MGR_SYNTAX="-S"
+    PKGS="bind"
     NAMED_OPTIONS="/etc/named.conf"
     NAMED_ZONES="/etc/named.conf"
     NAMED_DBS="/var/named"
@@ -91,7 +101,7 @@ fi
 
 # Install
 
-$PKG_MGR install -y $PKGS
+$PKG_MGR $PKG_MGR_SYNTAX -y $PKGS
 
 # Configure
 
@@ -105,7 +115,9 @@ add_domain inpvp.net play
 add_domain lbsg.net mco
 add_domain cubecraft.net mco
 add_domain galaxite.net play
+add_domain 4b4t.xyz play
 
 # Reload config
 
 systemctl reload $SERVICE_NAME
+echo "Done!"
