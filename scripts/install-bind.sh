@@ -115,9 +115,7 @@ add_domain inpvp.net play
 add_domain lbsg.net mco
 add_domain cubecraft.net mco
 add_domain galaxite.net play
-add_domain 4b4t.xyz play
 
 # Reload config
 
 systemctl reload $SERVICE_NAME
-echo "Done!"
