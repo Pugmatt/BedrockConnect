@@ -164,6 +164,9 @@ public class PacketHandler implements BedrockPacketHandler {
                                         case 5: // Galaxite
                                             transfer("51.222.8.223", 19132);
                                             break;
+                                        case 6: // Pixel Paradise
+                                            transfer("40.87.84.106", 19132);
+                                            break;
                                     }
                                     break;
                             }
