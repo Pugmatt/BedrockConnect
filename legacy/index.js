@@ -12,7 +12,7 @@ const db = async (function() {
 	
 	jack.listen(); // it listens on the standard DNS port of 53 per default
 	
-	jack.route(['mco.mineplex.com', 'hivebedrock.network', 'play.inpvp.net', 'mco.lbsg.net', 'mco.cubecraft.net'], function(data, callback) {
+	jack.route(['mco.mineplex.com', 'hivebedrock.network', 'play.inpvp.net', 'mco.lbsg.net', 'mco.cubecraft.net', 'play.pixelparadise.gg'], function(data, callback) {
 		
 		database.Server.findOne({ 
 			where: {
