@@ -9,6 +9,7 @@ import com.nukkitx.protocol.bedrock.v440.Bedrock_v440;
 import com.nukkitx.protocol.bedrock.v448.Bedrock_v448;
 import com.nukkitx.protocol.bedrock.v465.Bedrock_v465;
 import com.nukkitx.protocol.bedrock.v471.Bedrock_v471;
+import com.nukkitx.protocol.bedrock.v475.Bedrock_v475;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class BedrockProtocol {
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v448.V448_CODEC);
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v465.V465_CODEC);
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v471.V471_CODEC);
+        SUPPORTED_BEDROCK_CODECS.add(Bedrock_v475.V475_CODEC);
     }
 
     /**
