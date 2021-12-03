@@ -90,6 +90,14 @@ if [[ -f /etc/os-release ]]; then
     NAMED_ZONES="/etc/named.conf"
     NAMED_DBS="/var/named"
     SERVICE_NAME="named"
+  elif [[ "$ID" == "debian" ]]; then
+    PKG_MGR=apt
+    PKG_MGR_SYNTAX="install"
+    PKGS="bind9 dnsutils"
+    NAMED_OPTIONS="/etc/bind/named.conf.options"
+    NAMED_ZONES="/etc/bind/named.conf.local"
+    NAMED_DBS="/var/cache/bind"
+    SERVICE_NAME="named"
   else
     echo "Unsupported OS"
     exit 2
