@@ -28,7 +28,7 @@ public class UIForms {
         featuredServerButtons.add(UIComponents.createButton("The Hive", "https://forum.playhive.com/uploads/default/original/1X/0d05e3240037f7592a0f16b11b57c08eba76f19c.png", "url"));
         featuredServerButtons.add(UIComponents.createButton("Mineplex", "https://www.mineplex.com/assets/www-mp/img/footer/footer_smalllogo.png", "url"));
         featuredServerButtons.add(UIComponents.createButton("CubeCraft Games", "https://i.imgur.com/aFH1NUr.png", "url"));
-        featuredServerButtons.add(UIComponents.createButton("Lifeboat Network", "https://lbsg.net/wp-content/uploads/2017/06/lifeboat-square.png", "url"));
+        featuredServerButtons.add(UIComponents.createButton("Lifeboat Network", "https://i.imgur.com/LoI7bYx.png", "url"));
         featuredServerButtons.add(UIComponents.createButton("Mineville", "https://i.imgur.com/0K4TDut.png", "url"));
         featuredServerButtons.add(UIComponents.createButton("Galaxite", "https://i.imgur.com/VxXO8Of.png", "url"));
         featuredServerButtons.add(UIComponents.createButton("Pixel Paradise", "https://i.imgur.com/IMe5NSf.jpg", "url"));
