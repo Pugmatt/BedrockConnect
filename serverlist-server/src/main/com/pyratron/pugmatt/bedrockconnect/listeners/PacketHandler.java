@@ -68,7 +68,7 @@ public class PacketHandler implements BedrockPacketHandler {
         try {
             InetAddress host = InetAddress.getByName(hostname);
             String IP = host.getHostAddress().toString();
-            System.out.println(IP);
+            //System.out.println(IP);
             return IP;
         } catch (UnknownHostException ex) {
             ex.printStackTrace();
