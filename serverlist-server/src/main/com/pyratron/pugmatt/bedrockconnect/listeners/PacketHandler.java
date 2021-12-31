@@ -45,6 +45,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class PacketHandler implements BedrockPacketHandler {
 
@@ -60,6 +62,19 @@ public class PacketHandler implements BedrockPacketHandler {
 
     public void setPlayer(BCPlayer player) {
         this.player = player;
+    }
+
+    public static String getIP(String hostname) {
+        try {
+            InetAddress host = InetAddress.getByName(hostname);
+            String IP = host.getHostAddress().toString();
+            //System.out.println(IP);
+            return IP;
+        } catch (UnknownHostException ex) {
+            ex.printStackTrace();
+            String IP = "0.0.0.0";
+            return IP;
+        }
     }
 
     @Override
@@ -147,25 +162,25 @@ public class PacketHandler implements BedrockPacketHandler {
 
                                     switch (featuredServer) {
                                         case 0: // Hive
-                                            transfer("167.114.81.89", 19132);
+                                            transfer(getIP("hivebedrock.network"), 19132);
                                             break;
                                         case 1: // Mineplex
-                                            transfer("108.178.12.125", 19132);
+                                            transfer(getIP("mco.mineplex.com"), 19132);
                                             break;
                                         case 2: // Cubecraft
                                             transfer("play.cubecraft.net", 19132);
                                             break;
                                         case 3: // Lifeboat
-                                            transfer("51.222.26.28", 19132);
+                                            transfer(getIP("mco.lbsg.net"), 19132);
                                             break;
                                         case 4: // Mineville
-                                            transfer("168.62.164.235", 19132);
+                                            transfer(getIP("play.inpvp.net"), 19132);
                                             break;
                                         case 5: // Galaxite
-                                            transfer("51.222.8.223", 19132);
+                                            transfer(getIP("play.galaxite.net"), 19132);
                                             break;
                                         case 6: // Pixel Paradise
-                                            transfer("40.87.84.106", 19132);
+                                            transfer(getIP("play.pixelparadise.gg"), 19132);
                                             break;
                                     }
                                     break;
