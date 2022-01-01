@@ -3,6 +3,9 @@ package main.com.pyratron.pugmatt.bedrockconnect;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.net.*;
@@ -29,7 +32,10 @@ public class BedrockConnect {
     public static boolean kickInactive = true;
     public static boolean userServers = true;
     public static boolean featuredServers = true;
+    public static boolean fetchFeaturedIps = true;
     public static File whitelistfile;
+
+    public static HashMap<String, String> featuredServerIps;
 
     public static void main(String[] args) {
         System.out.println("-= BedrockConnect =-");
@@ -117,6 +123,9 @@ public class BedrockConnect {
                 if (str.startsWith("featured_servers=")) {
                     featuredServers = getArgValue(str, "featured_servers").toLowerCase().equals("true");
                 }
+                if (str.startsWith("fetch_featured_ips=")) {
+                    fetchFeaturedIps = getArgValue(str, "fetch_featured_ips").toLowerCase().equals("true");
+                }
                 if (str.startsWith("whitelist=")) {
                 	try {
                 		whitelistfile = new File(getArgValue(str, "whitelist"));
@@ -141,6 +150,44 @@ public class BedrockConnect {
             
             if (Whitelist.hasWhitelist()) {
             	System.out.printf("There are %d whitelisted players\n", Whitelist.getWhitelist().size());
+            }
+
+            if(!fetchFeaturedIps) {
+                try {
+                    featuredServerIps = new HashMap<>();
+
+                    // If the file doesn't already exist, create a configuration file containing the hard-coded IPs
+                    // for the featured servers if fetching the featured ips is set to disabled
+                    File ipFile = new File("featured_server_ips.json");
+                    if (ipFile.createNewFile()) {
+                        featuredServerIps.put("hivebedrock.network", "167.114.81.89");
+                        featuredServerIps.put("mco.mineplex.com", "108.178.12.125");
+                        featuredServerIps.put("mco.lbsg.net", "142.44.240.96");
+                        featuredServerIps.put("play.inpvp.net", "52.234.130.241");
+                        featuredServerIps.put("play.galaxite.net", "51.222.8.223");
+                        featuredServerIps.put("play.pixelparadise.gg", "40.87.84.106");
+
+                        JSONObject jo = new JSONObject();
+                        for (Map.Entry server : featuredServerIps.entrySet()) {
+                            jo.put(server.getKey(), server.getValue());
+                        }
+
+                        PrintWriter pw = new PrintWriter("featured_server_ips.json");
+                        pw.write(jo.toJSONString());
+                        pw.flush();
+                        pw.close();
+                    } else {
+                        Object obj = new JSONParser().parse(new FileReader("featured_server_ips.json"));
+
+                        JSONObject jo = (JSONObject) obj;
+                        for (Object server : jo.keySet()) {
+                            featuredServerIps.put((String) server, (String) jo.get(server));
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("An error occurred.");
+                    e.printStackTrace();
+                }
             }
             
             if(!noDB) {

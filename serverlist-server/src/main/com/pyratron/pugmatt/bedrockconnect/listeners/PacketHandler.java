@@ -8,6 +8,7 @@ import com.nimbusds.jwt.SignedJWT;
 import com.nukkitx.math.vector.Vector3f;
 import com.nukkitx.nbt.NbtUtils;
 import com.nukkitx.network.util.Preconditions;
+import com.nukkitx.protocol.bedrock.Bedrock;
 import com.nukkitx.protocol.bedrock.BedrockClient;
 import com.nukkitx.protocol.bedrock.BedrockPacketCodec;
 import com.nukkitx.protocol.bedrock.data.AttributeData;
@@ -66,15 +67,16 @@ public class PacketHandler implements BedrockPacketHandler {
 
     public static String getIP(String hostname) {
         try {
-            InetAddress host = InetAddress.getByName(hostname);
-            String IP = host.getHostAddress().toString();
-            //System.out.println(IP);
-            return IP;
+            if(BedrockConnect.fetchFeaturedIps) {
+                InetAddress host = InetAddress.getByName(hostname);
+                return host.getHostAddress();
+            } else {
+                return BedrockConnect.featuredServerIps.get(hostname);
+            }
         } catch (UnknownHostException ex) {
             ex.printStackTrace();
-            String IP = "0.0.0.0";
-            return IP;
         }
+        return "0.0.0.0";
     }
 
     @Override
