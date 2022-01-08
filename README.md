@@ -99,7 +99,7 @@ The following arguments can be placed in the startup command to ajust settings:
 | user_servers | If true, players can add and remove servers on the serverlist. If false, the options are hidden. | true |
 | featured_servers | If true, the featured servers will be displayed in the serverlist.  If false, the servers are hidden. | true |
 | whitelist | Specify file containing list of whitelisted players. (Should be a text file with the player names specified on seperate lines) | |
-| fetch_featured_ips | Dynamically grab the featured server IPs from the domain names. If false, a file ```featured_server_ips.json``` will be generated, containing the hard-coded featured server IPs, and to allow changing them if needed.  | true |
+| fetch_featured_ips | If true, dynamically grab the featured server IPs from the domain names. If false, a file ```featured_server_ips.json``` will be generated, containing the hard-coded featured server IPs, and to allow changing them if needed.  | true |
 
 MySQL example:
 ```
