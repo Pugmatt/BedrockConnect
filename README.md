@@ -157,5 +157,5 @@ Here's a script to setup BIND (DNS server software) on Linux: https://github.com
 
 If you like what you see, feel free to throw a few bucks. I won't ever charge for this service. Donations go toward hosting the main BedrockConnect instance, 104.238.130.180.
 
-http://paypal.me/Pugmatt
+https://paypal.me/Pugmatt
 
