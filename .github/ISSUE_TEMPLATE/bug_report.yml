@@ -4,7 +4,7 @@ body:
 - type: markdown
   attributes:
     value: |
-    	Hey there, first of all thanks for filling out this report.
+      Hey there, first of all thanks for filling out this report.
 
       Before opening any issues:
         - First ensure that there is no similiar issue on the [issue tracker](https://github.com/Pugmatt/BedrockConnect/issues).
