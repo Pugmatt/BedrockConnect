@@ -46,7 +46,7 @@ body:
     placeholder: |
       Example: 1.18.2
   validations:
-    required: true
+    required: false
 - type: input
   attributes:
     label: Console
@@ -54,7 +54,7 @@ body:
     placeholder: |
       Example: Nintendo Switch
   validations:
-    required: true
+    required: false
 - type: textarea
   attributes:
     label: Additional Context
