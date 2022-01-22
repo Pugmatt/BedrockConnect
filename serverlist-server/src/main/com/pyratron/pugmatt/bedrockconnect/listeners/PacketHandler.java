@@ -41,13 +41,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.security.interfaces.ECPublicKey;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.TimeUnit;
 
 public class PacketHandler implements BedrockPacketHandler {
 
@@ -115,7 +113,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     if(UIForms.currentForm == UIForms.MAIN) {
                         // Re-open window if closed
                         if (packet.getFormData().contains("null")) {
-                            session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
+                            session.sendPacketImmediately(UIForms.createMain(player.getServerList(), session));
                             player.setCurrentForm(UIForms.MAIN);
                         } else { // If selecting button
                             int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
@@ -193,7 +191,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 case UIForms.DIRECT_CONNECT:
                     try {
                         if(packet.getFormData().contains("null")) {
-                            session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
+                            session.sendPacketImmediately(UIForms.createMain(player.getServerList(), session));
                             player.setCurrentForm(UIForms.MAIN);
                         }
                         else {
@@ -248,7 +246,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 case UIForms.REMOVE_SERVER:
                     try {
                         if(packet.getFormData().contains("null")) {
-                            session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
+                            session.sendPacketImmediately(UIForms.createMain(player.getServerList(), session));
                             player.setCurrentForm(UIForms.MAIN);
                         }
                         else {
@@ -261,19 +259,37 @@ public class PacketHandler implements BedrockPacketHandler {
 
                             player.setServerList(serverList);
 
-                            session.sendPacketImmediately(UIForms.createMain(serverList));
+                            session.sendPacketImmediately(UIForms.createMain(serverList, session));
                         }
                     } catch(Exception e) {
                         session.sendPacketImmediately(UIForms.createError("Invalid server to remove"));
                     }
                     break;
                 case UIForms.ERROR:
-                    session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
+                    session.sendPacketImmediately(UIForms.createMain(player.getServerList(), session));
                     break;
                 case UIForms.DONATION:
-                    session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
+                    session.sendPacketImmediately(UIForms.createMain(player.getServerList(), session));
                     break;
         }
+
+        return false;
+    }
+
+    @Override
+    public boolean handle(NetworkStackLatencyPacket packet) {
+        // Fix bug where server icons don't load
+        UpdateAttributesPacket updateAttributesPacket = new UpdateAttributesPacket();
+        updateAttributesPacket.setRuntimeEntityId(1);
+        List<AttributeData> attributes = Collections.singletonList(new AttributeData("minecraft:player.level", 0f, 24791.00f, 0, 0f));
+        updateAttributesPacket.setAttributes(attributes);
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() { session.sendPacket(updateAttributesPacket); }
+        };
+        timer.schedule(task, 500);
+
         return false;
     }
 
@@ -286,7 +302,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public boolean handle(SetLocalPlayerAsInitializedPacket packet) {
-        session.sendPacketImmediately(UIForms.createMain(player.getServerList()));
+        session.sendPacketImmediately(UIForms.createMain(player.getServerList(), session));
         return false;
     }
 

@@ -138,7 +138,7 @@ public class BCPlayer {
 
             switch (getCurrentForm()) {
                 case UIForms.MAIN:
-                    form = UIForms.createMain(getServerList());
+                    form = UIForms.createMain(getServerList(), session);
                     break;
                 case UIForms.DIRECT_CONNECT:
                     form = UIForms.createDirectConnect();
@@ -147,7 +147,7 @@ public class BCPlayer {
                     form = UIForms.createRemoveServer(getServerList());
                     break;
                 default:
-                    form = UIForms.createMain(getServerList());
+                    form = UIForms.createMain(getServerList(), session);
                     break;
             }
 

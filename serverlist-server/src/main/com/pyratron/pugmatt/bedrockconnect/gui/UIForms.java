@@ -3,8 +3,10 @@ package main.com.pyratron.pugmatt.bedrockconnect.gui;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.nukkitx.protocol.bedrock.Bedrock;
+import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.packet.ModalFormRequestPacket;
 
+import com.nukkitx.protocol.bedrock.packet.NetworkStackLatencyPacket;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.CustomServer;
 import main.com.pyratron.pugmatt.bedrockconnect.CustomServerHandler;
@@ -34,7 +36,7 @@ public class UIForms {
         featuredServerButtons.add(UIComponents.createButton("Pixel Paradise", "https://i.imgur.com/IMe5NSf.jpg", "url"));
     }
 
-    public static ModalFormRequestPacket createMain(List<String> servers) {
+    public static ModalFormRequestPacket createMain(List<String> servers, BedrockServerSession session) {
         currentForm = MAIN;
         ModalFormRequestPacket mf = new ModalFormRequestPacket();
         mf.setFormId(UIForms.MAIN);
@@ -65,6 +67,12 @@ public class UIForms {
         out.add("buttons", buttons);
 
         mf.setFormData(out.toString());
+
+        // Fix icons not loading
+        NetworkStackLatencyPacket networkStackLatencyPacket = new NetworkStackLatencyPacket();
+        networkStackLatencyPacket.setFromServer(true);
+        networkStackLatencyPacket.setTimestamp(System.currentTimeMillis());
+        session.sendPacket(networkStackLatencyPacket);
 
         return mf;
     }
