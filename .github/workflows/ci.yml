@@ -1,10 +1,6 @@
 name: buildroot
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -19,7 +15,7 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
         cache: maven
-    - name: Building BedrockConnect
+    - name: Build with maven
       run: |
         cd serverlist-server
         mvn -B package --file pom.xml
