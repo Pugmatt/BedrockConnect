@@ -3,9 +3,9 @@ contact_links:
   - name: Troubleshooting
     url: https://github.com/Pugmatt/BedrockConnect/wiki/Troubleshooting
     about: A set of common issues that can occur, and how to fix them.
-  - name: Hosting you're own BedrockConnect Instance (Linux)
+  - name: Hosting your own BedrockConnect Instance (Linux)
     url: https://github.com/Pugmatt/BedrockConnect/wiki/Setting-up-on-Linux
-    about: Setup an BedrockConnect instance on you're Linux Computer
-  - name: Hosting you're own BedrockConnect Instance (Windows)
+    about: Setup a BedrockConnect instance on your Linux Computer
+  - name: Hosting your own BedrockConnect Instance (Windows)
     url: https://www.youtube.com/watch?v=AW5X7-qnvLk
-    about: Setup an BedrockConnect instance on you're Windows Computer
+    about: Setup a BedrockConnect instance on your Windows Computer
