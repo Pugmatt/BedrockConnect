@@ -1,0 +1,44 @@
+{
+  "serverInfo": {
+    "motd": "Join To Open Server List",
+    "subMotd": "BedrockConnect Server List"
+  },
+  "main": {
+    "heading": "ServerList",
+    "connectBtn" : "Connect to a Server",
+    "removeBtn": "Remove a Server",
+    "exitBtn": "Exit Server List"
+  },
+  "connect": {
+    "heading": "Connect to a Server",
+    "addressTitle": "Server Address",
+    "addressPlaceholder": "Please enter IP or Address",
+    "portTitle": "Server Port",
+    "portPlaceholder": "Please enter Port",
+    "displayNameTitle": "(Optional) Display Name on Server List",
+    "addToggle": "Add to server list"
+  },
+  "remove": {
+    "heading": "Remove Server",
+    "serverDropdown": "Servers"
+  },
+  "error": {
+    "heading": "Error",
+    "addressLarge": "Address is too large. (Must be 253 characters or less)",
+    "portLarge": "Port is too large. (Must be less than 10 characters)",
+    "nameLarge": "Display name is too large. (Must be 36 characters or less)",
+    "invalidAddress": "Enter a valid address. (E.g. play.example.net, 172.16.254.1)",
+    "invalidPort": "Enter a valid port that contains only numbers",
+    "invalidName": "Display name can only contain letters, numbers, and spaces between characters",
+    "serverLimit": "You have hit your serverlist limit of %MAX_SERVERS% servers. Remove some to add more.",
+    "invalidUserServer": "Invalid server address",
+    "invalidServerConnect": "Please enter a valid IP/Address and port that contains only numbers.",
+    "invalidServerRemove": "Invalid server to remove",
+    "transferError": "Error connecting to server. Invalid address."
+  },
+  "disconnect": {
+    "inactivity": "Kicked for inactivity",
+    "exit": "Exiting Server List",
+    "dataError": "We had some trouble receiving your player data. Please report this to the BedrockConnect GitHub if the issue continues."
+  }
+}

@@ -105,7 +105,7 @@ public class Data {
                     }
                 } catch (Exception e) {
                     errorAlert(e);
-                    session.disconnect("We had some trouble receiving your player data. Please report this to the BedrockConnect GitHub if the issue continues.");
+                    session.disconnect(BedrockConnect.language.getWording("disconnect", "dataError"));
                 }
             }).start();
         } else {
@@ -167,7 +167,7 @@ public class Data {
                 catch (Exception e)
                 {
                     errorAlert(e);
-                    session.disconnect("We had some trouble receiving your player data. Please report this to the BedrockConnect GitHub if the issue continues.");
+                    session.disconnect(BedrockConnect.language.getWording("disconnect", "dataError"));
                 }
         }).start();
     }

@@ -22,10 +22,12 @@ public class UIForms {
     public static JsonArray mainMenuButtons = new JsonArray();
     public static JsonArray featuredServerButtons = new JsonArray();
 
+    public static final int DEFAULT_PORT = 19132;
+
     static {
-        mainMenuButtons.add(UIComponents.createButton("Connect to a Server"));
-        mainMenuButtons.add(UIComponents.createButton("Remove a Server"));
-        mainMenuButtons.add(UIComponents.createButton("Exit Server List"));
+        mainMenuButtons.add(UIComponents.createButton(BedrockConnect.language.getWording("main", "connectBtn")));
+        mainMenuButtons.add(UIComponents.createButton(BedrockConnect.language.getWording("main", "removeBtn")));
+        mainMenuButtons.add(UIComponents.createButton(BedrockConnect.language.getWording("main", "exitBtn")));
 
         featuredServerButtons.add(UIComponents.createButton("The Hive", "https://forum.playhive.com/uploads/default/original/1X/0d05e3240037f7592a0f16b11b57c08eba76f19c.png", "url"));
         featuredServerButtons.add(UIComponents.createButton("Mineplex", "https://www.mineplex.com/assets/www-mp/img/footer/footer_smalllogo.png", "url"));
@@ -41,7 +43,7 @@ public class UIForms {
         ModalFormRequestPacket mf = new ModalFormRequestPacket();
         mf.setFormId(UIForms.MAIN);
 
-        JsonObject out = UIComponents.createForm("form", "Server List");
+        JsonObject out = UIComponents.createForm("form", BedrockConnect.language.getWording("main", "heading"));
         out.addProperty("content", "");
 
         JsonArray buttons = new JsonArray();
@@ -50,7 +52,7 @@ public class UIForms {
         if(BedrockConnect.userServers)
             buttons.addAll(mainMenuButtons);
         else
-            buttons.add(UIComponents.createButton("Exit Server List"));
+            buttons.add(UIComponents.createButton(BedrockConnect.language.getWording("main", "exitBtn")));
 
         for(int i=0;i<servers.size();i++) {
             buttons.add(UIComponents.createButton(UIComponents.getServerDisplayName(servers.get(i)), "https://i.imgur.com/3BmFZRE.png", "url"));
@@ -118,14 +120,14 @@ public class UIForms {
         currentForm = DIRECT_CONNECT;
         ModalFormRequestPacket mf = new ModalFormRequestPacket();
         mf.setFormId(UIForms.DIRECT_CONNECT);
-        JsonObject out = UIComponents.createForm("custom_form", "Connect to a Server");
+        JsonObject out = UIComponents.createForm("custom_form", BedrockConnect.language.getWording("connect", "heading"));
 
         JsonArray inputs = new JsonArray();
 
-        inputs.add(UIComponents.createInput("Server Address", "Please enter IP or Address"));
-        inputs.add(UIComponents.createInput("Server Port", "Please enter Port", "19132"));
-        inputs.add(UIComponents.createInput("(Optional) Display Name on Server List", "", ""));
-        inputs.add(UIComponents.createToggle("Add to server list"));
+        inputs.add(UIComponents.createInput(BedrockConnect.language.getWording("connect", "addressTitle"), BedrockConnect.language.getWording("connect", "addressPlaceholder")));
+        inputs.add(UIComponents.createInput(BedrockConnect.language.getWording("connect", "portTitle"), BedrockConnect.language.getWording("connect", "portPlaceholder"), Integer.toString(DEFAULT_PORT)));
+        inputs.add(UIComponents.createInput(BedrockConnect.language.getWording("connect", "displayNameTitle"), "", ""));
+        inputs.add(UIComponents.createToggle(BedrockConnect.language.getWording("connect", "addToggle")));
 
         out.add("content", inputs);
         mf.setFormData(out.toString());
@@ -137,7 +139,7 @@ public class UIForms {
         currentForm = REMOVE_SERVER;
         ModalFormRequestPacket mf = new ModalFormRequestPacket();
         mf.setFormId(UIForms.REMOVE_SERVER);
-        JsonObject out = UIComponents.createForm("custom_form", "Remove Server");
+        JsonObject out = UIComponents.createForm("custom_form", BedrockConnect.language.getWording("remove", "heading"));
 
         JsonArray inputs = new JsonArray();
 
@@ -145,7 +147,7 @@ public class UIForms {
         for(int i = 0; i < servers.size(); i++) {
             displayServers.add(UIComponents.getServerDisplayName(servers.get(i)));
         }
-        inputs.add(UIComponents.createDropdown(displayServers,"Servers", "0"));
+        inputs.add(UIComponents.createDropdown(displayServers,BedrockConnect.language.getWording("remove", "serverDropdown"), "0"));
 
         out.add("content", inputs);
         mf.setFormData(out.toString());
@@ -159,7 +161,7 @@ public class UIForms {
         mf.setFormId(UIForms.ERROR);
         JsonObject form = new JsonObject();
         form.addProperty("type", "custom_form");
-        form.addProperty("title", "Error");
+        form.addProperty("title", BedrockConnect.language.getWording("error", "heading"));
         JsonArray content = new JsonArray();
         content.add(UIComponents.createLabel(text));
         form.add("content", content);

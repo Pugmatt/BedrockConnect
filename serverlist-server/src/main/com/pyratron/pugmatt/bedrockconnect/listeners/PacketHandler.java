@@ -135,7 +135,7 @@ public class PacketHandler implements BedrockPacketHandler {
                                     player.setCurrentForm(UIForms.REMOVE_SERVER);
                                     break;
                                 case EXIT:
-                                    player.disconnect("Exiting Server List", server);
+                                    player.disconnect(BedrockConnect.language.getWording("disconnect", "exit"), server);
                                     break;
                                 case USER_SERVER:
                                     String address = server.getPlayer(uuid).getServerList().get(serverIndex);
@@ -144,13 +144,9 @@ public class PacketHandler implements BedrockPacketHandler {
                                         String ip = address.split(":")[0];
                                         String port = address.split(":")[1];
 
-                                        try {
-                                            transfer(ip, Integer.parseInt(port));
-                                        } catch (Exception e) {
-                                            session.sendPacketImmediately(UIForms.createError("Error connecting to server. Invalid address."));
-                                        }
+                                        transfer(ip, Integer.parseInt(port));
                                     } else {
-                                        session.sendPacketImmediately(UIForms.createError("Invalid server address"));
+                                        session.sendPacketImmediately(UIForms.createError(BedrockConnect.language.getWording("error", "invalidUserServer")));
                                     }
                                     break;
                                 case CUSTOM_SERVER:
@@ -202,23 +198,23 @@ public class PacketHandler implements BedrockPacketHandler {
                                 data.set(1, data.get(1).replaceAll("\\s",""));
 
                                 if(data.get(0).length() >= 253)
-                                    session.sendPacketImmediately(UIForms.createError("Address is too large. (Must be 253 characters or less)"));
+                                    session.sendPacketImmediately(UIForms.createError(BedrockConnect.language.getWording("error", "addressLarge")));
                                 else if(data.get(1).length() >= 10)
-                                    session.sendPacketImmediately(UIForms.createError("Port is too large. (Must be less than 10 characters)"));
+                                    session.sendPacketImmediately(UIForms.createError(BedrockConnect.language.getWording("error", "portLarge")));
                                 else if(data.get(2).length() >= 36)
-                                    session.sendPacketImmediately(UIForms.createError("Display name is too large. (Must be 36 characters or less)"));
+                                    session.sendPacketImmediately(UIForms.createError(BedrockConnect.language.getWording("error", "nameLarge")));
                                 else if (!data.get(0).matches("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$") && !data.get(0).matches("^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,64}$"))
-                                    session.sendPacketImmediately(UIForms.createError("Enter a valid address. (E.g. play.example.net, 172.16.254.1)"));
+                                    session.sendPacketImmediately(UIForms.createError(BedrockConnect.language.getWording("error", "invalidAddress")));
                                 else if (!data.get(1).matches("[0-9]+"))
-                                    session.sendPacketImmediately(UIForms.createError("Enter a valid port that contains only numbers"));
+                                    session.sendPacketImmediately(UIForms.createError(BedrockConnect.language.getWording("error", "invalidPort")));
                                 else if (!data.get(2).isEmpty() && !data.get(2).matches("^[a-zA-Z0-9]+( +[a-zA-Z0-9]+)*$"))
-                                    session.sendPacketImmediately(UIForms.createError("Display name can only contain letters, numbers, and spaces between characters"));
+                                    session.sendPacketImmediately(UIForms.createError(BedrockConnect.language.getWording("error", "invalidName")));
                                 else {
                                     boolean addServer = Boolean.parseBoolean(data.get(3));
                                     if (addServer) {
                                         List<String> serverList = player.getServerList();
                                         if (serverList.size() >= player.getServerLimit())
-                                            session.sendPacketImmediately(UIForms.createError("You have hit your serverlist limit of " + player.getServerLimit() + " servers. Remove some to add more."));
+                                            session.sendPacketImmediately(UIForms.createError(BedrockConnect.language.getWording("error", "serverLimit").replace("%MAX_SERVERS%", Integer.toString(player.getServerLimit()))));
                                         else {
                                             String server;
                                             // If display name is included from form input, add as parameter
@@ -240,7 +236,7 @@ public class PacketHandler implements BedrockPacketHandler {
                             }
                         }
                     } catch(Exception e) {
-                        session.sendPacketImmediately(UIForms.createError("Please enter a valid IP/Address and port that contains only numbers."));
+                        session.sendPacketImmediately(UIForms.createError(BedrockConnect.language.getWording("error", "invalidServerConnect")));
                     }
                     break;
                 case UIForms.REMOVE_SERVER:
@@ -262,7 +258,7 @@ public class PacketHandler implements BedrockPacketHandler {
                             session.sendPacketImmediately(UIForms.createMain(serverList, session));
                         }
                     } catch(Exception e) {
-                        session.sendPacketImmediately(UIForms.createError("Invalid server to remove"));
+                        session.sendPacketImmediately(UIForms.createError(BedrockConnect.language.getWording("error", "invalidServerRemove")));
                     }
                     break;
                 case UIForms.ERROR:
@@ -294,10 +290,14 @@ public class PacketHandler implements BedrockPacketHandler {
     }
 
     public void transfer(String ip, int port) {
-        TransferPacket tp = new TransferPacket();
-        tp.setAddress(ip);
-        tp.setPort(port);
-        session.sendPacketImmediately(tp);
+        try {
+            TransferPacket tp = new TransferPacket();
+            tp.setAddress(ip);
+            tp.setPort(port);
+            session.sendPacketImmediately(tp);
+        } catch (Exception e) {
+            session.sendPacketImmediately(UIForms.createError(BedrockConnect.language.getWording("error", "transferError")));
+        }
     }
 
     @Override

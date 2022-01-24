@@ -1,5 +1,6 @@
 package main.com.pyratron.pugmatt.bedrockconnect;
 
+import main.com.pyratron.pugmatt.bedrockconnect.config.Language;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
@@ -37,6 +38,8 @@ public class BedrockConnect {
 
     public static HashMap<String, String> featuredServerIps;
 
+    public static Language language;
+
     public static void main(String[] args) {
         System.out.println("-= BedrockConnect =-");
         paletteManager =  new PaletteManager();
@@ -49,6 +52,8 @@ public class BedrockConnect {
             String port = "19132";
 
             String serverLimit = "100";
+
+            String languageFile = null;
 
             for(String str : args) {
                 if(str.startsWith("mysql_host="))
@@ -136,6 +141,9 @@ public class BedrockConnect {
                 		e.printStackTrace();
                 	}
                 }
+                if (str.startsWith("language=")) {
+                    languageFile = getArgValue(str, "whitelist");
+                }
             }
 
             if(!noDB)
@@ -151,6 +159,8 @@ public class BedrockConnect {
             if (Whitelist.hasWhitelist()) {
             	System.out.printf("There are %d whitelisted players\n", Whitelist.getWhitelist().size());
             }
+
+            language = new Language(languageFile);
 
             if(!fetchFeaturedIps) {
                 try {

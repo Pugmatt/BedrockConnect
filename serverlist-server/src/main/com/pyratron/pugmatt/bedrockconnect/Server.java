@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.nukkitx.protocol.bedrock.*;
-import com.nukkitx.protocol.bedrock.v428.Bedrock_v428;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.BedrockProtocol;
 
@@ -55,8 +54,8 @@ public class Server {
         server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
         pong.setEdition("MCPE");
-        pong.setMotd("Join To Open Server List");
-        pong.setSubMotd("BedrockConnect Server List");
+        pong.setMotd(BedrockConnect.language.getWording("serverInfo", "motd"));
+        pong.setSubMotd(BedrockConnect.language.getWording("serverInfo", "subMotd"));
         pong.setPlayerCount(0);
         pong.setMaximumPlayerCount(20);
         pong.setGameType("Survival");
@@ -88,7 +87,7 @@ public class Server {
                 public void run() {
                     for (int i = 0; i < players.size(); i++) {
                         if (players.get(i) != null && !players.get(i).isActive())
-                            players.get(i).disconnect("Kicked for inactivity", current);
+                            players.get(i).disconnect(BedrockConnect.language.getWording("disconnect", "inactivity"), current);
                     }
                 }
             };
