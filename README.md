@@ -30,6 +30,7 @@ Table of contents
    * [Publicly available BedrockConnect instances](#publicly-available-bedrockconnect-instances)
    * [Hosting your own serverlist server](#hosting-your-own-serverlist-server)
    * [Defining your own custom servers](#defining-your-own-custom-servers)
+   * [Change wording of serverlist](#change-wording-of-serverlist)
    * [Using your own DNS server](#using-your-own-dns-server)
    * [Libraries used](#libraries-used)
    * [Donations](#donations)
@@ -100,6 +101,7 @@ The following arguments can be placed in the startup command to ajust settings:
 | featured_servers | If true, the featured servers will be displayed in the serverlist.  If false, the servers are hidden. | true |
 | whitelist | Specify file containing list of whitelisted players. (Should be a text file with the player names specified on seperate lines) | |
 | fetch_featured_ips | If true, dynamically grab the featured server IPs from the domain names. If false, a file ```featured_server_ips.json``` will be generated, containing the hard-coded featured server IPs, and to allow changing them if needed.  | true |
+| language | Specify a file containing language customizations. See [guide for changing wording](#change-wording-of-serverlist) | |
 
 MySQL example:
 ```
@@ -129,6 +131,27 @@ When hosting your own serverlist server, you add your own custom servers to the 
 Then, add this argument to your startup script: `custom_servers=[path to json file]`
 
 The icon URL is not required, if omitted it will show the default icon.
+
+# Change wording of serverlist
+
+For cases where you want to change the wording/language of your BedrockConnect server, you can do this by creating a JSON file in the same directory as the BedrockConnect JAR. The contents of this file should contain the parts of the wording you want to overwrite. 
+
+You can find all the options that be overwritten here: https://github.com/Pugmatt/BedrockConnect/blob/master/serverlist-server/src/main/resources/language.json
+
+Example custom language file:
+```json
+{
+	"main": {
+		"heading": "My Cool ServerList",
+		"connectBtn" : "Hop in a server!"
+	},
+	"disconnect": {
+		"exit": "Goodbye!"
+	}
+}
+```
+
+Once finished, you include it in your server by adding the following arguement to your startup command: ```language=my_lang.json``` (Replace "my_lang" with the name of your file")
 
 # Using your own DNS server
 
