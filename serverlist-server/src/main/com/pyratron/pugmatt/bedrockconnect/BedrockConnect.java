@@ -142,7 +142,7 @@ public class BedrockConnect {
                 	}
                 }
                 if (str.startsWith("language=")) {
-                    languageFile = getArgValue(str, "whitelist");
+                    languageFile = getArgValue(str, "language");
                 }
             }
 
