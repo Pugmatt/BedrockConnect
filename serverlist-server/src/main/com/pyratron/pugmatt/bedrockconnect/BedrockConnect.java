@@ -4,13 +4,11 @@ import main.com.pyratron.pugmatt.bedrockconnect.config.Language;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.net.*;
-import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,6 +48,7 @@ public class BedrockConnect {
             String username = "root";
             String password = "";
             String port = "19132";
+            String bindIp = "0.0.0.0";
 
             String serverLimit = "100";
 
@@ -144,6 +143,9 @@ public class BedrockConnect {
                 if (str.startsWith("language=")) {
                     languageFile = getArgValue(str, "language");
                 }
+              	if (str.startsWith("bindip=")) {
+              	    bindIp = getArgValue(str, "bindip");
+              	}
             }
 
             if(!noDB)
@@ -155,7 +157,7 @@ public class BedrockConnect {
 
             CustomServerHandler.initialize();
             System.out.printf("Loaded %d custom servers\n", CustomServerHandler.getServers().length);
-            
+
             if (Whitelist.hasWhitelist()) {
             	System.out.printf("There are %d whitelisted players\n", Whitelist.getWhitelist().size());
             }
@@ -199,7 +201,7 @@ public class BedrockConnect {
                     e.printStackTrace();
                 }
             }
-            
+
             if(!noDB) {
                 MySQL = new MySQL(hostname, database, username, password);
 
@@ -251,7 +253,7 @@ public class BedrockConnect {
                 timer.scheduleAtFixedRate(task, 0L, 1200L);
             }
 
-            server = new Server(port);
+            server = new Server(bindIp, port);
         } catch(Exception e) {
             e.printStackTrace();
         }
