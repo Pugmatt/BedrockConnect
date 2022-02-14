@@ -45,11 +45,11 @@ public class Server {
     }
 
 
-    public Server(String port) {
+    public Server(String bindIp, String port) {
         Server current = this;
         players = new ArrayList<>();
 
-        InetSocketAddress bindAddress = new InetSocketAddress("0.0.0.0", Integer.parseInt(port));
+        InetSocketAddress bindAddress = new InetSocketAddress(bindIp, Integer.parseInt(port));
 
         server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
@@ -80,7 +80,7 @@ public class Server {
         });
         // Start server up
         server.bind().join();
-        System.out.println("Bedrock Connection Started: 0.0.0.0:19132");
+        System.out.println("Bedrock Connection Started: " + bindIp + ":" + port);
         if(BedrockConnect.kickInactive) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
@@ -96,8 +96,9 @@ public class Server {
 
         new Thread() {
             public void run() {
+                Scanner sc = null;
                 try {
-                    Scanner sc = new Scanner(System.in);
+                    sc = new Scanner(System.in);
                     while(sc.hasNextLine()) {
                         String cmd = sc.next();
                         switch(cmd) {
@@ -109,6 +110,15 @@ public class Server {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                } finally {
+                    if (sc != null) {
+                        try {
+                            sc.close();
+                        } catch (Exception e1) {
+                            // just ignore it
+                        }
+                        sc = null;
+                    }
                 }
             }
         }.start();
