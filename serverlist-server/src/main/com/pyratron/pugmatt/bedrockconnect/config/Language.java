@@ -7,6 +7,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -59,7 +62,7 @@ public class Language {
     }
 
     private JSONObject loadCustom(String file) throws IOException, ParseException {
-        return (JSONObject) new JSONParser().parse(new FileReader(file));
+        return (JSONObject) new JSONParser().parse(new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF-8")));
     }
 
     public String getWording(String rootKey, String key) {
