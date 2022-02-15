@@ -93,6 +93,7 @@ The following arguments can be placed in the startup command to ajust settings:
 | mysql_pass | MySQL Password  |  |
 | server_limit | How many servers a new player can have in their serverlist  | 100 |
 | port | Port of the server (Should only be changed for debugging on PC. Port needs to be on 19132 for the bypass to work on game consoles) | 19132 |
+| bindip | IP that the BedrockConnect server will bind to | 0.0.0.0 |
 | nodb | If true, use JSON files for data instead of MySQL | false |
 | generatedns | If true, generate a DNS zone file using user input (Only needed if you're using the mod0Umleitung DNS software) | false |
 | kick_inactive | If true, players will be kicked after 10 minutes of inactivity with the serverlist UI | true |
