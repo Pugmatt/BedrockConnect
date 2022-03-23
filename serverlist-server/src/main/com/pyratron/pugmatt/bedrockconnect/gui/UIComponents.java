@@ -2,7 +2,10 @@ package main.com.pyratron.pugmatt.bedrockconnect.gui;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.nukkitx.protocol.bedrock.BedrockSession;
 import com.nukkitx.protocol.bedrock.packet.ModalFormRequestPacket;
+import main.com.pyratron.pugmatt.bedrockconnect.BCPlayer;
+import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import net.minidev.json.JSONUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -123,6 +126,39 @@ public class UIComponents {
         }
 
         return null;
+    }
+
+    public static boolean validateServerInfo(String address, String port, String name, BCPlayer player) {
+        if(address.length() >= 253)
+            player.createError(BedrockConnect.language.getWording("error", "addressLarge"));
+        else if(port.length() >= 10)
+            player.createError(BedrockConnect.language.getWording("error", "portLarge"));
+        else if(name.length() >= 36)
+            player.createError(BedrockConnect.language.getWording("error", "nameLarge"));
+        else if (!address.matches("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$") && !address.matches("^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,64}$"))
+            player.createError(BedrockConnect.language.getWording("error", "invalidAddress"));
+        else if (!port.matches("[0-9]+"))
+            player.createError(BedrockConnect.language.getWording("error", "invalidPort"));
+        else if (!name.isEmpty() && !name.matches("^[a-zA-Z0-9]+( +[a-zA-Z0-9]+)*$"))
+            player.createError(BedrockConnect.language.getWording("error", "invalidName"));
+        else
+            return true;
+        return false;
+    }
+
+    public static String[] validateAddress(String server, BCPlayer player) {
+        if (server.split(":").length > 1) {
+            return server.split(":");
+        } else {
+            player.createError((BedrockConnect.language.getWording("error", "invalidUserServer")));
+        }
+        return null;
+    }
+
+    public static ArrayList<String> cleanAddress(ArrayList<String> data) {
+        data.set(0, data.get(0).replaceAll("\\s",""));
+        data.set(1, data.get(1).replaceAll("\\s",""));
+        return data;
     }
 
     /**

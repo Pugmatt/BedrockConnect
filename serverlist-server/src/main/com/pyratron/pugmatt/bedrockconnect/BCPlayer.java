@@ -41,6 +41,8 @@ public class BCPlayer {
     private int currentForm = 0;
     private LocalTime movementOpenCoolDown = LocalTime.now();
 
+    public int editingServer = -1;
+
     private static final NbtMap EMPTY_TAG = NbtMap.EMPTY;
     private static final byte[] EMPTY_LEVEL_CHUNK_DATA;
 
@@ -89,6 +91,24 @@ public class BCPlayer {
         this.serverList = serverList;
     }
 
+    public boolean addServer(String address, String port, String name) {
+        List<String> serverList = getServerList();
+        if (serverList.size() >= getServerLimit())
+            createError(BedrockConnect.language.getWording("error", "serverLimit").replace("%MAX_SERVERS%", Integer.toString(getServerLimit())));
+        else {
+            String server;
+            // If display name is included from form input, add as parameter
+            if(!name.isEmpty())
+                server = address + ":" + port + ":" + name;
+            else
+                server = address + ":" + port;
+            serverList.add(server);
+            setServerList(serverList);
+            return true;
+        }
+        return false;
+    }
+
     public String getUuid() {
         return uuid;
     }
@@ -130,6 +150,10 @@ public class BCPlayer {
 
     public void setActive() { lastAction = LocalTime.now(); }
 
+    public void setEditingServer(int server) { editingServer = server; }
+
+    public int getEditingServer() { return editingServer; }
+
     public void movementOpen() {
 
         if(canMovementOpen()) {
@@ -155,6 +179,42 @@ public class BCPlayer {
 
             movementOpenCoolDown = LocalTime.now();
         }
+    }
+
+    public void openForm(int formId) {
+        ModalFormRequestPacket form;
+
+        switch (formId) {
+            case UIForms.MAIN:
+                form = UIForms.createMain(getServerList(), session);
+                break;
+            case UIForms.DIRECT_CONNECT:
+                form = UIForms.createDirectConnect();
+                break;
+            case UIForms.MANAGE_SERVER:
+                form = UIForms.createManageList();
+                break;
+            case UIForms.ADD_SERVER:
+                form = UIForms.createAddServer();
+                break;
+            case UIForms.EDIT_CHOOSE_SERVER:
+                form = UIForms.createEditChooseServer(getServerList());
+                break;
+            case UIForms.REMOVE_SERVER:
+                form = UIForms.createRemoveServer(getServerList());
+                break;
+            default:
+                form = UIForms.createMain(getServerList(), session);
+                break;
+        }
+
+        session.sendPacketImmediately(form);
+
+        setCurrentForm(formId);
+    }
+
+    public void createError(String text) {
+        session.sendPacketImmediately(UIForms.createError(text));
     }
 
     public void joinGame() {

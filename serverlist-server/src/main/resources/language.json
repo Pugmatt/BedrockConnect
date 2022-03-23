@@ -6,8 +6,14 @@
   "main": {
     "heading": "ServerList",
     "connectBtn" : "Connect to a Server",
-    "removeBtn": "Remove a Server",
+    "manageBtn" : "Manage Server List",
     "exitBtn": "Exit Server List"
+  },
+  "manage": {
+    "heading": "Manage Server List",
+    "addBtn": "Add a Server",
+    "removeBtn": "Remove a Server",
+    "editBtn": "Edit a Server"
   },
   "connect": {
     "heading": "Connect to a Server",
@@ -17,6 +23,14 @@
     "portPlaceholder": "Please enter Port",
     "displayNameTitle": "(Optional) Display Name on Server List",
     "addToggle": "Add to server list"
+  },
+  "add": {
+    "heading": "Add a Server"
+  },
+  "edit": {
+    "heading": "Edit Server",
+    "chooseHeading": "Choose a Server",
+    "serverDropdown": "Servers"
   },
   "remove": {
     "heading": "Remove Server",
