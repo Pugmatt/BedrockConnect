@@ -14,12 +14,7 @@ import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import com.nukkitx.protocol.bedrock.packet.LoginPacket;
 import com.nukkitx.protocol.bedrock.util.EncryptionUtils;
-import main.com.pyratron.pugmatt.bedrockconnect.BCPlayer;
-import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
-import main.com.pyratron.pugmatt.bedrockconnect.CustomServer;
-import main.com.pyratron.pugmatt.bedrockconnect.CustomServerHandler;
-import main.com.pyratron.pugmatt.bedrockconnect.Server;
-import main.com.pyratron.pugmatt.bedrockconnect.Whitelist;
+import main.com.pyratron.pugmatt.bedrockconnect.*;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.MainFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.ManageFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
@@ -104,7 +99,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     } else { // If selecting button
                         int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
 
-                        CustomServer[] customServers = CustomServerHandler.getServers();
+                        CustomEntry[] customServers = CustomServerHandler.getServers();
                         List<String> playerServers = server.getPlayer(uuid).getServerList();
 
                         MainFormButton button = UIForms.getMainFormButton(chosen, customServers, playerServers);
@@ -134,8 +129,14 @@ public class PacketHandler implements BedrockPacketHandler {
                                 }
                                 break;
                             case CUSTOM_SERVER:
-                                CustomServer server = customServers[serverIndex - playerServers.size()];
-                                transfer(server.getAddress(), server.getPort());
+                                CustomEntry server = customServers[serverIndex - playerServers.size()];
+
+                                if(server instanceof CustomServer) {
+                                    transfer(((CustomServer)server).getAddress(), ((CustomServer)server).getPort());
+                                } else if(server instanceof CustomServerGroup) {
+                                    player.setSelectedGroup(serverIndex - playerServers.size());
+                                    player.openForm(UIForms.SERVER_GROUP);
+                                }
                                 break;
                             case FEATURED_SERVER:
                                 int featuredServer = serverIndex - playerServers.size() - customServers.length;
@@ -164,6 +165,26 @@ public class PacketHandler implements BedrockPacketHandler {
                                         break;
                                 }
                                 break;
+                        }
+                    }
+                    break;
+                case UIForms.SERVER_GROUP:
+                    if(packet.getFormData().contains("null")) {
+                        if(player.getCurrentForm() != packet.getFormId())
+                            return false;
+                        player.openForm(UIForms.MAIN);
+                    }
+                    else {
+                        int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
+
+                        CustomEntry[] customServers = CustomServerHandler.getServers();
+                        CustomServerGroup group = (CustomServerGroup) customServers[player.getSelectedGroup()];
+
+                        if(chosen == 0) {
+                            player.openForm(UIForms.MAIN);
+                        } else {
+                            CustomServer server = group.getServers().get(chosen - 1);
+                            transfer(server.getAddress(), server.getPort());
                         }
                     }
                     break;

@@ -36,6 +36,9 @@
     "heading": "Remove Server",
     "serverDropdown": "Servers"
   },
+  "serverGroup": {
+    "backBtn": "Back To List"
+  },
   "error": {
     "heading": "Error",
     "addressLarge": "Address is too large. (Must be 253 characters or less)",

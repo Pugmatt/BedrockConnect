@@ -42,6 +42,7 @@ public class BCPlayer {
     private LocalTime movementOpenCoolDown = LocalTime.now();
 
     public int editingServer = -1;
+    public int selectedGroup = -1;
 
     private static final NbtMap EMPTY_TAG = NbtMap.EMPTY;
     private static final byte[] EMPTY_LEVEL_CHUNK_DATA;
@@ -154,6 +155,10 @@ public class BCPlayer {
 
     public int getEditingServer() { return editingServer; }
 
+    public void setSelectedGroup(int group) { selectedGroup = group; }
+
+    public int getSelectedGroup() { return selectedGroup; }
+
     public void movementOpen() {
 
         if(canMovementOpen()) {
@@ -202,6 +207,9 @@ public class BCPlayer {
                 break;
             case UIForms.REMOVE_SERVER:
                 form = UIForms.createRemoveServer(getServerList());
+                break;
+            case UIForms.SERVER_GROUP:
+                form = UIForms.createServerGroup((CustomServerGroup) CustomServerHandler.getServers()[getSelectedGroup()], session);
                 break;
             default:
                 form = UIForms.createMain(getServerList(), session);

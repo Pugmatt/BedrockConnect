@@ -7,15 +7,13 @@ import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.packet.ModalFormRequestPacket;
 
 import com.nukkitx.protocol.bedrock.packet.NetworkStackLatencyPacket;
-import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
-import main.com.pyratron.pugmatt.bedrockconnect.CustomServer;
-import main.com.pyratron.pugmatt.bedrockconnect.CustomServerHandler;
+import main.com.pyratron.pugmatt.bedrockconnect.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UIForms {
-    public static final int ERROR = 2, MAIN = 0, DIRECT_CONNECT = 1, REMOVE_SERVER = 3, MANAGE_SERVER = 4, EDIT_SERVER = 5, EDIT_CHOOSE_SERVER = 6, ADD_SERVER = 7;
+    public static final int ERROR = 2, MAIN = 0, DIRECT_CONNECT = 1, REMOVE_SERVER = 3, MANAGE_SERVER = 4, EDIT_SERVER = 5, EDIT_CHOOSE_SERVER = 6, ADD_SERVER = 7, SERVER_GROUP = 8;
 
     public static int currentForm = 0;
 
@@ -55,7 +53,7 @@ public class UIForms {
         out.addProperty("content", "");
 
         JsonArray buttons = new JsonArray();
-        CustomServer[] customServers = CustomServerHandler.getServers();
+        CustomEntry[] customServers = CustomServerHandler.getServers();
 
         if(BedrockConnect.userServers)
             buttons.addAll(mainMenuButtons);
@@ -66,7 +64,7 @@ public class UIForms {
             buttons.add(UIComponents.createButton(UIComponents.getServerDisplayName(servers.get(i)), "https://i.imgur.com/3BmFZRE.png", "url"));
         }
 
-        for (CustomServer cs : customServers) {
+        for (CustomEntry cs : customServers) {
             buttons.add(UIComponents.createButton(cs.getName(), cs.getIconUrl(), "url"));
         }
 
@@ -78,16 +76,45 @@ public class UIForms {
 
         mf.setFormData(out.toString());
 
+        fixIcons(session);
+
+        return mf;
+    }
+
+    public static ModalFormRequestPacket createServerGroup(CustomServerGroup group, BedrockServerSession session) {
+        currentForm = SERVER_GROUP;
+        ModalFormRequestPacket mf = new ModalFormRequestPacket();
+        mf.setFormId(UIForms.SERVER_GROUP);
+
+        JsonObject out = UIComponents.createForm("form", group.getName());
+        out.addProperty("content", "");
+
+        JsonArray buttons = new JsonArray();
+
+        buttons.add(UIComponents.createButton(BedrockConnect.language.getWording("serverGroup", "backBtn")));
+
+        for (CustomServer cs : group.getServers()) {
+            buttons.add(UIComponents.createButton(cs.getName(), cs.getIconUrl(), "url"));
+        }
+
+        out.add("buttons", buttons);
+
+        mf.setFormData(out.toString());
+
+        fixIcons(session);
+
+        return mf;
+    }
+
+    public static void fixIcons(BedrockServerSession session) {
         // Fix icons not loading
         NetworkStackLatencyPacket networkStackLatencyPacket = new NetworkStackLatencyPacket();
         networkStackLatencyPacket.setFromServer(true);
         networkStackLatencyPacket.setTimestamp(System.currentTimeMillis());
         session.sendPacket(networkStackLatencyPacket);
-
-        return mf;
     }
 
-    public static int getServerIndex(int btnId, CustomServer[] customServers, List<String> playerServers) {
+    public static int getServerIndex(int btnId, CustomEntry[] customServers, List<String> playerServers) {
         int serverIndex;
 
         if(BedrockConnect.userServers) {
@@ -100,7 +127,7 @@ public class UIForms {
         return serverIndex;
     }
 
-    public static MainFormButton getMainFormButton(int btnId, CustomServer[] customServers, List<String> playerServers) {
+    public static MainFormButton getMainFormButton(int btnId, CustomEntry[] customServers, List<String> playerServers) {
         int serverIndex = getServerIndex(btnId, customServers, playerServers);
 
         if(BedrockConnect.userServers) {
