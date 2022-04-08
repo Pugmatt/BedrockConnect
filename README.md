@@ -129,6 +129,37 @@ When hosting your own serverlist server, you add your own custom servers to the 
 ]
 ```
 
+You can also specify groups, such as the following format:
+```json
+[
+        {
+		"name": "My Server Group",
+		"iconUrl": "https://i.imgur.com/3BmFZRE.png",
+		"content": [
+			{
+				"name": "Server in Group 1",
+				"iconUrl": "https://i.imgur.com/3BmFZRE.png",
+				"address": "mc1.example.com",
+				"port": 19132
+			},
+		]
+	},
+	{
+		"name": "My Custom Server 1",
+		"iconUrl": "https://i.imgur.com/3BmFZRE.png",
+		"address": "mc1.example.com",
+		"port": 19132
+	},
+	{
+		"name": "My Custom Server 2",
+		"iconUrl": "https://i.imgur.com/3BmFZRE.png",
+		"address": "mc2.example.com",
+		"port": 19132
+	}
+]
+```
+
+
 Then, add this argument to your startup script: `custom_servers=[path to json file]`
 
 The icon URL is not required, if omitted it will show the default icon.
