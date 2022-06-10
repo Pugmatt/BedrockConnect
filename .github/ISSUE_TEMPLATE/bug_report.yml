@@ -4,13 +4,13 @@ body:
 - type: markdown
   attributes:
     value: |
-      Hey there, first of all thanks for filling out this report.
+      Hey there, thanks for filling out this report.
+      
+      **NOTE:** If the BedrockConnect serverlist is not showing on your game, and you are instead being directed to the actual featured servers, this means the DNS needs to be re-configured on your console/network. **This does NOT mean BedrockConnect has been patched.** All known solutions for fixing this can be found here: [Troubleshooting](https://github.com/Pugmatt/BedrockConnect/wiki/Troubleshooting#joining-the-featured-servers-still-directs-to-the-actual-servers-and-not-the-serverlist)
 
-      Before opening any issues:
-        - First, ensure that there is no similiar issue on the [issue tracker](https://github.com/Pugmatt/BedrockConnect/issues).
-        - Second, make sure that the issue you are having is either not mentioned on the [Troubleshooting](https://github.com/Pugmatt/BedrockConnect/wiki/Troubleshooting) or if it is mentioned there you have atleast tried the fix.
-
-      Optionally, if the public BedrockConnect instances are not working for you, it is also recommended to host your own local BedrockConnect instance as they may be more reliable, you can find the [Windows](https://www.youtube.com/watch?v=AW5X7-qnvLk) or [Linux](https://github.com/Pugmatt/BedrockConnect/wiki/Setting-up-on-Linux) tutorials here.
+      **READ BEFORE SUBMITTING AN ISSUE**:
+        - Check the [Troubleshooting page](https://github.com/Pugmatt/BedrockConnect/wiki/Troubleshooting) to see if your issue already has known solutions you can try
+        - Ensure that there is no similiar issue on the [issue tracker](https://github.com/Pugmatt/BedrockConnect/issues)
 - type: textarea
   attributes:
     label: What happened?
