@@ -33,10 +33,8 @@ fi
 
 $ADDUSER \
    --system \
-   --shell /bin/bash \
+   --shell /usr/sbin/nologin \
    --user-group \
-   --password "$(dd bs=36 count=1 if=/dev/urandom 2>/dev/null | base64)" \
-   --home /home/mcbc \
    --create-home \
    mcbc
 
