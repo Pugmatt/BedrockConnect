@@ -63,6 +63,14 @@
             <id>opencollab-repo</id>
             <url>https://repo.opencollab.dev/snapshot</url>
         </repository>
+        <repository>
+            <id>nukkitx-repo-release</id>
+            <url>https://repo.nukkitx.com/maven-releases/</url>
+        </repository>
+        <repository>
+            <id>nukkitx-repo-snapshot</id>
+            <url>https://repo.nukkitx.com/maven-snapshots/</url>
+        </repository>
     </repositories>
 
     <distributionManagement>

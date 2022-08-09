@@ -92,7 +92,7 @@ public class PacketHandler implements BedrockPacketHandler {
         switch (packet.getFormId()) {
                 case UIForms.MAIN:
                     // Re-open window if closed
-                    if (packet.getFormData().contains("null")) {
+                    if (packet.getFormData() == null || packet.getFormData().contains("null")) {
                         if(player.getCurrentForm() != packet.getFormId())
                             return false;
                         player.openForm(UIForms.MAIN);
@@ -169,7 +169,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     }
                     break;
                 case UIForms.SERVER_GROUP:
-                    if(packet.getFormData().contains("null")) {
+                    if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                         if(player.getCurrentForm() != packet.getFormId())
                             return false;
                         player.openForm(UIForms.MAIN);
@@ -189,7 +189,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     }
                     break;
                 case UIForms.MANAGE_SERVER:
-                    if(packet.getFormData().contains("null")) {
+                    if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                         if(player.getCurrentForm() != packet.getFormId())
                             return false;
                         player.openForm(UIForms.MAIN);
@@ -214,7 +214,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     break;
                 case UIForms.ADD_SERVER:
                     try {
-                        if(packet.getFormData().contains("null")) {
+                        if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                             if(player.getCurrentForm() != packet.getFormId())
                                 return false;
                             player.openForm(UIForms.MANAGE_SERVER);
@@ -242,7 +242,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     break;
                 case UIForms.DIRECT_CONNECT:
                     try {
-                        if(packet.getFormData().contains("null")) {
+                        if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                             if(player.getCurrentForm() != packet.getFormId())
                                 return false;
                             player.openForm(UIForms.MAIN);
@@ -274,7 +274,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     }
                     break;
                 case UIForms.EDIT_CHOOSE_SERVER:
-                    if(packet.getFormData().contains("null")) {
+                    if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                         if(player.getCurrentForm() != packet.getFormId())
                             return false;
                         player.openForm(UIForms.MANAGE_SERVER);
@@ -300,7 +300,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     }
                     break;
                 case UIForms.EDIT_SERVER:
-                    if(packet.getFormData().contains("null")) {
+                    if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                         if(player.getCurrentForm() != packet.getFormId())
                             return false;
                         player.openForm(UIForms.EDIT_CHOOSE_SERVER);
@@ -331,7 +331,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     break;
                 case UIForms.REMOVE_SERVER:
                     try {
-                        if(packet.getFormData().contains("null")) {
+                        if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                             if(player.getCurrentForm() != packet.getFormId())
                                 return false;
                             player.openForm(UIForms.MANAGE_SERVER);
