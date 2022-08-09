@@ -14,6 +14,7 @@ import com.nukkitx.protocol.bedrock.v486.Bedrock_v486;
 import com.nukkitx.protocol.bedrock.v503.Bedrock_v503;
 import com.nukkitx.protocol.bedrock.v527.Bedrock_v527;
 import com.nukkitx.protocol.bedrock.v534.Bedrock_v534;
+import com.nukkitx.protocol.bedrock.v544.Bedrock_v544;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class BedrockProtocol {
     /**
      * Latest available version
      */
-    public static final BedrockPacketCodec DEFAULT_BEDROCK_CODEC = Bedrock_v534.V534_CODEC;
+    public static final BedrockPacketCodec DEFAULT_BEDROCK_CODEC = Bedrock_v544.V544_CODEC;
 
     /**
      * A list of all supported Bedrock versions that can join BedrockConnect
@@ -49,6 +50,7 @@ public class BedrockProtocol {
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v503.V503_CODEC);
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v527.V527_CODEC);
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v534.V534_CODEC);
+        SUPPORTED_BEDROCK_CODECS.add(Bedrock_v544.V544_CODEC);
     }
 
     /**

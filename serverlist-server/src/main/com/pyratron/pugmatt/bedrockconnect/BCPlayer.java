@@ -297,6 +297,8 @@ public class BCPlayer {
         startGamePacket.setPlayerPropertyData(NbtMap.EMPTY);
         startGamePacket.setWorldTemplateId(UUID.randomUUID());
 
+        startGamePacket.setChatRestrictionLevel(ChatRestrictionLevel.NONE);
+
         startGamePacket.setBlockPalette(BedrockConnect.paletteManager.CACHED_PALLETE);
 
         session.sendPacket(startGamePacket);
