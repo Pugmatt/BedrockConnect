@@ -32,8 +32,7 @@ fi
 # Add user
 
 $ADDUSER \
-   --system \
-   --shell /bin/bash \
+   --shell /dev/null \
    --user-group \
    --password "$(dd bs=36 count=1 if=/dev/urandom 2>/dev/null | base64)" \
    --home /home/mcbc \
