@@ -189,7 +189,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     }
                     break;
                 case UIForms.MANAGE_SERVER:
-                    if(packet.getFormData() == null || packet.getFormData().contains("null")) {
+                    if(packet.getFormData() == null) {
                         if(player.getCurrentForm() != packet.getFormId())
                             return false;
                         player.openForm(UIForms.MAIN);
