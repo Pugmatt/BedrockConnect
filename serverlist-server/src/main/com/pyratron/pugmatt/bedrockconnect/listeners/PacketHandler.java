@@ -371,7 +371,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
-            public void run() { session.sendPacket(updateAttributesPacket); }
+            public void run() { if(!session.isClosed()) { session.sendPacket(updateAttributesPacket); } }
         };
         timer.schedule(task, 500);
 
