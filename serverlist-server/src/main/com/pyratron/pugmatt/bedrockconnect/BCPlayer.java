@@ -132,13 +132,13 @@ public class BCPlayer {
 
         TextPacket text = new TextPacket();
         text.setType(TextPacket.Type.TIP);
-        text.setMessage("==!!== Move around to re-trigger the popup ==!!==");
+        text.setMessage("==!!== Crouch or punch to re-trigger the popup ==!!==");
         text.setXuid(uuid);
         session.sendPacket(text);
 
         TextPacket text2 = new TextPacket();
         text2.setType(TextPacket.Type.RAW);
-        text2.setMessage("\n\n\n\n\n\n\n\n\n\n\n\n\n\n==!!== Move around to re-trigger the popup ==!!==\n\n\n\n\n\n\n\n\n\n\n");
+        text2.setMessage("\n\n\n\n\n\n\n\n\n\n\n\n\n\n==!!== Crouch or punch to re-trigger the popup ==!!==\n\n\n\n\n\n\n\n\n\n\n");
         text2.setXuid(uuid);
         session.sendPacket(text2);
     }
@@ -163,22 +163,7 @@ public class BCPlayer {
 
         if(canMovementOpen()) {
 
-            ModalFormRequestPacket form;
-
-            switch (getCurrentForm()) {
-                case UIForms.MAIN:
-                    form = UIForms.createMain(getServerList(), session);
-                    break;
-                case UIForms.DIRECT_CONNECT:
-                    form = UIForms.createDirectConnect();
-                    break;
-                case UIForms.REMOVE_SERVER:
-                    form = UIForms.createRemoveServer(getServerList());
-                    break;
-                default:
-                    form = UIForms.createMain(getServerList(), session);
-                    break;
-            }
+            ModalFormRequestPacket form = getForm(getCurrentForm());
 
             session.sendPacketImmediately(form);
 
@@ -187,6 +172,14 @@ public class BCPlayer {
     }
 
     public void openForm(int formId) {
+        ModalFormRequestPacket form = getForm(formId);
+
+        session.sendPacketImmediately(form);
+
+        setCurrentForm(formId);
+    }
+
+    private ModalFormRequestPacket getForm(int formId) {
         ModalFormRequestPacket form;
 
         switch (formId) {
@@ -216,9 +209,7 @@ public class BCPlayer {
                 break;
         }
 
-        session.sendPacketImmediately(form);
-
-        setCurrentForm(formId);
+        return form;
     }
 
     public void createError(String text) {

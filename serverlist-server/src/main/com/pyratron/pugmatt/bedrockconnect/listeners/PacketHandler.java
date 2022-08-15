@@ -77,9 +77,10 @@ public class PacketHandler implements BedrockPacketHandler {
         player.movementOpen();
         return false;
     }
+
     @Override
-    public boolean handle(MovePlayerPacket packet) {
-        if(packet.getMode() == MovePlayerPacket.Mode.NORMAL || packet.getMode() == MovePlayerPacket.Mode.HEAD_ROTATION)
+    public boolean handle(AnimatePacket packet) {
+        if(packet.getAction() == AnimatePacket.Action.SWING_ARM)
             player.movementOpen();
         return false;
     }
