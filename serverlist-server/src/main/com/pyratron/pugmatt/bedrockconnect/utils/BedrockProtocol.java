@@ -25,7 +25,10 @@ public class BedrockProtocol {
     /**
      * Latest available version
      */
-    public static final BedrockPacketCodec DEFAULT_BEDROCK_CODEC = Bedrock_v544.V544_CODEC;
+    public static final BedrockPacketCodec DEFAULT_BEDROCK_CODEC = Bedrock_v544.V544_CODEC.toBuilder()
+        .minecraftVersion("1.19.21")
+        .protocolVersion(545)
+        .build();
 
     /**
      * A list of all supported Bedrock versions that can join BedrockConnect
@@ -51,6 +54,10 @@ public class BedrockProtocol {
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v527.V527_CODEC);
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v534.V534_CODEC);
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v544.V544_CODEC);
+        SUPPORTED_BEDROCK_CODECS.add(Bedrock_v544.V544_CODEC.toBuilder()
+            .minecraftVersion("1.19.21")
+            .protocolVersion(545)
+            .build());
     }
 
     /**
