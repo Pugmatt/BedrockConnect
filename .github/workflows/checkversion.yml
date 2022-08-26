@@ -2,7 +2,7 @@ name: Check for new version every hour
 
 on:
   schedule:
-    - cron: '25 * * * *'
+    - cron: '55 * * * *'
 
 jobs:
   create_issue:
@@ -14,7 +14,7 @@ jobs:
           RandNum=$((1 + $RANDOM % 5000))
           curl -H "Accept-Encoding: identity" -H "Accept-Language: en" -L -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.$RandNum.212 Safari/537.36" -o $HOME/version.html https://www.minecraft.net/en-us/download/server/bedrock
           LatestURL=$(grep -o 'https://minecraft.azureedge.net/bin-linux/[^"]*' $HOME/version.html)
-          echo "::set-output name=downloadversion::$(echo "$LatestURL" | sed 's#.*/##')"
+          echo "::set-output name=downloadversion::$(echo "$LatestURL" | sed -e 's/.*server-//g' -e 's/.zip//')"
 
       - uses: actions/checkout@v3
         name: Latest supported version from repo
