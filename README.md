@@ -60,6 +60,7 @@ There are multiple BedrockConnect serverlist servers available that can be used,
 | 213.171.211.142 | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
 | 217.160.58.93 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
 | 188.165.49.178 | <img src="https://flagicons.lipis.dev/flags/4x3/fr.svg" height="20"> | [Darkmoi3108](https://github.com/darkmoi3108) | |
+| 91.218.66.13 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [LazyBirb](https://github.com/LazyBirb) | |
 
 If you are currently hosting a BedrockConnect instance and are interested in adding it to this list, create a pull request adding it to the table above.
 
