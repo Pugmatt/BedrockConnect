@@ -1,0 +1,45 @@
+name: Check for new version every hour
+
+on:
+  schedule:
+    - cron: '5 * * * *'
+
+jobs:
+  create_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get downloadable version
+        id: dlversion
+        run: |
+          RandNum=$((1 + $RANDOM % 5000))
+          curl -H "Accept-Encoding: identity" -H "Accept-Language: en" -L -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.$RandNum.212 Safari/537.36" -o $HOME/version.html https://www.minecraft.net/en-us/download/server/bedrock
+          LatestURL=$(grep -o 'https://minecraft.azureedge.net/bin-linux/[^"]*' $HOME/version.html)
+          echo "::set-output name=downloadversion::$(echo "$LatestURL" | sed 's#.*/##')"
+
+      - name: Latest supported version from repo
+        id: suppversion
+        run: echo "::set-output name=supportversion::$(cat SUPPORTED-VERSION)"
+
+      - uses: nickderobertis/check-if-issue-exists-action@master
+        name: Check if Issue Exists
+        id: check_if_issue_exists
+        with:
+          repo: kmpoppe/BedrockConnect
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: New Bedrock Version ${{ steps.dlversion.outputs.downloadversion }} has been published!
+          labels: enhancement
+      
+      - name: Create an issue
+        if: steps.check_if_issue_exists.outputs.exists == 'false' && ${{ steps.dlversion.outputs.downloadversion != steps.suppversion.outputs.supportversion }} 
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          title: New Bedrock Version ${{ steps.dlversion.outputs.downloadversion }} has been published!
+          body: |
+            ## New Bedrock Version ${{ steps.dlversion.outputs.downloadversion }}
+
+            - [ ] Update source code
+            - [ ] Update SUPPORTED-VERSION to the latest version
+
+          labels: |
+            enhancement
