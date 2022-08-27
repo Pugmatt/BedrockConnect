@@ -8,6 +8,9 @@ on:
 jobs:
   create_issue:
     runs-on: ubuntu-latest
+    permissions:
+      content: read
+      issues: write
     steps:
       - name: Get downloadable version
         id: dlversion
@@ -22,7 +25,7 @@ jobs:
 
       - name: Latest supported version from repo
         id: suppversion
-        run: echo "::set-output name=supportversion::$(cat SUPPORTED-VERSION)"
+        run: echo "::set-output name=supportversion::$(cat .github/assets/supportedVersion)"
 
       - uses: nickderobertis/check-if-issue-exists-action@master
         name: Check if Issue Exists
@@ -37,7 +40,7 @@ jobs:
         if: ${{ steps.check_if_issue_exists.outputs.exists == 'false' && steps.dlversion.outputs.downloadversion != steps.suppversion.outputs.supportversion }} 
         uses: actions-ecosystem/action-create-issue@v1
         with:
-          github_token: ${{ secrets.github_token }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           title: New Bedrock Version ${{ steps.dlversion.outputs.downloadversion }} has been published!
           body: |
             ## New Bedrock Version ${{ steps.dlversion.outputs.downloadversion }}
