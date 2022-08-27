@@ -9,7 +9,7 @@ jobs:
   create_issue:
     runs-on: ubuntu-latest
     permissions:
-      content: read
+      contents: read
       issues: write
     steps:
       - name: Get downloadable version
