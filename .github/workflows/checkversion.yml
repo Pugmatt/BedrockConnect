@@ -28,7 +28,7 @@ jobs:
         name: Check if Issue Exists
         id: check_if_issue_exists
         with:
-          repo: kmpoppe/BedrockConnect
+          repo: Pugmatt/BedrockConnect
           token: ${{ secrets.GITHUB_TOKEN }}
           title: New Bedrock Version ${{ steps.dlversion.outputs.downloadversion }} has been published!
           labels: enhancement
@@ -42,6 +42,7 @@ jobs:
           body: |
             ## New Bedrock Version ${{ steps.dlversion.outputs.downloadversion }}
 
+            - [X] Notify @Pugmatt @kmpoppe @Camotoy @CrafterPika
             - [ ] Update source code
             - [ ] Update SUPPORTED-VERSION to the latest version
 
