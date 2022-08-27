@@ -32,7 +32,7 @@ jobs:
           labels: enhancement
       
       - name: Create an issue
-        if: steps.check_if_issue_exists.outputs.exists == 'false' && ${{ steps.dlversion.outputs.downloadversion != steps.suppversion.outputs.supportversion }} 
+        if: ${{ steps.check_if_issue_exists.outputs.exists == 'false' && steps.dlversion.outputs.downloadversion != steps.suppversion.outputs.supportversion }} 
         uses: actions-ecosystem/action-create-issue@v1
         with:
           github_token: ${{ secrets.github_token }}
