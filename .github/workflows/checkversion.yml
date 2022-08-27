@@ -1,8 +1,7 @@
 name: Check for new version every hour
 
 on:
-  schedule:
-    - cron: '55 * * * *'
+  push
 
 jobs:
   create_issue:
