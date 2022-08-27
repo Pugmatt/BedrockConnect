@@ -1,7 +1,7 @@
 name: Check for new version every hour
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
   repository_dispatch:
     types: on_demand
 
