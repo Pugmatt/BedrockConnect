@@ -1,7 +1,7 @@
 name: Check for new version every hour
 
 on:
-  push
+  workflow_dispatch
 
 jobs:
   create_issue:
