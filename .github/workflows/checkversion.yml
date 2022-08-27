@@ -16,7 +16,9 @@ jobs:
           echo "::set-output name=downloadversion::$(echo "$LatestURL" | sed -e 's/.*server-//g' -e 's/.zip//')"
 
       - uses: actions/checkout@v3
-        name: Latest supported version from repo
+        name: Checkout repo
+
+      - name: Latest supported version from repo
         id: suppversion
         run: echo "::set-output name=supportversion::$(cat SUPPORTED-VERSION)"
 
