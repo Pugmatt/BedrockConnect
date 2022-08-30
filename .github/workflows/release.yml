@@ -1,0 +1,92 @@
+name: Release
+
+on: [push]
+
+jobs:
+  release:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Check for condition
+      id: check
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      run: |
+        if [[ "${{ github.event.head_commit.message }}" =~ ((S|s)upport.*|(R|r)elease.*|(B|b)ump version.*).* ]]; then
+          echo ::set-env name=NEW_RELEASE::true
+        else
+          echo ::set-env name=NEW_RELEASE::false
+        fi
+
+    - name: Set up OpenJDK
+      if: env.NEW_RELEASE == 'true'
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+        cache: maven
+
+    - name: Set up Python3
+      if: env.NEW_RELEASE == 'true'
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: set env
+      if: env.NEW_RELEASE == 'true'
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      run: |
+        echo ::set-env name=RELEASE_VERSION::$(echo $(python .github/assets/versionUp.py))
+
+    - name: Build with maven & make release artifacts
+      if: env.NEW_RELEASE == 'true'
+      run: |
+        cd serverlist-server
+        mvn -B package --file pom.xml
+        cd ..
+        mkdir setup-zip
+        cp .github/assets/run.bat setup-zip/run.bat && cp .github/assets/README.txt setup-zip/README.txt && cp serverlist-server/target/BedrockConnect-1.0-SNAPSHOT.jar setup-zip/BedrockConnect-1.0-SNAPSHOT.jar
+        cd setup-zip
+        zip -r ../BedrockConnect-setup.zip .
+        cd ..
+        rm -rf setup-zip
+
+    - name: create release
+      if: env.NEW_RELEASE == 'true'
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.RELEASE_VERSION }}
+        release_name: ${{ github.event.head_commit.message }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset 1
+      if: env.NEW_RELEASE == 'true'
+      id: upload-release-asset1
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./BedrockConnect-setup.zip
+        asset_name: BedrockConnect-setup.zip
+        asset_content_type: application/zip
+
+    - name: Upload Release Asset 2
+      if: env.NEW_RELEASE == 'true'
+      id: upload-release-asset2
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./serverlist-server/target/BedrockConnect-1.0-SNAPSHOT.jar
+        asset_name: BedrockConnect-1.0-SNAPSHOT.jar
+        asset_content_type: application/java-archive
