@@ -3,7 +3,7 @@ name: Release
 on: [push]
 
 jobs:
-  build:
+  release:
 
     runs-on: ubuntu-latest
 
@@ -15,7 +15,7 @@ jobs:
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       run: |
-        if [[ "${{ github.event.head_commit.message }}" =~ ^(support.*|Support.*|release.*|Release.*).* ]]; then
+        if [[ "${{ github.event.head_commit.message }}" =~ ((S|s)upport.*|(R|r)elease.*|(B|b)ump version.*).* ]]; then
           echo ::set-env name=NEW_RELEASE::true
         else
           echo ::set-env name=NEW_RELEASE::false
@@ -63,7 +63,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ env.RELEASE_VERSION }}
-        release_name: ${{ env.RELEASE_VERSION }}
+        release_name: ${{ github.event.head_commit.message }}
         draft: false
         prerelease: false
 
