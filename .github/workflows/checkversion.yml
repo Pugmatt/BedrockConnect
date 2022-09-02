@@ -20,6 +20,14 @@ jobs:
           LatestURL=$(grep -o 'https://minecraft.azureedge.net/bin-linux/[^"]*' $HOME/version.html)
           echo "::set-output name=downloadversion::$(echo "$LatestURL" | sed -e 's/.*server-//g' -e 's/.zip//')"
 
+      - name: Get Release Notes
+        id: dlversionnotes
+        run: |
+          RandNum=$((1 + $RANDOM % 5000))
+          curl -H "Accept-Encoding: identity" -H "Accept-Language: en" -L -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.$RandNum.212 Safari/537.36" -o $HOME/hc.html https://feedback.minecraft.net/api/v2/help_center/en-us/sections/360001186971/articles
+          titleversion=$(echo "${{ steps.dlversion.outputs.downloadversion }}" | sed -r 's/([0-9]*)\.([0-9]*)\.([0-9]*)\.([0-9]*)/\1-\2-\3/g');')
+          echo "::set-output name=downloadversionnotes::$(grep -o 'https://feedback.minecraft.net/hc/en-us/articles/[^"]*'${titleversion}'[^"]*' $HOME/hc.html)"
+
       - uses: actions/checkout@v3
         name: Checkout repo
 
@@ -31,7 +39,7 @@ jobs:
         name: Check if Issue Exists
         id: check_if_issue_exists
         with:
-          repo: Pugmatt/BedrockConnect
+          repo: kmpoppe/BedrockConnect
           token: ${{ secrets.GITHUB_TOKEN }}
           title: New Bedrock Version ${{ steps.dlversion.outputs.downloadversion }} has been published!
           labels: enhancement
@@ -45,9 +53,11 @@ jobs:
           body: |
             ## New Bedrock Version ${{ steps.dlversion.outputs.downloadversion }}
 
+            Release Notes: ${{ steps.dlversionnotes.outputs.downloadversionnotes }}
+
             - [X] Notify @Pugmatt @kmpoppe @Camotoy @CrafterPika
             - [ ] Update source code
-            - [ ] Update SUPPORTED-VERSION to the latest version
+            - [ ] Update [.github/assets/supportedVersion](../blob/master/.github/assets/supportedVersion) to the latest version
 
           labels: |
             enhancement
