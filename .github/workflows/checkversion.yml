@@ -25,7 +25,7 @@ jobs:
         run: |
           RandNum=$((1 + $RANDOM % 5000))
           curl -H "Accept-Encoding: identity" -H "Accept-Language: en" -L -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.$RandNum.212 Safari/537.36" -o $HOME/hc.html https://feedback.minecraft.net/api/v2/help_center/en-us/sections/360001186971/articles
-          titleversion=$(echo "${{ steps.dlversion.outputs.downloadversion }}" | sed -r 's/([0-9]*)\.([0-9]*)\.([0-9]*)\.([0-9]*)/\1-\2-\3/g');')
+          titleversion=$(echo "${{ steps.dlversion.outputs.downloadversion }}" | sed -r 's/([0-9]*)\.([0-9]*)\.([0-9]*)\.([0-9]*)/\1-\2-\3/g')
           echo "::set-output name=downloadversionnotes::$(grep -o 'https://feedback.minecraft.net/hc/en-us/articles/[^"]*'${titleversion}'[^"]*' $HOME/hc.html)"
 
       - uses: actions/checkout@v3
