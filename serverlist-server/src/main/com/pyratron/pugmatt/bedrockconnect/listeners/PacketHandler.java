@@ -6,6 +6,7 @@ import com.nukkitx.math.vector.Vector3f;
 import com.nukkitx.network.util.Preconditions;
 import com.nukkitx.protocol.bedrock.BedrockPacketCodec;
 import com.nukkitx.protocol.bedrock.data.AttributeData;
+import com.nukkitx.protocol.bedrock.data.PacketCompressionAlgorithm;
 import com.nukkitx.protocol.bedrock.packet.*;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
@@ -14,6 +15,7 @@ import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import com.nukkitx.protocol.bedrock.packet.LoginPacket;
 import com.nukkitx.protocol.bedrock.util.EncryptionUtils;
+import com.nukkitx.protocol.bedrock.v553.Bedrock_v553;
 import main.com.pyratron.pugmatt.bedrockconnect.*;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.MainFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.ManageFormButton;
@@ -297,6 +299,7 @@ public class PacketHandler implements BedrockPacketHandler {
                             player.setEditingServer(chosen);
 
                             session.sendPacketImmediately(UIForms.createEditServer(ip, port, name));
+                            player.setCurrentForm(UIForms.EDIT_SERVER);
                         }
                     }
                     break;
@@ -396,7 +399,21 @@ public class PacketHandler implements BedrockPacketHandler {
         return false;
     }
 
+    @Override
+    public boolean handle(RequestNetworkSettingsPacket packet) {
+        PacketCompressionAlgorithm algorithm = PacketCompressionAlgorithm.ZLIB;
+
+        NetworkSettingsPacket responsePacket = new NetworkSettingsPacket();
+        responsePacket.setCompressionAlgorithm(algorithm);
+        responsePacket.setCompressionThreshold(512);
+        session.sendPacketImmediately(responsePacket);
+
+        session.setCompression(algorithm);
+        return false;
+    }
+
     public PacketHandler(BedrockServerSession session, Server server, boolean packetListening) {
+        session.setPacketCodec(BedrockProtocol.DEFAULT_BEDROCK_CODEC);
         this.session = session;
         this.server = server;
 
