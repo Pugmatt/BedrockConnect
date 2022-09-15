@@ -10,19 +10,16 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Check for condition
-      id: check
+    - name: Set Enviroment
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       run: |
-        if [[ "${{ github.event.head_commit.message }}" =~ ^((?!supportedVersion)(S|s)upport.*)|((R|r)elease.*|(B|b)ump version.*).* ]]; then
-          echo ::set-env name=NEW_RELEASE::true
-        else
-          echo ::set-env name=NEW_RELEASE::false
-        fi
+        echo ::set-env name=RELEASE_VERSION::$(echo $(python .github/assets/versionUp.py))
+        echo ::set-env name=MINECRAFT_VERSION::$(echo $(cat .github/assets/supportedVersion))
+        echo ::set-env name=NEW_RELEASE::$(echo $(python .github/assets/pattern_check.py "${{ github.event.head_commit.message }}"))
 
     - name: Set up OpenJDK
-      if: env.NEW_RELEASE == 'true'
+      if: env.NEW_RELEASE == 'True'
       uses: actions/setup-java@v2
       with:
         java-version: '11'
@@ -30,20 +27,13 @@ jobs:
         cache: maven
 
     - name: Set up Python3
-      if: env.NEW_RELEASE == 'true'
+      if: env.NEW_RELEASE == 'True'
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
-    - name: set env
-      if: env.NEW_RELEASE == 'true'
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      run: |
-        echo ::set-env name=RELEASE_VERSION::$(echo $(python .github/assets/versionUp.py))
-
     - name: Build with maven & make release artifacts
-      if: env.NEW_RELEASE == 'true'
+      if: env.NEW_RELEASE == 'True'
       run: |
         cd serverlist-server
         mvn -B package --file pom.xml
@@ -56,7 +46,7 @@ jobs:
         rm -rf setup-zip
 
     - name: create release
-      if: env.NEW_RELEASE == 'true'
+      if: env.NEW_RELEASE == 'True'
       id: create_release
       uses: actions/create-release@v1
       env:
@@ -68,7 +58,7 @@ jobs:
         prerelease: false
 
     - name: Upload Release Asset 1
-      if: env.NEW_RELEASE == 'true'
+      if: env.NEW_RELEASE == 'True'
       id: upload-release-asset1
       uses: actions/upload-release-asset@v1.0.1
       env:
@@ -80,7 +70,7 @@ jobs:
         asset_content_type: application/zip
 
     - name: Upload Release Asset 2
-      if: env.NEW_RELEASE == 'true'
+      if: env.NEW_RELEASE == 'True'
       id: upload-release-asset2
       uses: actions/upload-release-asset@v1.0.1
       env:
