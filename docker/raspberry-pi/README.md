@@ -5,6 +5,8 @@
 - run `docker build -t bedrock-connect .`
 - run `docker run --name "bedrock-c" -d --restart always -p 19132:19132/udp bedrock-connect`
 
+NOTE: This setup only includes the BedrockConnect instance portion, and not currently the DNS server. You can set a DNS server up with the install-bind.sh script: https://raw.githubusercontent.com/Pugmatt/BedrockConnect/master/scripts/install-bind.sh (TODO: Seperate docker image for BIND setup)
+
 # Docker compose example
 ```
   bedrock-connect:
