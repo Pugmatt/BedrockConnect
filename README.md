@@ -17,7 +17,7 @@ Switch: https://www.youtube.com/watch?v=zalT_oR1nPM
 
 Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
 
-PS4: https://youtu.be/0MJVVhDeu2s?t=347
+PS4/PS5: https://youtu.be/0MJVVhDeu2s?t=347
 
 Joining Java Edition Servers: https://www.youtube.com/watch?v=B_oPHl5gz_c
 
