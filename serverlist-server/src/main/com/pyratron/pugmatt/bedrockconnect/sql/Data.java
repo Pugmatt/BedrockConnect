@@ -1,10 +1,10 @@
 package main.com.pyratron.pugmatt.bedrockconnect.sql;
 
-import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.BCPlayer;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
+import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

@@ -2,12 +2,10 @@ package main.com.pyratron.pugmatt.bedrockconnect.gui;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.nukkitx.protocol.bedrock.Bedrock;
-import com.nukkitx.protocol.bedrock.BedrockServerSession;
-import com.nukkitx.protocol.bedrock.packet.ModalFormRequestPacket;
-
-import com.nukkitx.protocol.bedrock.packet.NetworkStackLatencyPacket;
 import main.com.pyratron.pugmatt.bedrockconnect.*;
+import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.packet.ModalFormRequestPacket;
+import org.cloudburstmc.protocol.bedrock.packet.NetworkStackLatencyPacket;
 
 import java.util.ArrayList;
 import java.util.List;

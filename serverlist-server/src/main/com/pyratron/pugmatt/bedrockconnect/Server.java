@@ -3,9 +3,19 @@ package main.com.pyratron.pugmatt.bedrockconnect;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import com.nukkitx.protocol.bedrock.*;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioDatagramChannel;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.BedrockProtocol;
+import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
+import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
+import org.cloudburstmc.protocol.bedrock.BedrockPong;
+import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.BedrockSession;
+import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketHandler;
 
 
 import javax.annotation.Nonnull;
@@ -14,7 +24,8 @@ import java.util.*;
 
 public class Server {
 
-    public BedrockServer server;
+    private final NioEventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+    public Channel server;
     public BedrockPong pong;
 
     public static final ObjectMapper JSON_MAPPER = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -51,35 +62,31 @@ public class Server {
 
         InetSocketAddress bindAddress = new InetSocketAddress(bindIp, Integer.parseInt(port));
 
-        server = new BedrockServer(bindAddress);
         pong = new BedrockPong();
-        pong.setEdition("MCPE");
-        pong.setMotd(BedrockConnect.language.getWording("serverInfo", "motd"));
-        pong.setSubMotd(BedrockConnect.language.getWording("serverInfo", "subMotd"));
-        pong.setPlayerCount(0);
-        pong.setMaximumPlayerCount(20);
-        pong.setGameType("Survival");
-        pong.setIpv4Port(Integer.parseInt(port));
-        pong.setProtocolVersion(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion());
-        pong.setVersion(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion());
-        server.setHandler(new BedrockServerEventHandler() {
-            @Override
-            public boolean onConnectionRequest(InetSocketAddress address) {
-                return true; // Connection will be accepted
-            }
+        pong.edition("MCPE");
+        pong.motd(BedrockConnect.language.getWording("serverInfo", "motd"));
+        pong.subMotd(BedrockConnect.language.getWording("serverInfo", "subMotd"));
+        pong.playerCount(0);
+        pong.maximumPlayerCount(20);
+        pong.gameType("Survival");
+        pong.ipv4Port(Integer.parseInt(port));
+        pong.protocolVersion(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion());
+        pong.version(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion());
 
-            @Nonnull
-            public BedrockPong onQuery(InetSocketAddress address) {
-                return pong;
-            }
+        server = new ServerBootstrap()
+                .group(this.eventLoopGroup)
+                .channelFactory(RakChannelFactory.server(NioDatagramChannel.class))
+                .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
+                .childHandler(new BedrockServerInitializer() {
+                    @Override
+                    protected void initSession(BedrockServerSession session) {
+                        session.setPacketHandler(new PacketHandler(session, current, false));
+                    }
+                })
+                .bind(bindAddress)
+                .awaitUninterruptibly()
+                .channel();
 
-            @Override
-            public void onSessionCreation(BedrockServerSession session) {
-                    session.setPacketHandler(new PacketHandler(session, current, false));
-            }
-        });
-        // Start server up
-        server.bind().join();
         System.out.println("Bedrock Connection Started: " + bindIp + ":" + port);
         if(BedrockConnect.kickInactive) {
             Timer timer = new Timer();

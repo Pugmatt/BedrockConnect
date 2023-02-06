@@ -1,22 +1,21 @@
 package main.com.pyratron.pugmatt.bedrockconnect;
 
-import com.nukkitx.math.vector.Vector2f;
-import com.nukkitx.math.vector.Vector3i;
-import com.nukkitx.nbt.NBTOutputStream;
-import com.nukkitx.nbt.NbtMap;
-import com.nukkitx.nbt.NbtMapBuilder;
-import com.nukkitx.nbt.NbtUtils;
-import com.nukkitx.protocol.bedrock.Bedrock;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
-import com.nukkitx.protocol.bedrock.BedrockServerSession;
-import com.nukkitx.protocol.bedrock.data.*;
-import com.nukkitx.protocol.bedrock.data.inventory.ContainerId;
-import com.nukkitx.protocol.bedrock.data.inventory.ItemData;
-import com.nukkitx.protocol.bedrock.packet.*;
-import com.nukkitx.math.vector.Vector3f;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIForms;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
+import org.cloudburstmc.math.vector.Vector2f;
+import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.math.vector.Vector3i;
+import org.cloudburstmc.nbt.NBTOutputStream;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtUtils;
+import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.data.*;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -70,7 +69,7 @@ public class BCPlayer {
         this.serverLimit = serverLimit;
         this.lastAction = LocalTime.now();
 
-        if(session != null && !session.isClosed())
+        if(session != null && session.isConnected())
         joinGame();
     }
 
@@ -217,15 +216,6 @@ public class BCPlayer {
     }
 
     public void joinGame() {
-
-        MovePlayerPacket mp = new MovePlayerPacket();
-        mp.setRuntimeEntityId(1);
-        mp.setOnGround(false);
-        mp.setMode(MovePlayerPacket.Mode.NORMAL);
-        mp.setRotation(Vector3f.from(0,0,0));
-        mp.setPosition(Vector3f.from(0,0,0));
-        session.sendPacket(mp);
-
         StartGamePacket startGamePacket = new StartGamePacket();
         startGamePacket.setUniqueEntityId(1);
         startGamePacket.setRuntimeEntityId(1);
@@ -266,16 +256,18 @@ public class BCPlayer {
         startGamePacket.setUsingMsaGamertagsOnly(false);
         startGamePacket.setFromWorldTemplate(false);
         startGamePacket.setWorldTemplateOptionLocked(false);
+        startGamePacket.setSpawnBiomeType(SpawnBiomeType.DEFAULT);
+        startGamePacket.setCustomBiomeName("");
+        startGamePacket.setEducationProductionId("");
+        startGamePacket.setForceExperimentalGameplay(OptionalBoolean.empty());
 
-        //startGamePacket.setOnlySpawningV1Villagers(false);
         startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.CLIENT);
-        SyncedPlayerMovementSettings settings = new SyncedPlayerMovementSettings();
-        settings.setMovementMode(AuthoritativeMovementMode.CLIENT);
-        settings.setRewindHistorySize(0);
-        settings.setServerAuthoritativeBlockBreaking(false);
-        startGamePacket.setPlayerMovementSettings(settings);
+        startGamePacket.setRewindHistorySize(0);
+        startGamePacket.setServerAuthoritativeBlockBreaking(false);
         //startGamePacket.setTrial(false);
         startGamePacket.setVanillaVersion("*");
+        startGamePacket.setInventoriesServerAuthoritative(true);
+        startGamePacket.setServerEngine("");
 
         startGamePacket.setLevelId("world");
         startGamePacket.setLevelName("world");
@@ -314,7 +306,7 @@ public class BCPlayer {
                 data2.setChunkX(chunkX + x);
                 data2.setChunkZ(chunkZ + z);
                 data2.setSubChunksLength(0);
-                data2.setData(EMPTY_LEVEL_CHUNK_DATA);
+                data2.setData(Unpooled.wrappedBuffer(EMPTY_LEVEL_CHUNK_DATA));
                 session.sendPacket(data2);
             }
         }

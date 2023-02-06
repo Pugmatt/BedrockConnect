@@ -2,11 +2,8 @@ package main.com.pyratron.pugmatt.bedrockconnect.gui;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.nukkitx.protocol.bedrock.BedrockSession;
-import com.nukkitx.protocol.bedrock.packet.ModalFormRequestPacket;
 import main.com.pyratron.pugmatt.bedrockconnect.BCPlayer;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
-import net.minidev.json.JSONUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

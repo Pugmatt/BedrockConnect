@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nukkitx.nbt.NBTInputStream;
-import com.nukkitx.nbt.NbtList;
-import com.nukkitx.nbt.NbtMap;
-import com.nukkitx.nbt.NbtUtils;
-import com.nukkitx.protocol.bedrock.data.inventory.ItemData;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
+import org.cloudburstmc.nbt.NBTInputStream;
+import org.cloudburstmc.nbt.NbtList;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtUtils;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 
 import java.io.*;
 import java.nio.ByteOrder;
@@ -85,7 +85,7 @@ public class PaletteManager {
                 try {
                     NbtMap tag = (NbtMap) NbtUtils.createReaderLE(bais).readTag();
                     creativeItems.add(ItemData.builder()
-                            .id(itemNode.get("id").asInt())
+                            .netId(itemNode.get("id").asInt())
                             .damage(damage)
                             .count(1)
                             .tag(tag).build());
@@ -94,7 +94,7 @@ public class PaletteManager {
                 }
             } else {
                 creativeItems.add(ItemData.builder()
-                        .id(itemNode.get("id").asInt())
+                        .netId(itemNode.get("id").asInt())
                         .damage(damage)
                         .count(1).build());
             }

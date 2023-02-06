@@ -48,7 +48,7 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>com.nukkitx.protocol</pattern>
+                                    <pattern>org.cloudburstmc.protocol</pattern>
                                     <shadedPattern>com.pyratron.pugmatt.protocol</shadedPattern>
                                 </relocation>
                             </relocations>
@@ -61,26 +61,32 @@
 
     <repositories>
         <repository>
-            <id>opencollab-releases</id>
+            <id>opencollab-repo-release</id>
             <url>https://repo.opencollab.dev/maven-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
-            <id>opencollab-snapshots</id>
+            <id>opencollab-repo-snapshot</id>
             <url>https://repo.opencollab.dev/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/net.minidev/json-smart -->
         <dependency>
-            <groupId>net.minidev</groupId>
-            <artifactId>json-smart</artifactId>
-            <version>2.4.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.nukkitx.protocol</groupId>
-            <artifactId>bedrock-v560</artifactId>
-            <version>2.9.15-SNAPSHOT</version>
+            <groupId>org.cloudburstmc.protocol</groupId>
+            <artifactId>bedrock-connection</artifactId>
+            <version>3.0.0.Beta1-SNAPSHOT</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
@@ -106,7 +112,7 @@
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
-            <version>7.9</version>
+            <version>9.13</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

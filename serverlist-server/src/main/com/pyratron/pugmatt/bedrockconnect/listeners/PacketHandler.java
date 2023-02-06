@@ -2,28 +2,31 @@ package main.com.pyratron.pugmatt.bedrockconnect.listeners;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import com.nukkitx.math.vector.Vector3f;
-import com.nukkitx.network.util.Preconditions;
-import com.nukkitx.protocol.bedrock.BedrockPacketCodec;
-import com.nukkitx.protocol.bedrock.data.AttributeData;
-import com.nukkitx.protocol.bedrock.data.PacketCompressionAlgorithm;
-import com.nukkitx.protocol.bedrock.packet.*;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
+import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory;
-import com.nukkitx.protocol.bedrock.BedrockServerSession;
-import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
-import com.nukkitx.protocol.bedrock.packet.LoginPacket;
-import com.nukkitx.protocol.bedrock.util.EncryptionUtils;
+import com.nimbusds.jose.shaded.json.JSONObject;
+import com.nimbusds.jose.shaded.json.JSONValue;
+import com.nimbusds.jwt.SignedJWT;
 import main.com.pyratron.pugmatt.bedrockconnect.*;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.MainFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.ManageFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.UIForms;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.BedrockProtocol;
-import net.minidev.json.JSONObject;
+import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
+import org.cloudburstmc.protocol.bedrock.data.AttributeData;
+import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
+import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
+import org.cloudburstmc.protocol.common.PacketSignal;
+import org.cloudburstmc.protocol.common.util.Preconditions;
 
 import java.io.IOException;
+import java.net.URI;
 import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.net.InetAddress;
@@ -60,7 +63,7 @@ public class PacketHandler implements BedrockPacketHandler {
     }
 
     @Override
-    public boolean handle(RequestChunkRadiusPacket packet) {
+    public PacketSignal handle(RequestChunkRadiusPacket packet) {
         ChunkRadiusUpdatedPacket chunkRadiusUpdatePacket = new ChunkRadiusUpdatedPacket();
         chunkRadiusUpdatePacket.setRadius(packet.getRadius());
         session.sendPacketImmediately(chunkRadiusUpdatePacket);
@@ -68,26 +71,26 @@ public class PacketHandler implements BedrockPacketHandler {
         PlayStatusPacket playStatus = new PlayStatusPacket();
         playStatus.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         session.sendPacket(playStatus);
-        return false;
+        return PacketSignal.HANDLED;
     }
 
     // Occasionally, a sent form will not correctly send to a player for whatever reason, and they float in space. This works as a way to open the form back up.
-
+    
     @Override
-    public boolean handle(PlayerActionPacket packet) {
+    public PacketSignal handle(PlayerActionPacket packet) {
         player.movementOpen();
-        return false;
+        return PacketSignal.HANDLED;
     }
 
     @Override
-    public boolean handle(AnimatePacket packet) {
+    public PacketSignal handle(AnimatePacket packet) {
         if(packet.getAction() == AnimatePacket.Action.SWING_ARM)
             player.movementOpen();
-        return false;
+        return PacketSignal.HANDLED;
     }
 
     @Override
-    public boolean handle(ModalFormResponsePacket packet) {
+    public PacketSignal handle(ModalFormResponsePacket packet) {
         player.setActive();
         player.resetMovementOpen();
 
@@ -96,7 +99,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     // Re-open window if closed
                     if (packet.getFormData() == null || packet.getFormData().contains("null")) {
                         if(player.getCurrentForm() != packet.getFormId())
-                            return false;
+                            return PacketSignal.HANDLED;
                         player.openForm(UIForms.MAIN);
                     } else { // If selecting button
                         int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
@@ -173,7 +176,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 case UIForms.SERVER_GROUP:
                     if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                         if(player.getCurrentForm() != packet.getFormId())
-                            return false;
+                            return PacketSignal.HANDLED;
                         player.openForm(UIForms.MAIN);
                     }
                     else {
@@ -193,7 +196,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 case UIForms.MANAGE_SERVER:
                     if(packet.getFormData() == null) {
                         if(player.getCurrentForm() != packet.getFormId())
-                            return false;
+                            return PacketSignal.HANDLED;
                         player.openForm(UIForms.MAIN);
                     }
                     else {
@@ -218,7 +221,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     try {
                         if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                             if(player.getCurrentForm() != packet.getFormId())
-                                return false;
+                                return PacketSignal.HANDLED;
                             player.openForm(UIForms.MANAGE_SERVER);
                         }
                         else {
@@ -246,7 +249,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     try {
                         if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                             if(player.getCurrentForm() != packet.getFormId())
-                                return false;
+                                return PacketSignal.HANDLED;
                             player.openForm(UIForms.MAIN);
                         }
                         else {
@@ -278,7 +281,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 case UIForms.EDIT_CHOOSE_SERVER:
                     if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                         if(player.getCurrentForm() != packet.getFormId())
-                            return false;
+                            return PacketSignal.HANDLED;
                         player.openForm(UIForms.MANAGE_SERVER);
                     }
                     else {
@@ -305,7 +308,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 case UIForms.EDIT_SERVER:
                     if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                         if(player.getCurrentForm() != packet.getFormId())
-                            return false;
+                            return PacketSignal.HANDLED;
                         player.openForm(UIForms.EDIT_CHOOSE_SERVER);
                     }
                     else {
@@ -336,7 +339,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     try {
                         if(packet.getFormData() == null || packet.getFormData().contains("null")) {
                             if(player.getCurrentForm() != packet.getFormId())
-                                return false;
+                                return PacketSignal.HANDLED;
                             player.openForm(UIForms.MANAGE_SERVER);
                         }
                         else {
@@ -361,11 +364,11 @@ public class PacketHandler implements BedrockPacketHandler {
                     break;
         }
 
-        return false;
+        return PacketSignal.HANDLED;
     }
 
     @Override
-    public boolean handle(NetworkStackLatencyPacket packet) {
+    public PacketSignal handle(NetworkStackLatencyPacket packet) {
         // Fix bug where server icons don't load
         UpdateAttributesPacket updateAttributesPacket = new UpdateAttributesPacket();
         updateAttributesPacket.setRuntimeEntityId(1);
@@ -374,11 +377,11 @@ public class PacketHandler implements BedrockPacketHandler {
 
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
-            public void run() { if(!session.isClosed()) { session.sendPacket(updateAttributesPacket); } }
+            public void run() { if(session.isConnected()) { session.sendPacket(updateAttributesPacket); } }
         };
         timer.schedule(task, 500);
 
-        return false;
+        return PacketSignal.HANDLED;
     }
 
     public void transfer(String ip, int port) {
@@ -393,58 +396,101 @@ public class PacketHandler implements BedrockPacketHandler {
     }
 
     @Override
-    public boolean handle(SetLocalPlayerAsInitializedPacket packet) {
+    public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
         session.sendPacketImmediately(UIForms.createMain(player.getServerList(), session));
-        return false;
+        return PacketSignal.HANDLED;
     }
 
     @Override
-    public boolean handle(RequestNetworkSettingsPacket packet) {
+    public PacketSignal handle(RequestNetworkSettingsPacket packet) {
+        int protocolVersion = packet.getProtocolVersion();
+
+        BedrockCodec packetCodec = BedrockProtocol.getBedrockCodec(packet.getProtocolVersion());
+
+        if (protocolVersion != BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
+            PlayStatusPacket status = new PlayStatusPacket();
+            if (protocolVersion > BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
+                status.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
+            } else {
+                status.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
+            }
+
+            session.sendPacketImmediately(status);
+            return PacketSignal.HANDLED;
+        }
+        session.setCodec(packetCodec);
+
         PacketCompressionAlgorithm algorithm = PacketCompressionAlgorithm.ZLIB;
 
         NetworkSettingsPacket responsePacket = new NetworkSettingsPacket();
         responsePacket.setCompressionAlgorithm(algorithm);
-        responsePacket.setCompressionThreshold(512);
+        responsePacket.setCompressionThreshold(0);
         session.sendPacketImmediately(responsePacket);
 
         session.setCompression(algorithm);
-        return false;
+        return PacketSignal.HANDLED;
     }
 
     public PacketHandler(BedrockServerSession session, Server server, boolean packetListening) {
-        session.setPacketCodec(BedrockProtocol.DEFAULT_BEDROCK_CODEC);
         this.session = session;
         this.server = server;
-
-        session.addDisconnectHandler((DisconnectReason) -> disconnect());
     }
 
-    public void disconnect() {
+    @Override
+    public void onDisconnect(String reason) {
         System.out.println(name + " disconnected");
         if(player != null)
             server.removePlayer(player);
     }
 
-    private static boolean validateChainData(JsonNode data) throws Exception {
-        ECPublicKey lastKey = null;
-        boolean validChain = false;
-        for (JsonNode node : data) {
-            JWSObject jwt = JWSObject.parse(node.asText());
-
-            if (!validChain) {
-                validChain = verifyJwt(jwt, EncryptionUtils.getMojangPublicKey());
-            }
-
-            if (lastKey != null) {
-                verifyJwt(jwt, lastKey);
-            }
-
-            JsonNode payloadNode = Server.JSON_MAPPER.readTree(jwt.getPayload().toString());
-            JsonNode ipkNode = payloadNode.get("identityPublicKey");
-            Preconditions.checkState(ipkNode != null && ipkNode.getNodeType() == JsonNodeType.STRING, "identityPublicKey node is missing in chain");
-            lastKey = EncryptionUtils.generateKey(ipkNode.asText());
+    private static boolean validateChainData(List<SignedJWT> chain) throws Exception {
+        if (chain.size() != 3) {
+            return false;
         }
-        return validChain;
+
+        Payload identity = null;
+        ECPublicKey lastKey = null;
+        boolean mojangSigned = false;
+        Iterator<SignedJWT> iterator = chain.iterator();
+        while (iterator.hasNext()) {
+            SignedJWT jwt = iterator.next();
+            identity = jwt.getPayload();
+
+            // x509 cert is expected in every claim
+            URI x5u = jwt.getHeader().getX509CertURL();
+            if (x5u == null) {
+                return false;
+            }
+
+            ECPublicKey expectedKey = EncryptionUtils.generateKey(jwt.getHeader().getX509CertURL().toString());
+            // First key is self-signed
+            if (lastKey == null) {
+                lastKey = expectedKey;
+            } else if (!lastKey.equals(expectedKey)) {
+                return false;
+            }
+
+            if (!EncryptionUtils.verifyJwt(jwt, lastKey)) {
+                return false;
+            }
+
+            if (mojangSigned) {
+                return !iterator.hasNext();
+            }
+
+            if (lastKey.equals(EncryptionUtils.getMojangPublicKey())) {
+                mojangSigned = true;
+            }
+
+            Object payload = JSONValue.parse(jwt.getPayload().toString());
+            Preconditions.checkArgument(payload instanceof JSONObject, "Payload is not an object");
+
+            Object identityPublicKey = ((JSONObject) payload).get("identityPublicKey");
+            Preconditions.checkArgument(identityPublicKey instanceof String, "identityPublicKey node is missing in chain");
+            lastKey = EncryptionUtils.generateKey((String) identityPublicKey);
+        }
+
+        return mojangSigned;
     }
 
 
@@ -453,12 +499,12 @@ public class PacketHandler implements BedrockPacketHandler {
     }
 
     @Override
-    public boolean handle(DisconnectPacket packet) {
-        return false;
+    public PacketSignal handle(DisconnectPacket packet) {
+        return PacketSignal.UNHANDLED;
     }
 
     @Override
-    public boolean handle(ResourcePackClientResponsePacket packet) {
+    public PacketSignal handle(ResourcePackClientResponsePacket packet) {
         switch (packet.getStatus()) {
             case COMPLETED:
                 BedrockConnect.data.userExists(uuid, name, session, this);
@@ -475,49 +521,18 @@ public class PacketHandler implements BedrockPacketHandler {
                 break;
         }
 
-        return true;
+        return PacketSignal.HANDLED;
     }
 
     // Heavily referenced from https://github.com/NukkitX/ProxyPass/blob/master/src/main/java/com/nukkitx/proxypass/network/bedrock/session/UpstreamPacketHandler.java
 
     @Override
-    public boolean handle(LoginPacket packet) {
-        BedrockPacketCodec packetCodec = BedrockProtocol.getBedrockCodec(packet.getProtocolVersion());
+    public PacketSignal handle(LoginPacket packet) {
 
-        if (packetCodec == null) {
-            session.setPacketCodec(BedrockProtocol.DEFAULT_BEDROCK_CODEC);
+        List<SignedJWT> certChainData = packet.getChain();
 
-            PlayStatusPacket status = new PlayStatusPacket();
-
-            if (packet.getProtocolVersion() > BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
-                status.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
-            }
-            else if (packet.getProtocolVersion() < BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
-                status.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
-            }
-
-            session.sendPacket(status);
-        }
-
-        session.setPacketCodec(packetCodec);
-
-        JsonNode certData;
         try {
-            certData = Server.JSON_MAPPER.readTree(packet.getChainData().toByteArray());
-        } catch (IOException e) {
-            throw new RuntimeException("Certificate JSON can not be read.");
-        }
-
-        JsonNode certChainData = certData.get("chain");
-        if (certChainData.getNodeType() != JsonNodeType.ARRAY) {
-            throw new RuntimeException("Certificate data is not valid");
-        }
-
-        boolean validChain;
-        try {
-            validChain = validateChainData(certChainData);
-
-            JWSObject jwt = JWSObject.parse(certChainData.get(certChainData.size() - 1).asText());
+            JWSObject jwt = certChainData.get(certChainData.size() - 1);
             JsonNode payload = Server.JSON_MAPPER.readTree(jwt.getPayload().toBytes());
 
             if (payload.get("extraData").getNodeType() != JsonNodeType.OBJECT) {
@@ -531,7 +546,7 @@ public class PacketHandler implements BedrockPacketHandler {
             }
             ECPublicKey identityPublicKey = EncryptionUtils.generateKey(payload.get("identityPublicKey").textValue());
 
-            JWSObject clientJwt = JWSObject.parse(packet.getSkinData().toString());
+            JWSObject clientJwt = packet.getExtra();
             verifyJwt(clientJwt, identityPublicKey);
 
             System.out.println("Made it through login - " + "User: " + extraData.getAsString("displayName") + " (" + extraData.getAsString("identity") + ")");
@@ -541,7 +556,7 @@ public class PacketHandler implements BedrockPacketHandler {
             uuid = extraData.getAsString("identity");
             
             
-            //whitelist check
+            // Whitelist check
             if (Whitelist.hasWhitelist() && !Whitelist.isPlayerWhitelisted(name)) {
             	session.disconnect(Whitelist.getWhitelistMessage());
             	System.out.println("Kicked " + name + ": \"" + Whitelist.getWhitelistMessage() + "\"");
@@ -564,8 +579,771 @@ public class PacketHandler implements BedrockPacketHandler {
             session.disconnect("disconnectionScreen.internalError.cantConnect");
             throw new RuntimeException("Unable to complete login", e);
         }
-        return true;
+        return PacketSignal.HANDLED;
+    }
+
+    // Handle rest of packets to avoid log warnings
+
+    @Override
+    public PacketSignal handle(AdventureSettingsPacket packet) {
+        return PacketSignal.HANDLED;
     }
 
 
+    @Override
+    public PacketSignal handle(BlockEntityDataPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(BlockPickRequestPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(BookEditPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ClientCacheBlobStatusPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ClientCacheMissResponsePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ClientCacheStatusPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ClientToServerHandshakePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(CommandBlockUpdatePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(CommandRequestPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ContainerClosePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(CraftingEventPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(EntityEventPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(EntityPickRequestPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(EventPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(InteractPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(InventoryContentPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(InventorySlotPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(InventoryTransactionPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ItemFrameDropItemPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(LabTablePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(LecternUpdatePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(LevelEventGenericPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(LevelSoundEventPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(MapInfoRequestPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(MobArmorEquipmentPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(MobEquipmentPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(MoveEntityAbsolutePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(MovePlayerPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PhotoTransferPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PlayerHotbarPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PlayerInputPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PlayerSkinPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PurchaseReceiptPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ResourcePackChunkRequestPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(RiderJumpPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ServerSettingsRequestPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetDefaultGameTypePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetPlayerGameTypePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SubClientLoginPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(TextPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(AddBehaviorTreePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(AddEntityPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(AddHangingEntityPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(AddItemEntityPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(AddPaintingPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(AddPlayerPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(AvailableCommandsPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(BlockEventPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(BossEventPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(CameraPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ChangeDimensionPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ChunkRadiusUpdatedPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ClientboundMapItemDataPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(CommandOutputPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ContainerOpenPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ContainerSetDataPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(CraftingDataPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ExplodePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(LevelChunkPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(GameRulesChangedPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(GuiDataPickItemPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(HurtArmorPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(AutomationClientConnectPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(LevelEventPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(MapCreateLockedCopyPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(MobEffectPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ModalFormRequestPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(MoveEntityDeltaPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(NpcRequestPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(OnScreenTextureAnimationPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PlayerListPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PlaySoundPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PlayStatusPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(RemoveEntityPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(RemoveObjectivePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ResourcePackChunkDataPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ResourcePackDataInfoPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ResourcePacksInfoPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ResourcePackStackPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(RespawnPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ScriptCustomEventPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ServerSettingsResponsePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ServerToClientHandshakePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetCommandsEnabledPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetDifficultyPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetDisplayObjectivePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetEntityDataPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetEntityLinkPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetEntityMotionPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetHealthPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetLastHurtByPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetScoreboardIdentityPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetScorePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetSpawnPositionPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetTimePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SetTitlePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ShowCreditsPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ShowProfilePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ShowStoreOfferPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SimpleEventPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SpawnExperienceOrbPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(StartGamePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(StopSoundPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(StructureBlockUpdatePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(StructureTemplateDataRequestPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(StructureTemplateDataResponsePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(TakeItemEntityPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(TransferPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(UpdateAttributesPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(UpdateBlockPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(UpdateBlockPropertiesPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(UpdateBlockSyncedPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(UpdateEquipPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(UpdateSoftEnumPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(UpdateTradePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(AvailableEntityIdentifiersPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(BiomeDefinitionListPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(LevelSoundEvent2Packet packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(NetworkChunkPublisherUpdatePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SpawnParticleEffectPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(VideoStreamConnectPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(EmotePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(TickSyncPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(AnvilDamagePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(NetworkSettingsPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PlayerAuthInputPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(SettingsCommandPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(EducationSettingsPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(CompletedUsingItemPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(MultiplayerSettingsPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    // 1.16 new packets
+
+    @Override
+    public PacketSignal handle(DebugInfoPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(EmoteListPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(CodeBuilderPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(CreativeContentPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ItemStackRequestPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(LevelSoundEvent1Packet packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ItemStackResponsePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PlayerArmorDamagePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PlayerEnchantOptionsPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(UpdatePlayerGameTypePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PacketViolationWarningPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PositionTrackingDBClientRequestPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PositionTrackingDBServerBroadcastPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(MotionPredictionHintsPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(AnimateEntityPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(CameraShakePacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(PlayerFogPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(CorrectPlayerMovePredictionPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(ItemComponentPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(FilterTextPacket packet) {
+        return PacketSignal.HANDLED;
+    }
+
+    @Override
+    public PacketSignal handle(RequestAbilityPacket packet) {
+        return PacketSignal.HANDLED;
+    }
 }

@@ -9,74 +9,49 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.17" level="project" />
-    <orderEntry type="library" name="Maven: dnsjava:dnsjava:3.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-resolver-dns:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-dns:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v448:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v440:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v431:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v428:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v422:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v419:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v408:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v407:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v390:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v389:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v388:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v361:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v354:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v340:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v332:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v313:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-v291:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:bedrock-common:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.protocol:common:2.8.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.network:common:1.6.26-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport-native-epoll:linux-x86_64:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport-native-unix-common:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport-native-kqueue:osx-x86_64:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx:natives:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx:nbt:2.0.1" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx:math:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.cloudburstmc.protocol:bedrock-connection:3.0.0.Beta1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.cloudburstmc.protocol:bedrock-codec:3.0.0.Beta1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.cloudburstmc.protocol:common:3.0.0.Beta1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.fastutil:fastutil-int-object-maps:8.5.3" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.fastutil:fastutil-int-sets:8.5.3" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.fastutil:fastutil-int-common:8.5.3" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.fastutil:fastutil-object-int-maps:8.5.3" level="project" />
-    <orderEntry type="library" name="Maven: com.nukkitx.network:raknet:1.6.26-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-handler:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-common:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-resolver:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec:4.1.43.Final" level="project" />
-    <orderEntry type="library" name="Maven: net.jodah:expiringmap:0.5.9" level="project" />
+    <orderEntry type="library" name="Maven: org.cloudburstmc.math:immutable:2.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.nukkitx:natives:1.0.3" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.84.Final" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.fastutil:fastutil-long-common:8.5.3" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.fastutil:fastutil-common:8.5.3" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.fastutil:fastutil-long-object-maps:8.5.3" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.fastutil:fastutil-long-sets:8.5.3" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.fastutil:fastutil-object-sets:8.5.3" level="project" />
     <orderEntry type="library" name="Maven: com.nukkitx.fastutil:fastutil-object-common:8.5.3" level="project" />
+    <orderEntry type="library" name="Maven: org.cloudburstmc:nbt:3.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.lanternpowered:lmbda:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.ow2.asm:asm:7.1" level="project" />
+    <orderEntry type="library" name="Maven: org.checkerframework:checker-qual:2.8.1" level="project" />
+    <orderEntry type="library" name="Maven: org.cloudburstmc.netty:netty-transport-raknet:0.0.1.Final-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-common:4.1.84.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec:4.1.84.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport:4.1.84.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-resolver:4.1.84.Final" level="project" />
+    <orderEntry type="library" name="Maven: net.jodah:expiringmap:0.5.9" level="project" />
+    <orderEntry type="library" name="Maven: io.airlift:aircompressor:0.21" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.findbugs:jsr305:1.3.9" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.5" level="project" />
-    <orderEntry type="library" name="Maven: com.nimbusds:nimbus-jose-jwt:4.39.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.9" level="project" />
+    <orderEntry type="library" name="Maven: com.nimbusds:nimbus-jose-jwt:9.13" level="project" />
     <orderEntry type="library" name="Maven: com.github.stephenc.jcip:jcip-annotations:1.0-1" level="project" />
-    <orderEntry type="library" name="Maven: net.minidev:json-smart:2.3" level="project" />
-    <orderEntry type="library" name="Maven: net.minidev:accessors-smart:1.2" level="project" />
-    <orderEntry type="library" name="Maven: org.ow2.asm:asm:5.0.4" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.8" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.8" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.12.7.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.12.7" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.12.7" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.8" level="project" />
     <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.23" level="project" />
     <orderEntry type="library" name="Maven: net.sf.trove4j:trove:3.1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: net.sf.trove4j:trove-generator:3.1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.19" level="project" />
-    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.6.1" level="project" />
+    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.28" level="project" />
+    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.11.4" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.21" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.21" level="project" />
   </component>
