@@ -407,7 +407,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
         BedrockCodec packetCodec = BedrockProtocol.getBedrockCodec(packet.getProtocolVersion());
 
-        if (protocolVersion != BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
+        if (packetCodec == null) {
             PlayStatusPacket status = new PlayStatusPacket();
             if (protocolVersion > BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
                 status.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
