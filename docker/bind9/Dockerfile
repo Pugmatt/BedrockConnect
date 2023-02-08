@@ -12,7 +12,7 @@ ADD https://github.com/Pugmatt/BedrockConnect/blob/master/scripts/install-bind.s
 WORKDIR /docker/bind9
 RUN chmod +x /docker/bind9/install-bind.sh
 #CMD [ "/docker/bind9/install-bind.sh", "${BCIP}", "${NSIP}" ] 
-RUN wget -O - https://raw.githubusercontent.com/Pugmatt/BedrockConnect/master/scripts/install-bind.sh | bash
+RUN wget -O - https://raw.githubusercontent.com/xTITUSMAXIMUSX/BedrockConnect/master/scripts/install-bind.sh | bash
 
 #run forever
 CMD ["/bin/bash", "-c", "while :; do sleep 10; done"
