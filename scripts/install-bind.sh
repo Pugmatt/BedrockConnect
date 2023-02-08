@@ -127,4 +127,4 @@ add_domain pixelparadise.gg play
 
 # Reload config
 
-systemctl reload $SERVICE_NAME
+/etc/init.d/bind9 start

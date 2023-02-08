@@ -1,6 +1,13 @@
-version: "2"
+version: "3"
 services:
-  app:
-    build: .
+  bedrockconnect:
+    build: ./bedrockconnect
     ports:
       - "19132:19132/udp"
+  bind9:
+    build: ./bind9
+    ports: 
+      - "127.0.0.1:53:53/udp"
+    environment:
+      - BCIP=1.1.1.1
+      - NSIP=2.2.2.2
