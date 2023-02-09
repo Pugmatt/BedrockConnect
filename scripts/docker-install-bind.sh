@@ -127,4 +127,3 @@ add_domain pixelparadise.gg play
 
 # Reload config
 /etc/init.d/named start
-exit 0
