@@ -5,9 +5,10 @@ services:
     ports:
       - "19132:19132/udp"
   bind9:
-    build: ./bind9
+    build: 
+      context: ./bind9
+      args: 
+        BCIP: 104.238.130.180
+        NSIP: 104.238.130.180
     ports: 
-      - "127.0.0.1:54:53/udp"
-    environment:
-      - BCIP=1.1.1.1
-      - NSIP=2.2.2.2
+      - "53:53/udp"
