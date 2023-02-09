@@ -2,17 +2,14 @@ FROM ubuntu:jammy
 
 RUN apt update\
   && apt dist-upgrade -y\
-  && apt install wget bash -y
+  && apt install wget -y
 
+
+#Setting for future env vars later maybe?
 ARG BCIP="104.238.130.180"
 ARG NSIP="104.238.130.180"
 
-RUN mkdir -p /docker/bind9
-ADD https://github.com/Pugmatt/BedrockConnect/blob/master/scripts/install-bind.sh /docker/bind9
-WORKDIR /docker/bind9
-RUN chmod +x /docker/bind9/install-bind.sh
-#CMD [ "/docker/bind9/install-bind.sh", "${BCIP}", "${NSIP}" ] 
-RUN wget -O - https://raw.githubusercontent.com/xTITUSMAXIMUSX/BedrockConnect/master/scripts/install-bind.sh | bash
+RUN wget -O - https://raw.githubusercontent.com/xTITUSMAXIMUSX/BedrockConnect/master/scripts/docker-install-bind.sh $BCIP $NSIP | bash
 
 #run forever
-CMD ["/bin/bash", "-c", "while :; do sleep 10; done"
+CMD ["/bin/bash", "-c", "while :; do sleep 10; done"]

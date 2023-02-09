@@ -7,7 +7,7 @@ services:
   bind9:
     build: ./bind9
     ports: 
-      - "127.0.0.1:53:53/udp"
+      - "127.0.0.1:54:53/udp"
     environment:
       - BCIP=1.1.1.1
       - NSIP=2.2.2.2
