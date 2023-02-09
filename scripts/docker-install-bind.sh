@@ -126,4 +126,4 @@ add_domain galaxite.net play
 add_domain pixelparadise.gg play
 
 # Reload config
-/etc/init.d/named start
+/etc/init.d/named start >> /dev/null
