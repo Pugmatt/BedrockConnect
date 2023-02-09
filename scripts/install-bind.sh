@@ -115,7 +115,7 @@ $PKG_MGR $PKG_MGR_SYNTAX -y $PKGS
 
 sed -i '/recursion/d' $NAMED_OPTIONS
 sed -i '/additional-from-cache/d' $NAMED_OPTIONS
-sed -i 's/^options {/options {\n\trecursion no;\n\tadditional-from-cache no;/' $NAMED_OPTIONS
+sed -i 's/^options {/options {\n\trecursion no;/' $NAMED_OPTIONS
 
 add_domain hivebedrock.network @ geo
 add_domain mineplex.com mco
@@ -126,4 +126,5 @@ add_domain galaxite.net play
 add_domain pixelparadise.gg play
 
 # Reload config
-/etc/init.d/named start
+
+systemctl reload $SERVICE_NAME
