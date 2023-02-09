@@ -11,7 +11,7 @@ ARG NSIP
 
 #download install script
 RUN mkdir -p /docker/bind
-RUN wget -O /docker/bind/docker-install-bind.sh https://raw.githubusercontent.com/xTITUSMAXIMUSX/BedrockConnect/master/scripts/docker-install-bind.sh 
+RUN wget -O /docker/bind/docker-install-bind.sh https://raw.githubusercontent.com/Pugmatt/BedrockConnect/master/scripts/docker-install-bind.sh 
 RUN bash /docker/bind/docker-install-bind.sh ${BCIP} ${NSIP}
 
 #run forever
