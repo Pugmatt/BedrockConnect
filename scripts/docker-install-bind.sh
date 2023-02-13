@@ -5,7 +5,7 @@
 #   BCIP    Optional IP of the bedrock connect server (Default: 104.238.130.180)
 #   NSIP    Optional IP of the name server (Default: same as the bedrock connect server)
 #
-# Should support Ubuntu 18+ and Cent OS 7+
+# Should support Ubuntu 18+, Cent OS 7+, Arch, and Debian
 # Tested on: Ubuntu 18.04 LTS, Ubuntu 20.04 LTS, Cent OS 7 and Cent OS 8
 #
 
@@ -90,7 +90,7 @@ if [[ -f /etc/os-release ]]; then
     NAMED_ZONES="/etc/named.conf"
     NAMED_DBS="/var/named"
     SERVICE_NAME="named"
-  elif [[ "$ID" == "debian" ]]; then
+  elif [[ "$ID" == "debian" || "$ID_LIKE" == "debian" ]]; then
     PKG_MGR=apt
     PKG_MGR_SYNTAX="install"
     PKGS="bind9 dnsutils"
