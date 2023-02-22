@@ -279,30 +279,33 @@ public class PacketHandler implements BedrockPacketHandler {
                     }
                     break;
                 case UIForms.EDIT_CHOOSE_SERVER:
-                    if(packet.getFormData() == null || packet.getFormData().contains("null")) {
-                        if(player.getCurrentForm() != packet.getFormId())
-                            return PacketSignal.HANDLED;
-                        player.openForm(UIForms.MANAGE_SERVER);
-                    }
-                    else {
-                        ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
+                    try {
+                        if (packet.getFormData() == null || packet.getFormData().contains("null")) {
+                            if (player.getCurrentForm() != packet.getFormId())
+                                return PacketSignal.HANDLED;
+                            player.openForm(UIForms.MANAGE_SERVER);
+                        } else {
+                            ArrayList<String> data = UIComponents.getFormData(packet.getFormData());
 
-                        int chosen = Integer.parseInt(data.get(0));
+                            int chosen = Integer.parseInt(data.get(0));
 
-                        String server = player.getServerList().get(chosen);
+                            String server = player.getServerList().get(chosen);
 
-                        String[] serverInfo = UIComponents.validateAddress(server, player);
+                            String[] serverInfo = UIComponents.validateAddress(server, player);
 
-                        if(serverInfo != null) {
-                            String ip = serverInfo[0];
-                            String port = serverInfo[1];
-                            String name = serverInfo.length > 2 ? serverInfo[2] : "";
+                            if (serverInfo != null) {
+                                String ip = serverInfo[0];
+                                String port = serverInfo[1];
+                                String name = serverInfo.length > 2 ? serverInfo[2] : "";
 
-                            player.setEditingServer(chosen);
+                                player.setEditingServer(chosen);
 
-                            session.sendPacketImmediately(UIForms.createEditServer(ip, port, name));
-                            player.setCurrentForm(UIForms.EDIT_SERVER);
+                                session.sendPacketImmediately(UIForms.createEditServer(ip, port, name));
+                                player.setCurrentForm(UIForms.EDIT_SERVER);
+                            }
                         }
+                    } catch(Exception e) {
+                        player.createError((BedrockConnect.language.getWording("error", "invalidServerEdit")));
                     }
                     break;
                 case UIForms.EDIT_SERVER:

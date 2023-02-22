@@ -51,6 +51,7 @@
     "invalidUserServer": "Invalid server address",
     "invalidServerConnect": "Please enter a valid IP/Address and port that contains only numbers.",
     "invalidServerRemove": "Invalid server to remove",
+    "invalidServerEdit": "Invalid server to edit",
     "transferError": "Error connecting to server. Invalid address."
   },
   "disconnect": {
