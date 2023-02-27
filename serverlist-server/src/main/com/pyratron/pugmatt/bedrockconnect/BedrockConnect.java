@@ -34,12 +34,14 @@ public class BedrockConnect {
     public static boolean fetchFeaturedIps = true;
     public static File whitelistfile;
 
+    public static String release = "1.28";
+
     public static HashMap<String, String> featuredServerIps;
 
     public static Language language;
 
     public static void main(String[] args) {
-        System.out.println("-= BedrockConnect =-");
+        System.out.println("-= BedrockConnect (Release: " + release + ") =-");
         paletteManager =  new PaletteManager();
 
         try {
