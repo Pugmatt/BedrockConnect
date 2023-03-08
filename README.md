@@ -57,6 +57,7 @@ There are multiple BedrockConnect serverlist servers available that can be used,
 | ------------- | ------------- | ------------- | ------------- |
 | 104.238.130.180 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. Might be blocked on PS4, try another instance if you experience issues. |
 | 173.82.100.84 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [jdextraze](https://github.com/jdextraze) | |
+| 207.244.229.200 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [AdamAtomus](https://github.com/adamatomus) | Located in Central US |
 | 213.171.211.142 | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
 | 217.160.58.93 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
 | 188.165.49.178 | <img src="https://flagicons.lipis.dev/flags/4x3/fr.svg" height="20"> | [Darkmoi3108](https://github.com/darkmoi3108) | |
