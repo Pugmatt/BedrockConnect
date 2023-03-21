@@ -11,6 +11,8 @@ BedrockConnect is an easy to use solution for Minecraft Bedrock Edition players 
 
 Here's the final result in action: https://www.youtube.com/watch?v=Uz-XYXAxd8Q
 
+#### Tutorials
+
 Here's tutorials to get it setup yourself. It takes only a few minutes to get setup:
 
 Switch: https://www.youtube.com/watch?v=zalT_oR1nPM
