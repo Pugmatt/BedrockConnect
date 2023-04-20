@@ -34,7 +34,7 @@ public class BedrockConnect {
     public static boolean fetchFeaturedIps = true;
     public static File whitelistfile;
 
-    public static String release = "1.29";
+    public static String release = "1.31";
 
     public static HashMap<String, String> featuredServerIps;
 
