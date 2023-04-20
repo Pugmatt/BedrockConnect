@@ -154,7 +154,7 @@ public class PacketHandler implements BedrockPacketHandler {
                                         transfer(getIP("mco.mineplex.com"), 19132);
                                         break;
                                     case 2: // Cubecraft
-                                        transfer("mco.cubecraft.net", 19132);
+                                        transfer(!BedrockConnect.fetchFeaturedIps ? getIP("mco.cubecraft.net") : "mco.cubecraft.net", 19132);
                                         break;
                                     case 3: // Lifeboat
                                         transfer(getIP("mco.lbsg.net"), 19132);
