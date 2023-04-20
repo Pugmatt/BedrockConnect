@@ -176,6 +176,7 @@ public class BedrockConnect {
                     if (ipFile.createNewFile()) {
                         featuredServerIps.put("hivebedrock.network", "167.114.81.89");
                         featuredServerIps.put("mco.mineplex.com", "108.178.12.125");
+                        featuredServerIps.put("mco.cubecraft.net", "51.178.75.10");
                         featuredServerIps.put("mco.lbsg.net", "142.44.240.96");
                         featuredServerIps.put("play.inpvp.net", "52.234.130.241");
                         featuredServerIps.put("play.galaxite.net", "51.222.8.223");
