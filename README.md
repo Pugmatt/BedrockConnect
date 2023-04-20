@@ -200,7 +200,6 @@ In the case where you want to use your own DNS server instead of the one I suppl
 | mco.mineplex.com | 104.238.130.180  | 
 | play.inpvp.net | 104.238.130.180  |
 | mco.lbsg.net | 104.238.130.180  |
-| mco.cubecraft.net | 104.238.130.180  |
 | play.galaxite.net | 104.238.130.180 |
 | play.pixelparadise.gg | 104.238.130.180 |
 

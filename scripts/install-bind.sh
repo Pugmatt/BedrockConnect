@@ -121,7 +121,6 @@ add_domain hivebedrock.network @ geo
 add_domain mineplex.com mco
 add_domain inpvp.net play
 add_domain lbsg.net mco
-add_domain cubecraft.net mco
 add_domain galaxite.net play
 add_domain pixelparadise.gg play
 
