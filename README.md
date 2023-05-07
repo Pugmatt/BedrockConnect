@@ -106,6 +106,7 @@ The following arguments can be placed in the startup command to ajust settings:
 | featured_servers | If true, the featured servers will be displayed in the serverlist.  If false, the servers are hidden. | true |
 | whitelist | Specify file containing list of whitelisted players. (Should be a text file with the player names specified on seperate lines) | |
 | fetch_featured_ips | If true, dynamically grab the featured server IPs from the domain names. If false, a file ```featured_server_ips.json``` will be generated, containing the hard-coded featured server IPs, and to allow changing them if needed.  | true |
+| fetch_ips | If true, dynamically grab the server IPs from domain names, of any server a user is attempting to join. | false |
 | language | Specify a file containing language customizations. See [guide for changing wording](#change-wording-of-serverlist) | |
 
 MySQL example:
@@ -120,13 +121,13 @@ When hosting your own serverlist server, you add your own custom servers to the 
 [
 	{
 		"name": "My Custom Server 1",
-		"iconUrl": "https://i.imgur.com/3BmFZRE.png",
+		"iconUrl": "https://i.imgur.com/nhumQVP.png",
 		"address": "mc1.example.com",
 		"port": 19132
 	},
 	{
 		"name": "My Custom Server 2",
-		"iconUrl": "https://i.imgur.com/3BmFZRE.png",
+		"iconUrl": "https://i.imgur.com/nhumQVP.png",
 		"address": "mc2.example.com",
 		"port": 19132
 	}
@@ -172,7 +173,7 @@ The icon URL is not required, if omitted it will show the default icon.
 
 For cases where you want to change the wording/language of your BedrockConnect server, you can do this by creating a JSON file in the same directory as the BedrockConnect JAR. The contents of this file should contain the parts of the wording you want to overwrite. 
 
-You can find all the options that be overwritten here: https://github.com/Pugmatt/BedrockConnect/blob/master/serverlist-server/src/main/resources/language.json
+You can find all the options that can be overwritten here: https://github.com/Pugmatt/BedrockConnect/blob/master/serverlist-server/src/main/resources/language.json
 
 Example custom language file:
 ```json
