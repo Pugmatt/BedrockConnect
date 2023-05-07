@@ -59,7 +59,7 @@ public class UIForms {
             buttons.add(UIComponents.createButton(BedrockConnect.language.getWording("main", "exitBtn")));
 
         for(int i=0;i<servers.size();i++) {
-            buttons.add(UIComponents.createButton(UIComponents.getServerDisplayName(servers.get(i)), "https://i.imgur.com/3BmFZRE.png", "url"));
+            buttons.add(UIComponents.createButton(UIComponents.getServerDisplayName(servers.get(i)), "https://i.imgur.com/nhumQVP.png", "url"));
         }
 
         for (CustomEntry cs : customServers) {

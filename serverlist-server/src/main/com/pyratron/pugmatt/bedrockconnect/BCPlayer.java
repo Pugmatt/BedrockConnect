@@ -31,8 +31,6 @@ public class BCPlayer {
 
     private int serverLimit;
 
-    private Data data;
-
     private String uuid;
 
     private LocalTime lastAction;
@@ -61,9 +59,8 @@ public class BCPlayer {
     }
 
 
-    public BCPlayer(String uuid, Data data, BedrockServerSession session, List<String> serverList, int serverLimit) {
+    public BCPlayer(String uuid, BedrockServerSession session, List<String> serverList, int serverLimit) {
         this.uuid = uuid;
-        this.data = data;
         this.session = session;
         this.serverList = serverList;
         this.serverLimit = serverLimit;
@@ -87,7 +84,7 @@ public class BCPlayer {
     }
 
     public void setServerList(List<String> serverList) {
-        data.setValueString("servers", UIComponents.serversToFormData(serverList), serverList, uuid);
+        BedrockConnect.data.setValueString("servers", UIComponents.serversToFormData(serverList), serverList, uuid);
         this.serverList = serverList;
     }
 
@@ -118,7 +115,7 @@ public class BCPlayer {
     }
 
     public void setServerLimit(int serverLimit) {
-        data.setValueInt("serverLimit", serverLimit, uuid);
+        BedrockConnect.data.setValueInt("serverLimit", serverLimit, uuid);
         this.serverLimit = serverLimit;
     }
 

@@ -31,6 +31,8 @@ import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class PacketHandler implements BedrockPacketHandler {
 
@@ -44,11 +46,14 @@ public class PacketHandler implements BedrockPacketHandler {
 
     private JSONObject extraData;
 
+    // Used for server icon fix
+    private ScheduledThreadPoolExecutor executor = null;
+
     public void setPlayer(BCPlayer player) {
         this.player = player;
     }
 
-    public static String getIP(String hostname) {
+    public String getIP(String hostname) {
         try {
             if(BedrockConnect.fetchFeaturedIps) {
                 InetAddress host = InetAddress.getByName(hostname);
@@ -378,11 +383,12 @@ public class PacketHandler implements BedrockPacketHandler {
         List<AttributeData> attributes = Collections.singletonList(new AttributeData("minecraft:player.level", 0f, 24791.00f, 0, 0f));
         updateAttributesPacket.setAttributes(attributes);
 
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            public void run() { if(session.isConnected()) { session.sendPacket(updateAttributesPacket); } }
-        };
-        timer.schedule(task, 500);
+        if (executor == null)
+            executor = new ScheduledThreadPoolExecutor(1);
+
+        executor.schedule(() -> {
+            session.sendPacket(updateAttributesPacket);
+        }, 500, TimeUnit.MILLISECONDS);
 
         return PacketSignal.HANDLED;
     }
@@ -442,11 +448,14 @@ public class PacketHandler implements BedrockPacketHandler {
     @Override
     public void onDisconnect(String reason) {
         System.out.println(name + " disconnected");
+        if(executor != null)
+            executor.shutdown();
         if(player != null)
             server.removePlayer(player);
+
     }
 
-    private static boolean validateChainData(List<SignedJWT> chain) throws Exception {
+    private boolean validateChainData(List<SignedJWT> chain) throws Exception {
         if (chain.size() != 3) {
             return false;
         }
@@ -497,7 +506,7 @@ public class PacketHandler implements BedrockPacketHandler {
     }
 
 
-    private static boolean verifyJwt(JWSObject jwt, ECPublicKey key) throws JOSEException {
+    private boolean verifyJwt(JWSObject jwt, ECPublicKey key) throws JOSEException {
         return jwt.verify(new DefaultJWSVerifierFactory().createJWSVerifier(jwt.getHeader(), key));
     }
 

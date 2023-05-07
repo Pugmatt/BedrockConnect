@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
@@ -25,7 +26,6 @@ import java.util.*;
 public class Server {
 
     private final NioEventLoopGroup eventLoopGroup = new NioEventLoopGroup();
-    public Channel server;
     public BedrockPong pong;
 
     public static final ObjectMapper JSON_MAPPER = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -73,7 +73,7 @@ public class Server {
         pong.protocolVersion(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion());
         pong.version(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion());
 
-        server = new ServerBootstrap()
+        new ServerBootstrap()
                 .group(this.eventLoopGroup)
                 .channelFactory(RakChannelFactory.server(NioDatagramChannel.class))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
@@ -84,8 +84,7 @@ public class Server {
                     }
                 })
                 .bind(bindAddress)
-                .awaitUninterruptibly()
-                .channel();
+                .syncUninterruptibly();
 
         System.out.println("Bedrock Connection Started: " + bindIp + ":" + port);
         if(BedrockConnect.kickInactive) {
