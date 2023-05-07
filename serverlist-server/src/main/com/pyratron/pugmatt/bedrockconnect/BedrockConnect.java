@@ -32,9 +32,11 @@ public class BedrockConnect {
     public static boolean userServers = true;
     public static boolean featuredServers = true;
     public static boolean fetchFeaturedIps = true;
+
+    public static boolean fetchIps = false;
     public static File whitelistfile;
 
-    public static String release = "1.32";
+    public static String release = "1.33";
 
     public static HashMap<String, String> featuredServerIps;
 
@@ -131,6 +133,9 @@ public class BedrockConnect {
                 }
                 if (str.startsWith("fetch_featured_ips=")) {
                     fetchFeaturedIps = getArgValue(str, "fetch_featured_ips").toLowerCase().equals("true");
+                }
+                if (str.startsWith("fetch_ips=")) {
+                    fetchIps = getArgValue(str, "fetch_ips").toLowerCase().equals("true");
                 }
                 if (str.startsWith("whitelist=")) {
                 	try {

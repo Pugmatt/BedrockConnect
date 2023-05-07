@@ -55,7 +55,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
     public String getIP(String hostname) {
         try {
-            if(BedrockConnect.fetchFeaturedIps) {
+            if(BedrockConnect.fetchFeaturedIps || BedrockConnect.fetchIps) {
                 InetAddress host = InetAddress.getByName(hostname);
                 return host.getHostAddress();
             } else {
@@ -64,7 +64,7 @@ public class PacketHandler implements BedrockPacketHandler {
         } catch (UnknownHostException ex) {
             ex.printStackTrace();
         }
-        return "0.0.0.0";
+        return hostname;
     }
 
     @Override
@@ -396,7 +396,11 @@ public class PacketHandler implements BedrockPacketHandler {
     public void transfer(String ip, int port) {
         try {
             TransferPacket tp = new TransferPacket();
-            tp.setAddress(ip);
+            if(BedrockConnect.fetchIps && UIComponents.isDomain(ip)) {
+                tp.setAddress(getIP(ip));
+            } else {
+                tp.setAddress(ip);
+            }
             tp.setPort(port);
             session.sendPacketImmediately(tp);
         } catch (Exception e) {
