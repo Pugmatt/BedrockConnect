@@ -10,7 +10,7 @@ import org.cloudburstmc.protocol.bedrock.codec.v567.Bedrock_v567;
 import org.cloudburstmc.protocol.bedrock.codec.v568.Bedrock_v568;
 import org.cloudburstmc.protocol.bedrock.codec.v575.Bedrock_v575;
 import org.cloudburstmc.protocol.bedrock.codec.v582.Bedrock_v582;
-import org.cloudburstmc.protocol.bedrock.codec.v582.Bedrock_v589;
+import org.cloudburstmc.protocol.bedrock.codec.v589.Bedrock_v589;
 
 import java.util.ArrayList;
 import java.util.List;
