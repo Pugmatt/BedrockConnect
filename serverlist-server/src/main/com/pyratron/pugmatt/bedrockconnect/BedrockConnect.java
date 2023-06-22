@@ -34,9 +34,11 @@ public class BedrockConnect {
     public static boolean fetchFeaturedIps = true;
 
     public static boolean fetchIps = false;
+
+    public static boolean storeDisplayNames = true;
     public static File whitelistfile;
 
-    public static String release = "1.34";
+    public static String release = "1.35";
 
     public static HashMap<String, String> featuredServerIps;
 
@@ -153,6 +155,9 @@ public class BedrockConnect {
               	if (str.startsWith("bindip=")) {
               	    bindIp = getArgValue(str, "bindip");
               	}
+                if (str.startsWith("store_display_names=")) {
+                    storeDisplayNames = getArgValue(str, "store_display_names").toLowerCase().equals("true");
+                }
             }
 
             if(!noDB)

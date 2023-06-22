@@ -88,9 +88,9 @@ public class Data {
                             getUser.setString(1, uuid);
                             ResultSet rs = getUser.executeQuery();
                             while (rs.next()) {
-                                if (!rs.getString("name").equals(name)) {
+                                if (BedrockConnect.storeDisplayNames && !rs.getString("name").equals(name)) {
                                     PreparedStatement updateUUID = BedrockConnect.connection.prepareStatement("UPDATE servers SET name = ? WHERE uuid = ?");
-                                    updateUUID.setString(1, uuid);
+                                    updateUUID.setString(1, name);
                                     updateUUID.setString(2, uuid);
                                     updateUUID.executeUpdate();
                                 }
@@ -116,7 +116,9 @@ public class Data {
                 if (plyrFile.createNewFile()) {
                     JSONObject jo = new JSONObject();
                     jo.put("uuid", uuid);
-                    jo.put("name", name);
+                    if(BedrockConnect.storeDisplayNames) {
+                        jo.put("name", name);
+                    }
                     jo.put("serverLimit", serverLimit);
                     jo.put("servers", new JSONArray());
 
@@ -156,7 +158,7 @@ public class Data {
                 {
                     PreparedStatement s = BedrockConnect.connection.prepareStatement("INSERT INTO servers (uuid, name, serverLimit) VALUES (?, ?, ?)");
                     s.setString(1, uuid);
-                    s.setString(2, name);
+                    s.setString(2, BedrockConnect.storeDisplayNames ? name : "");
                     s.setInt(3, Integer.parseInt(serverLimit));
                     s.executeUpdate();
                     System.out.println("[BedrockConnect] Added new user '" + name + "' (" + uuid + ") to Database.");
