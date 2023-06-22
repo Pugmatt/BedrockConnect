@@ -107,6 +107,7 @@ The following arguments can be placed in the startup command to ajust settings:
 | fetch_featured_ips | If true, dynamically grab the featured server IPs from the domain names. If false, a file ```featured_server_ips.json``` will be generated, containing the hard-coded featured server IPs, and to allow changing them if needed.  | true |
 | fetch_ips | If true, dynamically grab the server IPs from domain names, of any server a user is attempting to join. | false |
 | language | Specify a file containing language customizations. See [guide for changing wording](#change-wording-of-serverlist) | |
+| store_display_names | If true, player displays names will be included in the stored player data. | true |
 
 MySQL example:
 ```
