@@ -21,12 +21,17 @@ import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
+import org.cloudburstmc.protocol.bedrock.util.JsonUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.util.Preconditions;
+import org.jose4j.jws.JsonWebSignature;
+import org.jose4j.lang.JoseException;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.PublicKey;
 import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.net.InetAddress;
@@ -459,59 +464,12 @@ public class PacketHandler implements BedrockPacketHandler {
 
     }
 
-    private boolean validateChainData(List<SignedJWT> chain) throws Exception {
-        if (chain.size() != 3) {
-            return false;
-        }
+    private boolean verifyJwt(String jwt, PublicKey key) throws JoseException {
+        JsonWebSignature jws = new JsonWebSignature();
+        jws.setKey(key);
+        jws.setCompactSerialization(jwt);
 
-        Payload identity = null;
-        ECPublicKey lastKey = null;
-        boolean mojangSigned = false;
-        Iterator<SignedJWT> iterator = chain.iterator();
-        while (iterator.hasNext()) {
-            SignedJWT jwt = iterator.next();
-            identity = jwt.getPayload();
-
-            // x509 cert is expected in every claim
-            URI x5u = jwt.getHeader().getX509CertURL();
-            if (x5u == null) {
-                return false;
-            }
-
-            ECPublicKey expectedKey = EncryptionUtils.generateKey(jwt.getHeader().getX509CertURL().toString());
-            // First key is self-signed
-            if (lastKey == null) {
-                lastKey = expectedKey;
-            } else if (!lastKey.equals(expectedKey)) {
-                return false;
-            }
-
-            if (!EncryptionUtils.verifyJwt(jwt, lastKey)) {
-                return false;
-            }
-
-            if (mojangSigned) {
-                return !iterator.hasNext();
-            }
-
-            if (lastKey.equals(EncryptionUtils.getMojangPublicKey())) {
-                mojangSigned = true;
-            }
-
-            Object payload = JSONValue.parse(jwt.getPayload().toString());
-            Preconditions.checkArgument(payload instanceof JSONObject, "Payload is not an object");
-
-            Object identityPublicKey = ((JSONObject) payload).get("identityPublicKey");
-            Preconditions.checkArgument(identityPublicKey instanceof String, "identityPublicKey node is missing in chain");
-            lastKey = EncryptionUtils.generateKey((String) identityPublicKey);
-        }
-
-        return mojangSigned;
-    }
-
-
-    private boolean verifyJwt(JWSObject jwt, ECPublicKey key) throws JOSEException {
-        return jwt.verify(new DefaultJWSVerifierFactory().createJWSVerifier(jwt.getHeader(), key));
+        return jws.verifySignature();
     }
 
     @Override
@@ -544,25 +502,22 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public PacketSignal handle(LoginPacket packet) {
-
-        List<SignedJWT> certChainData = packet.getChain();
-
         try {
-            JWSObject jwt = certChainData.get(certChainData.size() - 1);
-            JsonNode payload = Server.JSON_MAPPER.readTree(jwt.getPayload().toBytes());
+            ChainValidationResult chain = EncryptionUtils.validateChain(packet.getChain());
+            JsonNode payload = Server.JSON_MAPPER.valueToTree(chain.rawIdentityClaims());
 
             if (payload.get("extraData").getNodeType() != JsonNodeType.OBJECT) {
                 throw new RuntimeException("AuthData was not found!");
             }
 
-            extraData = (JSONObject) jwt.getPayload().toJSONObject().get("extraData");
+            extraData = new JSONObject(JsonUtils.childAsType(chain.rawIdentityClaims(), "extraData", Map.class));
 
             if (payload.get("identityPublicKey").getNodeType() != JsonNodeType.STRING) {
                 throw new RuntimeException("Identity Public Key was not found!");
             }
-            ECPublicKey identityPublicKey = EncryptionUtils.generateKey(payload.get("identityPublicKey").textValue());
+            ECPublicKey identityPublicKey = EncryptionUtils.parseKey(payload.get("identityPublicKey").textValue());
 
-            JWSObject clientJwt = packet.getExtra();
+            String clientJwt = packet.getExtra();
             verifyJwt(clientJwt, identityPublicKey);
 
             System.out.println("Made it through login - " + "User: " + extraData.getAsString("displayName") + " (" + extraData.getAsString("identity") + ")");
