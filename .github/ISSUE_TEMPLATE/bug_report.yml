@@ -10,7 +10,7 @@ body:
 
       **READ BEFORE SUBMITTING AN ISSUE**:
         - Check the [Troubleshooting page](https://github.com/Pugmatt/BedrockConnect/wiki/Troubleshooting) to see if your issue already has known solutions you can try
-        - Ensure that there is no similiar issue on the [issue tracker](https://github.com/Pugmatt/BedrockConnect/issues)
+        - Ensure that there is no similiar issue on the [issue tracker](https://github.com/Pugmatt/BedrockConnect/issues?q=is%3Aissue)
 - type: textarea
   attributes:
     label: What happened?
