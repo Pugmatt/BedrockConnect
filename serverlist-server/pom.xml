@@ -90,8 +90,8 @@
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>net.sf.trove4j</groupId>
-                    <artifactId>trove</artifactId>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-all</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -133,9 +133,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>net.sf.trove4j</groupId>
-            <artifactId>trove</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.84.Final</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
