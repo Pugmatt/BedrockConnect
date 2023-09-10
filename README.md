@@ -63,7 +63,7 @@ There are multiple BedrockConnect serverlist servers available that can be used,
 | 213.171.211.142 | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
 | 217.160.58.93 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
 | 134.255.231.119 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) |
-| 45.79.162.142 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [MCrashCraft](https://github.com/lovingtaken3) | Located in East US, has custom servers. |
+| 45.79.162.142 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [MCrashCraft](https://github.com/lovingtaken3) | Located in East US, has custom servers. DOES NOT WORK ON PLAYSTATION |
 
 If you are currently hosting a BedrockConnect instance and are interested in adding it to this list, create a pull request adding it to the table above.
 
