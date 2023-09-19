@@ -160,22 +160,19 @@ public class PacketHandler implements BedrockPacketHandler {
                                     case 0: // Hive
                                         transfer(getIP("hivebedrock.network"), 19132);
                                         break;
-                                    case 1: // Mineplex
-                                        transfer(getIP("mco.mineplex.com"), 19132);
-                                        break;
-                                    case 2: // Cubecraft
+                                    case 1: // Cubecraft
                                         transfer(!BedrockConnect.fetchFeaturedIps ? getIP("mco.cubecraft.net") : "mco.cubecraft.net", 19132);
                                         break;
-                                    case 3: // Lifeboat
+                                    case 2: // Lifeboat
                                         transfer(getIP("mco.lbsg.net"), 19132);
                                         break;
-                                    case 4: // Mineville
+                                    case 3: // Mineville
                                         transfer(getIP("play.inpvp.net"), 19132);
                                         break;
-                                    case 5: // Galaxite
+                                    case 4: // Galaxite
                                         transfer(getIP("play.galaxite.net"), 19132);
                                         break;
-                                    case 6: // Pixel Paradise
+                                    case 5: // Pixel Paradise
                                         transfer(getIP("play.pixelparadise.gg"), 19132);
                                         break;
                                 }
