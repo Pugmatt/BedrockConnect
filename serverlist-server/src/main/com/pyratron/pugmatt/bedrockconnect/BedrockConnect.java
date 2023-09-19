@@ -187,7 +187,6 @@ public class BedrockConnect {
                         featuredServerIps.put("mco.lbsg.net", "142.44.240.96");
                         featuredServerIps.put("play.inpvp.net", "52.234.130.241");
                         featuredServerIps.put("play.galaxite.net", "51.222.8.223");
-                        featuredServerIps.put("play.pixelparadise.gg", "40.87.84.106");
 
                         JSONObject jo = new JSONObject();
                         for (Map.Entry server : featuredServerIps.entrySet()) {

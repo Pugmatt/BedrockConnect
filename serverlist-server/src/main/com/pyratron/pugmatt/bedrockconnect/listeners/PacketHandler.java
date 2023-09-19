@@ -172,9 +172,6 @@ public class PacketHandler implements BedrockPacketHandler {
                                     case 4: // Galaxite
                                         transfer(getIP("play.galaxite.net"), 19132);
                                         break;
-                                    case 5: // Pixel Paradise
-                                        transfer(getIP("play.pixelparadise.gg"), 19132);
-                                        break;
                                 }
                                 break;
                         }
