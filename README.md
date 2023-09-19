@@ -194,15 +194,13 @@ Once finished, you include it in your server by adding the following arguement t
 
 In the case where you want to use your own DNS server instead of the one I supplied, this is what zones you'll need to set your DNS to in order for BedrockConnect to work:
 
-| Domain  | IP |
-| ------------- | ------------- |
-| geo.hivebedrock.network  | 104.238.130.180  |
-| hivebedrock.network  | 104.238.130.180  |
-| mco.mineplex.com | 104.238.130.180  | 
-| play.inpvp.net | 104.238.130.180  |
-| mco.lbsg.net | 104.238.130.180  |
-| play.galaxite.net | 104.238.130.180 |
-| play.pixelparadise.gg | 104.238.130.180 |
+| Server | Domain  | IP |
+| ------------- | ------------- | ------------- |
+| The Hive | geo.hivebedrock.network  | 104.238.130.180  |
+| The Hive | hivebedrock.network  | 104.238.130.180  |
+| Mineville | play.inpvp.net | 104.238.130.180  |
+| Lifeboat | mco.lbsg.net | 104.238.130.180  |
+| Galaxite | play.galaxite.net | 104.238.130.180 |
 
 *104.238.130.180 is the IP to the BedrockConnect serverlist server. If you are hosting your own BedrockConnect serverlist server as well, obviously use that IP instead*
 
