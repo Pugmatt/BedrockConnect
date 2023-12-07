@@ -19,7 +19,7 @@ Switch: https://www.youtube.com/watch?v=zalT_oR1nPM
 
 Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
 
-PS4/PS5: https://youtu.be/0MJVVhDeu2s?t=347
+PS4/PS5: https://youtu.be/0MJVVhDeu2s?t=347 (Use 45.55.68.52 for the primary DNS address)
 
 Joining Java Edition Servers: https://www.youtube.com/watch?v=B_oPHl5gz_c
 
