@@ -38,7 +38,7 @@ public class BedrockConnect {
     public static boolean storeDisplayNames = true;
     public static File whitelistfile;
 
-    public static String release = "1.40";
+    public static String release = "1.41";
 
     public static HashMap<String, String> featuredServerIps;
 
