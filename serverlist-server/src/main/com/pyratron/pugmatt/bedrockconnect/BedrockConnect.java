@@ -4,6 +4,7 @@ import main.com.pyratron.pugmatt.bedrockconnect.config.Language;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
+import org.cloudburstmc.netty.channel.raknet.RakConstants;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -38,7 +39,13 @@ public class BedrockConnect {
     public static boolean storeDisplayNames = true;
     public static File whitelistfile;
 
-    public static String release = "1.42";
+    public static int packetLimit = 200;
+
+    public static int offlinePacketLimit = 35;
+
+    public static int globalPacketLimit = RakConstants.DEFAULT_GLOBAL_PACKET_LIMIT;
+
+    public static String release = "1.42.1";
 
     public static HashMap<String, String> featuredServerIps;
 
@@ -155,6 +162,15 @@ public class BedrockConnect {
               	}
                 if (str.startsWith("store_display_names=")) {
                     storeDisplayNames = getArgValue(str, "store_display_names").toLowerCase().equals("true");
+                }
+                if (str.startsWith("packet_limit=")) {
+                    packetLimit = Integer.parseInt(getArgValue(str, "packet_limit"));
+                }
+                if (str.startsWith("offline_packet_limit=")) {
+                    offlinePacketLimit = Integer.parseInt(getArgValue(str, "offline_packet_limit"));
+                }
+                if (str.startsWith("global_packet_limit=")) {
+                    globalPacketLimit = Integer.parseInt(getArgValue(str, "global_packet_limit"));
                 }
             }
 
