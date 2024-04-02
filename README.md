@@ -110,6 +110,9 @@ The following arguments can be placed in the startup command to ajust settings:
 | fetch_ips | If true, dynamically grab the server IPs from domain names, of any server a user is attempting to join. | false |
 | language | Specify a file containing language customizations. See [guide for changing wording](#change-wording-of-serverlist) | |
 | store_display_names | If true, player displays names will be included in the stored player data. | true |
+| packet_limit | Number of datagram packets each address can send within one tick (10ms) | 200 |
+| offline_packet_limit | Number of "unconnected" datagram packets each address can send within one second. | 35 |
+| global_packet_limit | Number of all datagrams that will be handled within one tick (10ms) before server starts dropping any incoming data. | 100000 |
 
 MySQL example:
 ```
