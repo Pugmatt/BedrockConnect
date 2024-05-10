@@ -65,6 +65,8 @@ There are multiple BedrockConnect serverlist servers available that can be used,
 | 134.255.231.119 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) | |
 | 45.88.109.66 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [LazyBirb](https://github.com/lazybirb) | running DNS Server and MCXboxBroadcast to join over, just add McBEFC as your Friend over Xbox Live and check Friends tab ingame |
 | 185.169.180.190 | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | Dns service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
+| 49.176.216.12 | <img src="https://flagicons.lipis.dev/flags/4x3/au.svg" height="20"> | [xavierhorwood](https://github.com/xavierhorwood) | Dns service with PowerDNS |
+
 
 If you are currently hosting a BedrockConnect instance and are interested in adding it to this list, create a pull request adding it to the table above.
 
