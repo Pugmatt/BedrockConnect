@@ -209,6 +209,8 @@ In the case where you want to use your own DNS server instead of the one I suppl
 | Lifeboat | mco.lbsg.net | 104.238.130.180  |
 | Galaxite | play.galaxite.net | 104.238.130.180 |
 
+<sub>["Why is CubeCraft not included in the above list?"](https://github.com/Pugmatt/BedrockConnect/pull/456)</sub>
+
 *104.238.130.180 is the IP to the BedrockConnect serverlist server. If you are hosting your own BedrockConnect serverlist server as well, obviously use that IP instead*
 
 Here's a script to setup BIND (DNS server software) on Linux: https://github.com/Pugmatt/BedrockConnect/blob/master/scripts/install-bind.sh
