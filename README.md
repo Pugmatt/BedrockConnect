@@ -208,6 +208,7 @@ In the case where you want to use your own DNS server instead of the one I suppl
 | Mineville | play.inpvp.net | 104.238.130.180  |
 | Lifeboat | mco.lbsg.net | 104.238.130.180  |
 | Galaxite | play.galaxite.net | 104.238.130.180 |
+| Enchanted Dragons | play.enchanted.gg | 104.238.130.180 |
 
 <sub>["Why is CubeCraft not included in the above list?"](https://github.com/Pugmatt/BedrockConnect/pull/456)</sub>
 

@@ -45,7 +45,7 @@ public class BedrockConnect {
 
     public static int globalPacketLimit = RakConstants.DEFAULT_GLOBAL_PACKET_LIMIT;
 
-    public static String release = "1.43";
+    public static String release = "1.44";
 
     public static HashMap<String, String> featuredServerIps;
 
@@ -203,6 +203,7 @@ public class BedrockConnect {
                         featuredServerIps.put("mco.lbsg.net", "142.44.240.96");
                         featuredServerIps.put("play.inpvp.net", "52.234.130.241");
                         featuredServerIps.put("play.galaxite.net", "51.222.8.223");
+                        featuredServerIps.put("play.enchanted.gg", "216.39.241.141");
 
                         JSONObject jo = new JSONObject();
                         for (Map.Entry server : featuredServerIps.entrySet()) {

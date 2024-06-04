@@ -2,13 +2,6 @@ package main.com.pyratron.pugmatt.bedrockconnect.listeners;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSObject;
-import com.nimbusds.jose.Payload;
-import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory;
-import com.nimbusds.jose.shaded.json.JSONObject;
-import com.nimbusds.jose.shaded.json.JSONValue;
-import com.nimbusds.jwt.SignedJWT;
 import main.com.pyratron.pugmatt.bedrockconnect.*;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.MainFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.gui.ManageFormButton;
@@ -26,6 +19,7 @@ import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.bedrock.util.JsonUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.util.Preconditions;
+import org.jose4j.json.internal.json_simple.JSONObject;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.lang.JoseException;
 
@@ -171,6 +165,9 @@ public class PacketHandler implements BedrockPacketHandler {
                                         break;
                                     case 4: // Galaxite
                                         transfer(getIP("play.galaxite.net"), 19132);
+                                        break;
+                                    case 5: // Enchanted Dragons
+                                        transfer(getIP("play.enchanted.gg"), 19132);
                                         break;
                                 }
                                 break;
@@ -514,11 +511,11 @@ public class PacketHandler implements BedrockPacketHandler {
             String clientJwt = packet.getExtra();
             verifyJwt(clientJwt, identityPublicKey);
 
-            System.out.println("Made it through login - " + "User: " + extraData.getAsString("displayName") + " (" + extraData.getAsString("identity") + ")");
+            System.out.println("Made it through login - " + "User: " + extraData.get("displayName") + " (" + extraData.get("identity") + ")");
 
 
-            name = extraData.getAsString("displayName");
-            uuid = extraData.getAsString("identity");
+            name = (String) extraData.get("displayName");
+            uuid = (String) extraData.get("identity");
             
             
             // Whitelist check
