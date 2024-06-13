@@ -219,6 +219,9 @@ public class BCPlayer {
         startGamePacket.setPlayerGameType(GameType.SURVIVAL);
         startGamePacket.setPlayerPosition(Vector3f.from(0, 0, 0));
         startGamePacket.setRotation(Vector2f.from(1, 1));
+        startGamePacket.setServerId("");
+        startGamePacket.setWorldId("");
+        startGamePacket.setScenarioId("");
 
         startGamePacket.setSeed(-1);
         startGamePacket.setDimensionId(0);
