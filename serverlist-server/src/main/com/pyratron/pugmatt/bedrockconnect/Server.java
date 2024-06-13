@@ -79,7 +79,6 @@ public class Server {
                 .group(this.eventLoopGroup)
                 .channelFactory(RakChannelFactory.server(NioDatagramChannel.class))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
-                .option(RakChannelOption.RAK_OFFLINE_PACKET_LIMIT, BedrockConnect.offlinePacketLimit)
                 .option(RakChannelOption.RAK_PACKET_LIMIT, BedrockConnect.packetLimit)
                 .option(RakChannelOption.RAK_GLOBAL_PACKET_LIMIT, BedrockConnect.globalPacketLimit)
                 .childHandler(new BedrockServerInitializer() {

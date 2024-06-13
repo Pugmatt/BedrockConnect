@@ -41,11 +41,9 @@ public class BedrockConnect {
 
     public static int packetLimit = 200;
 
-    public static int offlinePacketLimit = 35;
-
     public static int globalPacketLimit = RakConstants.DEFAULT_GLOBAL_PACKET_LIMIT;
 
-    public static String release = "1.44";
+    public static String release = "1.45";
 
     public static HashMap<String, String> featuredServerIps;
 
@@ -165,9 +163,6 @@ public class BedrockConnect {
                 }
                 if (str.startsWith("packet_limit=")) {
                     packetLimit = Integer.parseInt(getArgValue(str, "packet_limit"));
-                }
-                if (str.startsWith("offline_packet_limit=")) {
-                    offlinePacketLimit = Integer.parseInt(getArgValue(str, "offline_packet_limit"));
                 }
                 if (str.startsWith("global_packet_limit=")) {
                     globalPacketLimit = Integer.parseInt(getArgValue(str, "global_packet_limit"));
