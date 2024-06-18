@@ -1,16 +1,26 @@
 name: Release
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+
+env:
+  REGISTRY_IMAGE: Pugmatt/bedrock-connect
 
 jobs:
   release:
 
     runs-on: ubuntu-latest
+    outputs:
+      RELEASE_VERSION: ${{ steps.outputs.outputs.RELEASE_VERSION }}
+      MINECRAFT_VERSION: ${{ steps.outputs.outputs.MINECRAFT_VERSION }}
+      NEW_RELEASE: ${{ steps.outputs.outputs.NEW_RELEASE }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - name: Set Enviroment
+    - name: Set Env
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       run: |
@@ -18,26 +28,35 @@ jobs:
         echo ::set-env name=MINECRAFT_VERSION::$(echo $(cat .github/assets/supportedVersion))
         echo ::set-env name=NEW_RELEASE::$(echo $(python .github/assets/pattern_check.py "${{ github.event.head_commit.message }}"))
 
+    - name: Output env
+      id: outputs
+      run: |
+        echo "RELEASE_VERSION=${{ env.RELEASE_VERSION }}" >> $GITHUB_OUTPUT
+        echo "MINECRAFT_VERSION=${{ env.MINECRAFT_VERSION }}" >> $GITHUB_OUTPUT
+        echo "NEW_RELEASE=${{ env.NEW_RELEASE }}" >> $GITHUB_OUTPUT
+
     - name: Set up OpenJDK
-      if: env.NEW_RELEASE == 'True'
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4
       with:
-        java-version: '11'
+        java-version: '21'
         distribution: 'adopt'
         cache: maven
 
-    - name: Set up Python3
-      if: env.NEW_RELEASE == 'True'
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
-    - name: Build with maven & make release artifacts
-      if: env.NEW_RELEASE == 'True'
+    - name: Build with maven
       run: |
         cd serverlist-server
-        mvn -B package --file pom.xml
-        cd ..
+        mvn -B package
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifact
+        path: ./serverlist-server/target/BedrockConnect-1.0-SNAPSHOT.jar
+        if-no-files-found: error
+
+    - name: Make release artifacts
+      if: env.NEW_RELEASE == 'True'
+      run: |
         mkdir setup-zip
         cp .github/assets/run.bat setup-zip/run.bat && cp .github/assets/README.txt setup-zip/README.txt && cp serverlist-server/target/BedrockConnect-1.0-SNAPSHOT.jar setup-zip/BedrockConnect-1.0-SNAPSHOT.jar
         cd setup-zip
@@ -80,3 +99,120 @@ jobs:
         asset_path: ./serverlist-server/target/BedrockConnect-1.0-SNAPSHOT.jar
         asset_name: BedrockConnect-1.0-SNAPSHOT.jar
         asset_content_type: application/java-archive
+
+  docker:
+    runs-on: ubuntu-latest
+    needs:
+      - release
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+
+    steps:
+      - name: Prepare
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v4
+
+      - name: Download jar
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: ./serverlist-server/target/BedrockConnect-1.0-SNAPSHOT.jar
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: serverlist-server
+          push: true
+          platforms: ${{ matrix.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  push:
+    runs-on: ubuntu-latest
+    needs:
+      - release
+      - docker
+    env:
+      NEW_RELEASE: ${{ needs.release.outputs.NEW_RELEASE }}
+      RELEASE_VERSION: ${{ needs.release.outputs.RELEASE_VERSION }}
+
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Update docker version
+        if: env.NEW_RELEASE == 'True'
+        run: echo "DOCKER_VERSION=${{ needs.release.outputs.RELEASE_VERSION }}" >> $GITHUB_ENV
+
+      - name: Update docker version dev
+        if: env.NEW_RELEASE == 'False'
+        run: echo "DOCKER_VERSION=dev" >> $GITHUB_ENV
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          tags: ${{ env.DOCKER_VERSION }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Create manifest list and push
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
+
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
