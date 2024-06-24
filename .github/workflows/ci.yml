@@ -1,6 +1,11 @@
 name: buildroot
 
-on: [push, pull_request]
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
 
 jobs:
   build:
@@ -8,19 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 11
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'
-        distribution: 'adopt'
-        cache: maven
-    - name: Build with maven
-      run: |
-        cd serverlist-server
-        mvn -B package --file pom.xml
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: build-artifact
-        path: ./serverlist-server/target/BedrockConnect-1.0-SNAPSHOT.jar
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'adopt'
+          cache: maven
+      - name: Build with maven
+        run: |
+          cd serverlist-server
+          mvn -B package
+
