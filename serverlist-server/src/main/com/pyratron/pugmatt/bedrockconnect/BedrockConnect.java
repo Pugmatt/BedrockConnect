@@ -1,5 +1,7 @@
 package main.com.pyratron.pugmatt.bedrockconnect;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import main.com.pyratron.pugmatt.bedrockconnect.config.Language;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
@@ -10,6 +12,7 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.net.*;
+import java.security.Security;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,7 +46,7 @@ public class BedrockConnect {
 
     public static int globalPacketLimit = RakConstants.DEFAULT_GLOBAL_PACKET_LIMIT;
 
-    public static String release = "1.45";
+    public static String release = "1.46";
 
     public static HashMap<String, String> featuredServerIps;
 
@@ -65,107 +68,153 @@ public class BedrockConnect {
 
             String languageFile = null;
 
+            HashMap<String, String> settings = new HashMap<>();
+
+            // Find any settings in startup arguments
             for(String str : args) {
-                if(str.startsWith("mysql_host="))
-                    hostname = getArgValue(str, "mysql_host");
-                if(str.startsWith("mysql_db="))
-                    database = getArgValue(str, "mysql_db");
-                if(str.startsWith("mysql_user="))
-                    username = getArgValue(str, "mysql_user");
-                if(str.startsWith("mysql_pass="))
-                    password = getArgValue(str, "mysql_pass");
-                if(str.startsWith("server_limit="))
-                    serverLimit = getArgValue(str, "server_limit");
-                if(str.startsWith("port="))
-                    port = getArgValue(str, "port");
-                if(str.startsWith("nodb="))
-                    noDB = getArgValue(str, "nodb").toLowerCase().equals("true");
-                if(str.startsWith("custom_servers="))
-                    customServers = getArgValue(str, "custom_servers");
-                if(str.startsWith("generatedns=")) {
-                    String ip;
-                    try {
-                        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+                if(str.indexOf("=") !=  -1 && str.indexOf("=") < str.length() - 1) {
+                    settings.put(str.substring(0, str.indexOf("=")), str.substring(str.indexOf("=") + 1));
+                }
+            }
 
-                        System.out.println("Local IPv4 IPs:");
-                        while (interfaces.hasMoreElements()) {
-                            NetworkInterface iface = interfaces.nextElement();
+            // Find any settings in configuration file
+            File configFile = new File("config.yml");
+            if(configFile.exists() && !configFile.isDirectory()) {
+                try {
+                    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+                    Map<String, Object> config = mapper.readValue(configFile, Map.class);
+                    for (String configKey : config.keySet()) {
+                        settings.put(configKey.toLowerCase(), config.get(configKey).toString());
+                    }
+                } catch(Exception e) {
+                    System.out.println("Issue parsing configuration file");
+                    throw new RuntimeException(e);
+                }
+            }
 
-                            if (iface.isLoopback() || !iface.isUp() || iface.isVirtual() || iface.isPointToPoint())
-                                continue;
-
-                            Enumeration<InetAddress> addresses = iface.getInetAddresses();
-                            while(addresses.hasMoreElements()) {
-                                InetAddress addr = addresses.nextElement();
-
-                                if(!(addr instanceof Inet4Address)) continue;
-
-                                ip = addr.getHostAddress();
-                                System.out.println(iface.getDisplayName() + ": " + ip);
-                            }
-                        }
-
-                        Scanner reader = new Scanner(System.in);  // Reading from System.in
-                        System.out.print("\nWhich IP should be used for the DNS records: ");
-                        String selectedIP = reader.next().replaceAll("\\s+","");
-                        reader.close();
-
-                        BufferedWriter br = new BufferedWriter(new FileWriter(new File("bc_dns.conf")));
-                        br.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                                "<DNSMasqConfig xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
-                                "  <DNSMasqEntries>\n" +
-                                "    <DNSMasqHost name=\"hivebedrock.network\" a=\"" + selectedIP + "\" />\n" +
-                                "    <DNSMasqHost name=\"play.inpvp.net\" a=\"" + selectedIP + "\" />\n" +
-                                "    <DNSMasqHost name=\"mco.lbsg.net\" a=\"" + selectedIP + "\" />\n" +
-                                "    <DNSMasqHost name=\"play.lbsg.net\" a=\"" + selectedIP + "\" />\n" +
-                                "    <DNSMasqHost name=\"mco.cubecraft.net\" a=\"" + selectedIP + "\" />\n" +
-                                "    <DNSMasqHost name=\"play.galaxite.net\" a=\"" + selectedIP + "\" />\n" +
-                                "  </DNSMasqEntries>\n" +
-                                "</DNSMasqConfig>");
-                        br.close();
-                    } catch (SocketException e) {
-                        throw new RuntimeException(e);
+            // Find any settings in environment variables
+            try {
+                Map<String, String> env = System.getenv();
+                for (String envName : env.keySet()) {
+                    if (envName.toLowerCase().startsWith("bc_")) {
+                        settings.put(envName.toLowerCase().replace("bc_", ""), env.get(envName));
                     }
                 }
-                if(str.startsWith("kick_inactive=")) {
-                    kickInactive = getArgValue(str, "kick_inactive").toLowerCase().equals("true");
-                }
-                if(str.startsWith("user_servers=")) {
-                    userServers = getArgValue(str, "user_servers").toLowerCase().equals("true");
-                }
-                if (str.startsWith("featured_servers=")) {
-                    featuredServers = getArgValue(str, "featured_servers").toLowerCase().equals("true");
-                }
-                if (str.startsWith("fetch_featured_ips=")) {
-                    fetchFeaturedIps = getArgValue(str, "fetch_featured_ips").toLowerCase().equals("true");
-                }
-                if (str.startsWith("fetch_ips=")) {
-                    fetchIps = getArgValue(str, "fetch_ips").toLowerCase().equals("true");
-                }
-                if (str.startsWith("whitelist=")) {
-                	try {
-                		whitelistfile = new File(getArgValue(str, "whitelist"));
-                		Whitelist.loadWhitelist(whitelistfile);
-                	}
-                	catch(Exception e) {
-                		System.out.println("Unable to load whitelist file: " + whitelistfile.getName());
-                		e.printStackTrace();
-                	}
-                }
-                if (str.startsWith("language=")) {
-                    languageFile = getArgValue(str, "language");
-                }
-              	if (str.startsWith("bindip=")) {
-              	    bindIp = getArgValue(str, "bindip");
-              	}
-                if (str.startsWith("store_display_names=")) {
-                    storeDisplayNames = getArgValue(str, "store_display_names").toLowerCase().equals("true");
-                }
-                if (str.startsWith("packet_limit=")) {
-                    packetLimit = Integer.parseInt(getArgValue(str, "packet_limit"));
-                }
-                if (str.startsWith("global_packet_limit=")) {
-                    globalPacketLimit = Integer.parseInt(getArgValue(str, "global_packet_limit"));
+            } catch(SecurityException e) {}
+
+            for (Map.Entry<String, String> setting : settings.entrySet()) {
+                switch(setting.getKey().toLowerCase()) {
+                    case "mysql_host":
+                        hostname = setting.getValue();
+                        break;
+                    case "mysql_db":
+                        database = setting.getValue();
+                        break;
+                    case "mysql_user":
+                        username = setting.getValue();
+                        break;
+                    case "mysql_pass":
+                        password = setting.getValue();
+                        break;
+                    case "server_limit":
+                        serverLimit = setting.getValue();
+                        break;
+                    case "port":
+                        port = setting.getValue();
+                        break;
+                    case "nodb":
+                        noDB = setting.getValue().equalsIgnoreCase("true");
+                        break;
+                    case "custom_servers":
+                        customServers = setting.getValue();
+                        break;
+                    case "generatedns":
+                        if(setting.getValue().equalsIgnoreCase("true")) {
+                            String ip;
+                            try {
+                                Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+
+                                System.out.println("Local IPv4 IPs:");
+                                while (interfaces.hasMoreElements()) {
+                                    NetworkInterface iface = interfaces.nextElement();
+
+                                    if (iface.isLoopback() || !iface.isUp() || iface.isVirtual() || iface.isPointToPoint())
+                                        continue;
+
+                                    Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                                    while (addresses.hasMoreElements()) {
+                                        InetAddress addr = addresses.nextElement();
+
+                                        if (!(addr instanceof Inet4Address)) continue;
+
+                                        ip = addr.getHostAddress();
+                                        System.out.println(iface.getDisplayName() + ": " + ip);
+                                    }
+                                }
+
+                                Scanner reader = new Scanner(System.in);  // Reading from System.in
+                                System.out.print("\nWhich IP should be used for the DNS records: ");
+                                String selectedIP = reader.next().replaceAll("\\s+", "");
+                                reader.close();
+
+                                BufferedWriter br = new BufferedWriter(new FileWriter(new File("bc_dns.conf")));
+                                br.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                                        "<DNSMasqConfig xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
+                                        "  <DNSMasqEntries>\n" +
+                                        "    <DNSMasqHost name=\"hivebedrock.network\" a=\"" + selectedIP + "\" />\n" +
+                                        "    <DNSMasqHost name=\"play.inpvp.net\" a=\"" + selectedIP + "\" />\n" +
+                                        "    <DNSMasqHost name=\"mco.lbsg.net\" a=\"" + selectedIP + "\" />\n" +
+                                        "    <DNSMasqHost name=\"play.lbsg.net\" a=\"" + selectedIP + "\" />\n" +
+                                        "    <DNSMasqHost name=\"mco.cubecraft.net\" a=\"" + selectedIP + "\" />\n" +
+                                        "    <DNSMasqHost name=\"play.galaxite.net\" a=\"" + selectedIP + "\" />\n" +
+                                        "  </DNSMasqEntries>\n" +
+                                        "</DNSMasqConfig>");
+                                br.close();
+                            } catch (SocketException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        break;
+                    case "kick_inactive":
+                        kickInactive = setting.getValue().equalsIgnoreCase("true");
+                        break;
+                    case "user_servers":
+                        userServers = setting.getValue().equalsIgnoreCase("true");
+                        break;
+                    case "featured_servers":
+                        featuredServers = setting.getValue().equalsIgnoreCase("true");
+                        break;
+                    case "fetch_featured_ips":
+                        fetchFeaturedIps = setting.getValue().equalsIgnoreCase("true");
+                        break;
+                    case "fetch_ips":
+                        fetchIps = setting.getValue().equalsIgnoreCase("true");
+                        break;
+                    case "whitelist":
+                        try {
+                            whitelistfile = new File(setting.getValue());
+                            Whitelist.loadWhitelist(whitelistfile);
+                        }
+                        catch(Exception e) {
+                            System.out.println("Unable to load whitelist file: " + whitelistfile.getName());
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "language":
+                        languageFile = setting.getValue();
+                        break;
+                    case "bindip":
+                        bindIp = setting.getValue();
+                        break;
+                    case "store_display_names":
+                        storeDisplayNames =  setting.getValue().equalsIgnoreCase("true");
+                        break;
+                    case "packet_limit":
+                        packetLimit =  Integer.parseInt(setting.getValue());
+                        break;
+                    case "global_packet_limit":
+                        globalPacketLimit =  Integer.parseInt(setting.getValue());
+                        break;
                 }
             }
 

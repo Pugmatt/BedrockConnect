@@ -31,6 +31,7 @@ Table of contents
    * [FAQ](#faq)
    * [Publicly available BedrockConnect instances](#publicly-available-bedrockconnect-instances)
    * [Hosting your own serverlist server](#hosting-your-own-serverlist-server)
+   * [Configuration](#configuration)
    * [Defining your own custom servers](#defining-your-own-custom-servers)
    * [Change wording of serverlist](#change-wording-of-serverlist)
    * [Using your own DNS server](#using-your-own-dns-server)
@@ -90,9 +91,29 @@ java -jar BedrockConnect-1.0-SNAPSHOT.jar nodb=true
 ```
 (```nodb=true``` allows the software to run without a database. If you want to use a database, remove this argument)
 
-The following arguments can be placed in the startup command to ajust settings:
+Alternatively, BedrockConnect can also be ran on Docker through the public image ```pugmatt/bedrock-connect```
 
-| Argument  | Description | Default Value |
+```
+docker run -p 19132:19132/udp pugmatt/bedrock-connect
+```
+
+# Configuration
+
+BedrockConnect can be configured through three ways:
+
+- Through startup arguments (e.g. ```java -jar BedrockConnect-1.0-SNAPSHOT.jar nodb=true user_servers=false server_limit=100```)
+
+- Configuration file, by adding the file ```config.yml``` to the root directory where your BedrockConnect jar is present, containing settings in YAML format. Example:
+```
+user_servers: false
+server_limit: 100
+```
+
+- Environment variables. Any setting can be defined through an environment variable, as long as it's prefixed with ```BC_``` (e.g. ```BC_USER_SERVERS```, ```BC_SERVER_LIMIT```, etc)
+
+The following is the full list of settings available:
+
+| Setting  | Description | Default Value |
 | ------------- | ------------- | ------------- |
 | mysql_host  | MySQL Host  | localhost |
 | mysql_db | MySQL Database Name  | bedrock-connect |
@@ -114,11 +135,6 @@ The following arguments can be placed in the startup command to ajust settings:
 | store_display_names | If true, player displays names will be included in the stored player data. | true |
 | packet_limit | Number of datagram packets each address can send within one tick (10ms) | 200 |
 | global_packet_limit | Number of all datagrams that will be handled within one tick (10ms) before server starts dropping any incoming data. | 100000 |
-
-MySQL example:
-```
-java -jar BedrockConnect-1.0-SNAPSHOT.jar mysql_pass=test123 server_limit=10
-```
 
 # Defining your own custom servers
 
@@ -170,8 +186,7 @@ You can also specify groups, such as the following format:
 ]
 ```
 
-
-Then, add this argument to your startup script: `custom_servers=[path to json file]`
+Then, set ```custom_servers``` in your BedrockConnect [configuration](#configuration) to the path of the json file. (e.g. Setting through an argument to your startup script: `custom_servers=[path to json file]`)
 
 The icon URL is not required, if omitted it will show the default icon.
 
@@ -194,7 +209,7 @@ Example custom language file:
 }
 ```
 
-Once finished, you include it in your server by adding the following arguement to your startup command: ```language=my_lang.json``` (Replace "my_lang" with the name of your file")
+Then, set ```language``` in your BedrockConnect [configuration](#configuration) to the path of the json file. (e.g. Setting through an argument to your startup script: `language=my_lang.json` Replace "my_lang" with the name of your file")
 
 # Using your own DNS server
 
