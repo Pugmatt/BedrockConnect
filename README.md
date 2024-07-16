@@ -11,15 +11,29 @@ BedrockConnect is an easy to use solution for Minecraft Bedrock Edition players 
 
 Here's the final result in action: https://www.youtube.com/watch?v=Uz-XYXAxd8Q
 
-#### Tutorials
+### Tutorials
 
-Here's tutorials to get it setup yourself. It takes only a few minutes to get setup:
+Here's tutorials to get it setup yourself, it takes only a few minutes to get setup.
+
+There are two methods available to join BedrockConnect:
+
+#### "Add Friend" Method
+
+- In the Minecraft main menu, go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" (whichever is available on your game version)
+- Search for the gamer tag ***BCMain***, and add this user as friend
+- Return to the Minecraft main menu and then return to the "Friends" tab
+- Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List", under "Joinable Friends" or "Joinable Cross-Platform Friends"
+- Join instance to connect to BedrockConnect server list
+
+<sub>(This method utilizes [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast) to supply this join option)</sub>
+  
+#### DNS Method
 
 Switch: https://www.youtube.com/watch?v=zalT_oR1nPM
 
 Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
 
-PS4/PS5: https://youtu.be/0MJVVhDeu2s?t=347 (Use 45.55.68.52 for the primary DNS address)
+(For PS4/PS5, try the **"Add Friend" Method** above)
 
 Joining Java Edition Servers: https://www.youtube.com/watch?v=B_oPHl5gz_c
 
@@ -40,15 +54,15 @@ Table of contents
 
 # FAQ
 
-**How does it work?** In Minecraft Bedrock Edition, players on any version can join the available 'Featured Servers'. By using a DNS server, we can make the domains that are used to join these servers, and make them direct to the BedrockConnect serverlist server, rather than their actual servers.
+**How does it work?** In Minecraft Bedrock Edition, players on any version can join the available 'Featured Servers'. By using a DNS server, we can make the domains that are used to join these servers, and make them direct to the BedrockConnect serverlist server, rather than their actual servers. Or through the "Add Friend" method, we direct the user to the BedrockConnect serverlist server via a workaround supplied by [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast).
 
 The BedrockConnect serverlist server, is a specially made Minecraft server that serves the purpose of joining Minecraft servers. Yes, you join Minecraft servers, from a Minecraft server. The server can transfer you to the server you want, and you can store servers as well, just like a regular serverlist.
 
 **What is a DNS server?** A DNS server is what devices uses to know what domain names go with what IP address. Your device sends the DNS server a domain name and asks what IP is associated with it, and the DNS server sends an IP back for the device to connect to. Commonly used ones include Google or Cloudflare DNS. Anyone can technically create a DNS server, and have it associate whatever IP they want to a domain. In this case, we make the 'Featured Server' domains direct to our own server.
 
-**I don't trust your DNS server...** The public BedrockConnect DNS server only redirects the domains of the "Featured Servers" in Minecraft to the BedrockConnect serverlist. (Full list of records under the "Using your own DNS server" section) It's understandable though why some might not want to use a random DNS server.  If you fear a MITM attack, you can also verify any domains you fear the DNS server are overriding by pinging them in command line or another tool. If you still don't feel comfortable using the BedrockConnect DNS server, you can also make your own. Look under 'Using your own DNS server' further down this page for more on that.
+**I don't trust your DNS server...** The public BedrockConnect DNS server only redirects the domains of the "Featured Servers" in Minecraft to the BedrockConnect serverlist. (Full list of records under the "Using your own DNS server" section) It's understandable though why some might not want to use a random DNS server.  If you fear a MITM attack, you can also verify any domains you fear the DNS server are overriding by pinging them in command line or another tool. If you still don't feel comfortable using the BedrockConnect DNS server, you can also make your own. Look under 'Using your own DNS server' further down this page for more on that. Or, try the ["Add Friend" Method](#add-friend-method) instead of the DNS method.
 
-**Some featured server aren't redirecting to the serverlist** If some featured servers are redirecting to the BedrockConnect serverlist, and some aren't, this can be an issue with the DNS cache on the device/game console not updating. Nothing can really be done except wait when on the game console for the cache to clear, as there isn't a manual way to do it on these devices.
+**Some featured server aren't redirecting to the serverlist using the DNS** If some featured servers are redirecting to the BedrockConnect serverlist, and some aren't, this can be an issue with the DNS cache on the device/game console not updating. Nothing can really be done except wait when on the game console for the cache to clear, as there isn't a manual way to do it on these devices.
 
 Another possible issue is that some of the featured servers such the Hive, use DNSSEC, which is used to protect itself from being overidden by DNS servers such as BedrockConnect. This is still being tested, and seems to work on some people's consoles and not on others.
 
@@ -58,8 +72,7 @@ There are multiple BedrockConnect serverlist servers available that can be used,
 
 | IP Address | Location | Maintainer | Note |
 | ------------- | ------------- | ------------- | ------------- |
-| 104.238.130.180 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5, try the IP address 45.55.68.52 or the other instances below |
-| 45.55.68.52 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Alternative DNS server that should work better on PS4/PS5. Directs to the same BedrockConnect server instances as 104.238.130.180. |
+| 104.238.130.180 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method) |
 | 207.244.229.200 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [AdamAtomus](https://github.com/adamatomus) | Located in Central US |
 | 213.171.211.142 | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
 | 217.160.58.93 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
@@ -229,6 +242,8 @@ In the case where you want to use your own DNS server instead of the one I suppl
 *104.238.130.180 is the IP to the BedrockConnect serverlist server. If you are hosting your own BedrockConnect serverlist server as well, obviously use that IP instead*
 
 Here's a script to setup BIND (DNS server software) on Linux: https://github.com/Pugmatt/BedrockConnect/blob/master/scripts/install-bind.sh
+
+Alternatively, instead of using a DNS, you can also use other tools such as [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast) to join the BedrockConnect instance.
 
 # Libraries used
 - [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)
