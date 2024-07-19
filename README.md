@@ -81,6 +81,8 @@ There are multiple BedrockConnect serverlist servers available that can be used,
 | 185.169.180.190 | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | Dns service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
 | 116.255.1.195 2600:70ff:c0de:bed::c0 | <img src="https://flagicons.lipis.dev/flags/4x3/au.svg" height="20"> | [xavierhorwood](https://github.com/xavierhorwood) | Dns service with PowerDNS |
 
+[Status Page for all public instances](https://bcstatus.teamriverbubbles.com/status/bedrock)
+
 
 If you are currently hosting a BedrockConnect instance and are interested in adding it to this list, create a pull request adding it to the table above.
 
