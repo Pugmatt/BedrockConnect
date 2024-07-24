@@ -20,7 +20,7 @@ There are two methods available to join BedrockConnect:
 #### "Add Friend" Method
 
 - In the Minecraft main menu, go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" (whichever is available on your game version)
-- Search for the gamer tag ***BCMain***, and add this user as friend
+- Search for the gamer tag ***BCMain*** (Or any of [these alts](https://github.com/Pugmatt/BedrockConnect/wiki/Alternate-gamer-tags-for-%22Add-Friend%22-method)), and add this user as friend
 - Return to the Minecraft main menu and then return to the "Friends" tab
 - Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List", under "Joinable Friends" or "Joinable Cross-Platform Friends"
 - Join instance to connect to BedrockConnect server list
