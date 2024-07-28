@@ -80,7 +80,7 @@ There are multiple BedrockConnect serverlist servers available that can be used,
 | 45.88.109.66 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [LazyBirb](https://github.com/lazybirb) | Details about the instance and contact towards me can be found [here](https://github.com/LazyBirb/LazyBirb/blob/master/bedrockconnect/README.MD) |
 | 185.169.180.190 | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | Dns service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
 | 116.255.1.195 2600:70ff:c0de:bed::c0 | <img src="https://flagicons.lipis.dev/flags/4x3/au.svg" height="20"> | [xavierhorwood](https://github.com/xavierhorwood) | Dns service with PowerDNS. TRBMCXB For Friend Method |
-| 124.221.149.13 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [Kongtu5i](https://github.com/Kongtu5i) | No DNS service, only BedrockConnect server. "K0ngtu5i" For Friend Method|
+| 124.221.149.13 | <img src="https://flagicons.lipis.dev/flags/4x3/cn.svg" height="20"> | [Kongtu5i](https://github.com/Kongtu5i) | No DNS service, only BedrockConnect server. "K0ngtu5i" For Friend Method|
 
 [Status Page for all public instances](https://bcstatus.teamriverbubbles.com/status/bedrock)
 
