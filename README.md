@@ -70,16 +70,16 @@ Another possible issue is that some of the featured servers such the Hive, use D
 
 There are multiple BedrockConnect serverlist servers available that can be used, giving you multiple options to connect to. Currently, they do NOT share the same player database, so if you have added a server to your list on any of the given servers and connect to a different one, you will need to save that data again.
 
-| IP Address | Location | Maintainer | Note |
-| ------------- | ------------- | ------------- | ------------- |
-| 104.238.130.180 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method) |
-| 207.244.229.200 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [AdamAtomus](https://github.com/adamatomus) | Located in Central US |
-| 213.171.211.142 | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
-| 217.160.58.93 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
-| 134.255.231.119 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) | |
-| 45.88.109.66 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [LazyBirb](https://github.com/lazybirb) | Details about the instance and contact towards me can be found [here](https://github.com/LazyBirb/LazyBirb/blob/master/bedrockconnect/README.MD) |
-| 185.169.180.190 | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | Dns service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
-| 116.255.1.195 2600:70ff:c0de:bed::c0 | <img src="https://flagicons.lipis.dev/flags/4x3/au.svg" height="20"> | [xavierhorwood](https://github.com/xavierhorwood) | Dns service with PowerDNS. TRBMCXB For Friend Method |
+| IP Address | Gamertag | Location | Maintainer | Note |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| 104.238.130.180 | BCMain | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method) |
+| 207.244.229.200 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [AdamAtomus](https://github.com/adamatomus) | Located in Central US |
+| 213.171.211.142 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
+| 217.160.58.93 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
+| 134.255.231.119 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) | |
+| 45.88.109.66 | McBEFC | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [LazyBirb](https://github.com/lazybirb) | Details about the instance and contact towards me can be found [here](https://github.com/LazyBirb/LazyBirb/blob/master/bedrockconnect/README.MD) |
+| 185.169.180.190 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | Dns service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
+| 116.255.1.195 2600:70ff:c0de:bed::c0 | TRBMCXB | <img src="https://flagicons.lipis.dev/flags/4x3/au.svg" height="20"> | [xavierhorwood](https://github.com/xavierhorwood) | Dns service with PowerDNS. TRBMCXB For Friend Method |
 
 [Status Page for all public instances](https://bcstatus.teamriverbubbles.com/status/bedrock)
 
