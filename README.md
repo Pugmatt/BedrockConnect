@@ -25,6 +25,8 @@ There are two methods available to join BedrockConnect:
 - Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List", under "Joinable Friends" or "Joinable Cross-Platform Friends"
 - Join instance to connect to BedrockConnect server list
 
+NOTE: (For BCMain/BCMain alts) To free up room on the friendlist (As it fills up very quickly), any friended users with a "Last seen" of 7 days or more are auto-removed. If you get removed, simply go online and add back BCMain or one of the alts.
+
 <sub>(This method utilizes [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast) to supply this join option)</sub>
   
 #### DNS Method
