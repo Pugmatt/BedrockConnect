@@ -126,16 +126,20 @@ public class BedrockConnect {
                         break;
                     case "nodb":
                         //noDB = setting.getValue().equalsIgnoreCase("true");
-                        databaseType = DatabaseTypes.nosql;
+                        if (setting.getValue().equalsIgnoreCase("true"))
+                            databaseType = DatabaseTypes.nosql;
                         break;
                     case "mysql":
-                        databaseType = DatabaseTypes.mysql;
+                        if (setting.getValue().equalsIgnoreCase("true"))
+                            databaseType = DatabaseTypes.mysql;
                         break;
                     case "mairadb":
-                        databaseType = DatabaseTypes.mairadb;
+                        if (setting.getValue().equalsIgnoreCase("true"))
+                            databaseType = DatabaseTypes.mairadb;
                         break;
                     case "postgress":
-                        databaseType = DatabaseTypes.postgress;
+                        if (setting.getValue().equalsIgnoreCase("true"))
+                            databaseType = DatabaseTypes.postgress;
                         break;
                     case "custom_servers":
                         customServers = setting.getValue();
