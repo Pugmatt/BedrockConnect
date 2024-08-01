@@ -21,6 +21,10 @@ public class MySQL extends Database {
     private final String password;
     private final String hostname;
 
+    private final Boolean mysql;
+
+    private final Boolean autoReconnect;
+
     private Connection connection;
 
     /**
@@ -35,19 +39,41 @@ public class MySQL extends Database {
      * @param password
      *            Password
      */
-    public MySQL(String hostname, String database, String username, String password) {
+    public MySQL(String hostname, String database, String username, String password, Boolean mysql, Boolean autoReconnect) {
         this.hostname = hostname;
         this.database = database;
         this.user = username;
         this.password = password;
         this.connection = null;
+        this.mysql = mysql;
+        this.autoReconnect = autoReconnect;
     }
 
     @Override
     public Connection openConnection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://" + this.hostname + "/" + this.database + "?serverTimezone=UTC&useLegacyDatetimeCode=false", this.user, this.password);
+            String Driver;
+
+            if (mysql)
+            {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Driver = "jdbc:mysql://";
+            }
+            else
+            {
+                Class.forName("org.mariadb.jdbc.Driver");
+                Driver = "jdbc:mariadb://";
+            }
+
+            String Extra = "";
+
+            if (autoReconnect)
+            {
+                Extra += "&autoReconnect=true";
+            }
+
+
+            connection = DriverManager.getConnection(Driver + this.hostname + "/" + this.database + "?serverTimezone=UTC&useLegacyDatetimeCode=false" + Extra, this.user, this.password);
             System.out.println("- MySQL Connection Started -");
 
         } catch (SQLException e) {
