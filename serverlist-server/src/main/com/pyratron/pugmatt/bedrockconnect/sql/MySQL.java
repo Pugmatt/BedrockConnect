@@ -21,7 +21,7 @@ public class MySQL extends Database {
     private final String password;
     private final String hostname;
 
-    private final Boolean mysql;
+    private final DatabaseTypes databasetype;
 
     private final Boolean autoReconnect;
 
@@ -39,30 +39,35 @@ public class MySQL extends Database {
      * @param password
      *            Password
      */
-    public MySQL(String hostname, String database, String username, String password, Boolean mysql, Boolean autoReconnect) {
+    public MySQL(String hostname, String database, String username, String password, DatabaseTypes databasetype, Boolean autoReconnect) {
         this.hostname = hostname;
         this.database = database;
         this.user = username;
         this.password = password;
         this.connection = null;
-        this.mysql = mysql;
+        this.databasetype = databasetype;
         this.autoReconnect = autoReconnect;
     }
 
     @Override
     public Connection openConnection() {
         try {
-            String Driver;
+            String Driver = "";
 
-            if (mysql)
+            switch (databasetype)
             {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Driver = "jdbc:mysql://";
-            }
-            else
-            {
-                Class.forName("org.mariadb.jdbc.Driver");
-                Driver = "jdbc:mariadb://";
+                case mysql:
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    Driver = "jdbc:mysql://";
+                    break;
+                case mairadb:
+                    Class.forName("org.mariadb.jdbc.Driver");
+                    Driver = "jdbc:mariadb://";
+                    break;
+                case postgress:
+                    Class.forName("org.postgresql.Driver");
+                    Driver = "jdbc:postgresql://";
+                    break;
             }
 
             String Extra = "";

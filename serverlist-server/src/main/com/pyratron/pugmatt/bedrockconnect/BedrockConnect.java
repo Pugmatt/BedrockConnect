@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import main.com.pyratron.pugmatt.bedrockconnect.config.Language;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
+import main.com.pyratron.pugmatt.bedrockconnect.sql.DatabaseTypes;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
 import org.cloudburstmc.netty.channel.raknet.RakConstants;
@@ -12,7 +13,6 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.net.*;
-import java.security.Security;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -63,6 +63,8 @@ public class BedrockConnect {
             String password = "";
             String port = "19132";
             String bindIp = "0.0.0.0";
+            DatabaseTypes databaseType = DatabaseTypes.nosql;
+            boolean autoReconnect = false;
 
             String serverLimit = "100";
 
@@ -104,16 +106,16 @@ public class BedrockConnect {
 
             for (Map.Entry<String, String> setting : settings.entrySet()) {
                 switch(setting.getKey().toLowerCase()) {
-                    case "mysql_host":
+                    case "db_host":
                         hostname = setting.getValue();
                         break;
-                    case "mysql_db":
+                    case "db_db":
                         database = setting.getValue();
                         break;
-                    case "mysql_user":
+                    case "db_user":
                         username = setting.getValue();
                         break;
-                    case "mysql_pass":
+                    case "db_pass":
                         password = setting.getValue();
                         break;
                     case "server_limit":
@@ -123,7 +125,17 @@ public class BedrockConnect {
                         port = setting.getValue();
                         break;
                     case "nodb":
-                        noDB = setting.getValue().equalsIgnoreCase("true");
+                        //noDB = setting.getValue().equalsIgnoreCase("true");
+                        databaseType = DatabaseTypes.nosql;
+                        break;
+                    case "mysql":
+                        databaseType = DatabaseTypes.mysql;
+                        break;
+                    case "mairadb":
+                        databaseType = DatabaseTypes.mairadb;
+                        break;
+                    case "postgress":
+                        databaseType = DatabaseTypes.postgress;
                         break;
                     case "custom_servers":
                         customServers = setting.getValue();
@@ -273,7 +285,7 @@ public class BedrockConnect {
             }
 
             if(!noDB) {
-                MySQL = new MySQL(hostname, database, username, password);
+                MySQL = new MySQL(hostname, database, username, password, databaseType, autoReconnect);
 
                 connection = null;
 
