@@ -64,10 +64,12 @@ public class MySQL extends Database {
                     Class.forName("org.mariadb.jdbc.Driver");
                     Driver = "jdbc:mariadb://";
                     break;
-                case postgress:
+                case postgres:
                     Class.forName("org.postgresql.Driver");
                     Driver = "jdbc:postgresql://";
                     break;
+                default:
+                    throw new IllegalArgumentException("Unsupported database type: " + databasetype);
             }
 
             String Extra = "";

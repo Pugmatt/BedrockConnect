@@ -4,5 +4,5 @@ public enum DatabaseTypes {
     nosql,
     mysql,
     mairadb,
-    postgress,
+    postgres,
 }

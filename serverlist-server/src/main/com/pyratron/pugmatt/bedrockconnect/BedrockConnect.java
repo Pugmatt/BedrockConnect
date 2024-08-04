@@ -127,7 +127,11 @@ public class BedrockConnect {
                     case "nodb":
                         //noDB = setting.getValue().equalsIgnoreCase("true");
                         if (setting.getValue().equalsIgnoreCase("true"))
+                        {
                             databaseType = DatabaseTypes.nosql;
+                            noDB = setting.getValue().equalsIgnoreCase("true");
+                        }
+
                         break;
                     case "mysql":
                         if (setting.getValue().equalsIgnoreCase("true"))
@@ -137,9 +141,9 @@ public class BedrockConnect {
                         if (setting.getValue().equalsIgnoreCase("true"))
                             databaseType = DatabaseTypes.mairadb;
                         break;
-                    case "postgress":
+                    case "postgres":
                         if (setting.getValue().equalsIgnoreCase("true"))
-                            databaseType = DatabaseTypes.postgress;
+                            databaseType = DatabaseTypes.postgres;
                         break;
                     case "custom_servers":
                         customServers = setting.getValue();
@@ -295,7 +299,7 @@ public class BedrockConnect {
 
                 connection = MySQL.openConnection();
 
-                data = new Data(serverLimit);
+                data = new Data(serverLimit, databaseType);
 
                 // Keep MySQL connection alive
                 Timer timer = new Timer();
@@ -331,7 +335,7 @@ public class BedrockConnect {
                 };
                 timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
             } else {
-                data = new Data(serverLimit);
+                data = new Data(serverLimit, databaseType);
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask() {
                     public void run() { }

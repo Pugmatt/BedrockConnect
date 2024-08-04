@@ -23,21 +23,24 @@ public class Data {
 
     String serverLimit;
 
-    public Data(String serverLimit) {
+    public Data(String serverLimit, DatabaseTypes database) {
         this.serverLimit = serverLimit;
 
         if(!BedrockConnect.noDB) {
             try {
-                createTables();
+                createTables((database == DatabaseTypes.postgres));
             } catch (Exception e) {
                 errorAlert(e);
             }
         }
     }
 
-    public void createTables() throws SQLException {
+    public void createTables(boolean postgres) throws SQLException {
         // Create table if table does not exist
-        String sqlCreate = "CREATE TABLE IF NOT EXISTS servers"
+        String sqlCreate = "";
+        if (!postgres)
+                sqlCreate =
+                "CREATE TABLE IF NOT EXISTS servers"
                 + "  (id         INTEGER PRIMARY KEY AUTO_INCREMENT,"
                 + "   uuid            TEXT,"
                 + "   name            TEXT,"
@@ -45,6 +48,15 @@ public class Data {
                 + "   serverLimit     INTEGER,"
                 + "   INDEX (uuid(255))"
                 + ");";
+        else
+            sqlCreate = "CREATE TABLE IF NOT EXISTS servers (" +
+                    "    id SERIAL PRIMARY KEY," +
+                    "    uuid TEXT," +
+                    "    name TEXT," +
+                    "    servers TEXT," +
+                    "    serverLimit INTEGER" +
+                    ");" +
+                    "CREATE INDEX idx_uuid ON servers(uuid);";
 
         Statement stmt = BedrockConnect.connection.createStatement();
         stmt.execute(sqlCreate);
