@@ -235,6 +235,9 @@ public class BedrockConnect {
                     case "global_packet_limit":
                         globalPacketLimit =  Integer.parseInt(setting.getValue());
                         break;
+                    case "auto_reconnect":
+                        autoReconnect = setting.getValue().equalsIgnoreCase("true");
+                        break;
                 }
             }
 
