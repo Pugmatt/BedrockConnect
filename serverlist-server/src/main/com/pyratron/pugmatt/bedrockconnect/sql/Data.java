@@ -48,14 +48,22 @@ public class Data {
                 + "   INDEX (uuid(255))"
                 + ");";
         else
-            sqlCreate = "CREATE TABLE IF NOT EXISTS servers (" +
-                    "    id SERIAL PRIMARY KEY," +
-                    "    uuid TEXT," +
-                    "    name TEXT," +
-                    "    servers TEXT," +
-                    "    serverLimit INTEGER" +
-                    ");" +
-                    "CREATE INDEX idx_uuid ON servers(uuid);";
+            sqlCreate = "DO $$\n" +
+                    "BEGIN\n" +
+                    "    IF NOT EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'servers') THEN\n" +
+                    "        CREATE TABLE servers (\n" +
+                    "            id SERIAL PRIMARY KEY,\n" +
+                    "            uuid TEXT,\n" +
+                    "            name TEXT,\n" +
+                    "            servers TEXT,\n" +
+                    "            serverLimit INTEGER\n" +
+                    "        );\n" +
+                    "    END IF;\n" +
+                    "\n" +
+                    "    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_uuid') THEN\n" +
+                    "        CREATE INDEX idx_uuid ON servers(uuid);\n" +
+                    "    END IF;\n" +
+                    "END $$;\n";
 
         Statement stmt = BedrockConnect.connection.createStatement();
         stmt.execute(sqlCreate);
