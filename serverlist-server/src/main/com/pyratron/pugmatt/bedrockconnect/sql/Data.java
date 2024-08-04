@@ -39,8 +39,7 @@ public class Data {
         // Create table if table does not exist
         String sqlCreate = "";
         if (!postgres)
-                sqlCreate =
-                "CREATE TABLE IF NOT EXISTS servers"
+                sqlCreate = "CREATE TABLE IF NOT EXISTS servers"
                 + "  (id         INTEGER PRIMARY KEY AUTO_INCREMENT,"
                 + "   uuid            TEXT,"
                 + "   name            TEXT,"
