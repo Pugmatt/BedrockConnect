@@ -242,9 +242,9 @@ public class BedrockConnect {
             }
 
             if(!noDB)
-            System.out.println("MySQL Host: " + hostname + "\n" +
-            "MySQL Database: " + database + "\n" +
-            "MySQL User: " + username);
+            System.out.println("Database Host: " + hostname + "\n" +
+            "Database: " + database + "\n" +
+            "Database User: " + username);
 
             System.out.println("\nServer Limit: " + serverLimit + "\n" + "Port: " + port + "\n");
 
