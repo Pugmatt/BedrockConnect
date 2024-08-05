@@ -81,10 +81,10 @@ public class MySQL extends Database {
 
 
             connection = DriverManager.getConnection(Driver + this.hostname + "/" + this.database + "?serverTimezone=UTC&useLegacyDatetimeCode=false" + Extra, this.user, this.password);
-            System.out.println("- MySQL Connection Started -");
+            System.out.println("- Database Connection Started -");
 
         } catch (SQLException e) {
-            System.out.println("ERROR: Could not connect to MySQL server! because: " + e.getMessage());
+            System.out.println("ERROR: Could not connect to Database server! because: " + e.getMessage());
         } catch (ClassNotFoundException e) {
             System.out.println("ERROR: JDBC Driver not found!");
         }
