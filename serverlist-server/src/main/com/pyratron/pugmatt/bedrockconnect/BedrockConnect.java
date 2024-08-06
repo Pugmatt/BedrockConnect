@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import main.com.pyratron.pugmatt.bedrockconnect.config.Language;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
+import main.com.pyratron.pugmatt.bedrockconnect.sql.DatabaseTypes;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
 import org.cloudburstmc.netty.channel.raknet.RakConstants;
@@ -12,7 +13,6 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.net.*;
-import java.security.Security;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -63,6 +63,8 @@ public class BedrockConnect {
             String password = "";
             String port = "19132";
             String bindIp = "0.0.0.0";
+            DatabaseTypes databaseType = DatabaseTypes.nosql;
+            boolean autoReconnect = false;
 
             String serverLimit = "100";
 
@@ -104,16 +106,16 @@ public class BedrockConnect {
 
             for (Map.Entry<String, String> setting : settings.entrySet()) {
                 switch(setting.getKey().toLowerCase()) {
-                    case "mysql_host":
+                    case "db_host":
                         hostname = setting.getValue();
                         break;
-                    case "mysql_db":
+                    case "db_db":
                         database = setting.getValue();
                         break;
-                    case "mysql_user":
+                    case "db_user":
                         username = setting.getValue();
                         break;
-                    case "mysql_pass":
+                    case "db_pass":
                         password = setting.getValue();
                         break;
                     case "server_limit":
@@ -123,7 +125,25 @@ public class BedrockConnect {
                         port = setting.getValue();
                         break;
                     case "nodb":
-                        noDB = setting.getValue().equalsIgnoreCase("true");
+                        //noDB = setting.getValue().equalsIgnoreCase("true");
+                        if (setting.getValue().equalsIgnoreCase("true"))
+                        {
+                            databaseType = DatabaseTypes.nosql;
+                            noDB = setting.getValue().equalsIgnoreCase("true");
+                        }
+
+                        break;
+                    case "mysql":
+                        if (setting.getValue().equalsIgnoreCase("true"))
+                            databaseType = DatabaseTypes.mysql;
+                        break;
+                    case "mairadb":
+                        if (setting.getValue().equalsIgnoreCase("true"))
+                            databaseType = DatabaseTypes.mairadb;
+                        break;
+                    case "postgres":
+                        if (setting.getValue().equalsIgnoreCase("true"))
+                            databaseType = DatabaseTypes.postgres;
                         break;
                     case "custom_servers":
                         customServers = setting.getValue();
@@ -215,13 +235,16 @@ public class BedrockConnect {
                     case "global_packet_limit":
                         globalPacketLimit =  Integer.parseInt(setting.getValue());
                         break;
+                    case "auto_reconnect":
+                        autoReconnect = setting.getValue().equalsIgnoreCase("true");
+                        break;
                 }
             }
 
             if(!noDB)
-            System.out.println("MySQL Host: " + hostname + "\n" +
-            "MySQL Database: " + database + "\n" +
-            "MySQL User: " + username);
+            System.out.println("Database Host: " + hostname + "\n" +
+            "Database: " + database + "\n" +
+            "Database User: " + username);
 
             System.out.println("\nServer Limit: " + serverLimit + "\n" + "Port: " + port + "\n");
 
@@ -273,13 +296,13 @@ public class BedrockConnect {
             }
 
             if(!noDB) {
-                MySQL = new MySQL(hostname, database, username, password);
+                MySQL = new MySQL(hostname, database, username, password, databaseType, autoReconnect);
 
                 connection = null;
 
                 connection = MySQL.openConnection();
 
-                data = new Data(serverLimit);
+                data = new Data(serverLimit, databaseType);
 
                 // Keep MySQL connection alive
                 Timer timer = new Timer();
@@ -315,7 +338,7 @@ public class BedrockConnect {
                 };
                 timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
             } else {
-                data = new Data(serverLimit);
+                data = new Data(serverLimit, databaseType);
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask() {
                     public void run() { }

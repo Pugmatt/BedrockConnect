@@ -128,28 +128,32 @@ server_limit: 100
 
 The following is the full list of settings available:
 
-| Setting  | Description | Default Value |
-| ------------- | ------------- | ------------- |
-| mysql_host  | MySQL Host  | localhost |
-| mysql_db | MySQL Database Name  | bedrock-connect |
-| mysql_user | MySQL Username  | root |
-| mysql_pass | MySQL Password  |  |
-| server_limit | How many servers a new player can have in their serverlist  | 100 |
-| port | Port of the server (Should only be changed for debugging on PC. Port needs to be on 19132 for the bypass to work on game consoles) | 19132 |
-| bindip | IP that the BedrockConnect server will bind to | 0.0.0.0 |
-| nodb | If true, use JSON files for data instead of MySQL | false |
-| generatedns | If true, generate a DNS zone file using user input (Only needed if you're using the mod0Umleitung DNS software) | false |
-| kick_inactive | If true, players will be kicked after 10 minutes of inactivity with the serverlist UI | true |
-| custom_servers| Sets the path to a custom server file, for specifying your servers in the list for all players. See [custom servers](#defining-your-own-custom-servers). |  |
-| user_servers | If true, players can add and remove servers on the serverlist. If false, the options are hidden. | true |
-| featured_servers | If true, the featured servers will be displayed in the serverlist.  If false, the servers are hidden. | true |
-| whitelist | Specify file containing list of whitelisted players. (Should be a text file with the player names specified on seperate lines) | |
-| fetch_featured_ips | If true, dynamically grab the featured server IPs from the domain names. If false, a file ```featured_server_ips.json``` will be generated, containing the hard-coded featured server IPs, and to allow changing them if needed.  | true |
-| fetch_ips | If true, dynamically grab the server IPs from domain names, of any server a user is attempting to join. | false |
-| language | Specify a file containing language customizations. See [guide for changing wording](#change-wording-of-serverlist) | |
-| store_display_names | If true, player displays names will be included in the stored player data. | true |
-| packet_limit | Number of datagram packets each address can send within one tick (10ms) | 200 |
-| global_packet_limit | Number of all datagrams that will be handled within one tick (10ms) before server starts dropping any incoming data. | 100000 |
+| Setting             | Description                                                                                                                                                                                                                      | Default Value   |
+|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|
+| db_host             | Database Host                                                                                                                                                                                                                    | localhost       |
+| db_db               | Database Name                                                                                                                                                                                                                    | bedrock-connect |
+| db_user             | Database Username                                                                                                                                                                                                                | root            |
+| db_pass             | Database Password                                                                                                                                                                                                                |                 |
+| server_limit        | How many servers a new player can have in their serverlist                                                                                                                                                                       | 100             |
+| port                | Port of the server (Should only be changed for debugging on PC. Port needs to be on 19132 for the bypass to work on game consoles)                                                                                               | 19132           |
+| bindip              | IP that the BedrockConnect server will bind to                                                                                                                                                                                   | 0.0.0.0         |
+| nodb                | If true, use JSON files                                                                                                                                                                                                          | true            |
+| mysql               | If true, use Mysql                                                                                                                                                                                                               | false           |
+| mairadb             | If true, use MairaDB                                                                                                                                                                                                             | false           |
+| postgres            | If true, use Postgres                                                                                                                                                                                                            | false           |
+| auto_reconnect      | If true, Make Mysql and MairaDB auto reconnect to the database when disconnected                                                                                                                                                 | false           |
+| generatedns         | If true, generate a DNS zone file using user input (Only needed if you're using the mod0Umleitung DNS software)                                                                                                                  | false           |
+| kick_inactive       | If true, players will be kicked after 10 minutes of inactivity with the serverlist UI                                                                                                                                            | true            |
+| custom_servers      | Sets the path to a custom server file, for specifying your servers in the list for all players. See [custom servers](#defining-your-own-custom-servers).                                                                         |                 |
+| user_servers        | If true, players can add and remove servers on the serverlist. If false, the options are hidden.                                                                                                                                 | true            |
+| featured_servers    | If true, the featured servers will be displayed in the serverlist.  If false, the servers are hidden.                                                                                                                            | true            |
+| whitelist           | Specify file containing list of whitelisted players. (Should be a text file with the player names specified on seperate lines)                                                                                                   |                 |
+| fetch_featured_ips  | If true, dynamically grab the featured server IPs from the domain names. If false, a file ```featured_server_ips.json``` will be generated, containing the hard-coded featured server IPs, and to allow changing them if needed. | true            |
+| fetch_ips           | If true, dynamically grab the server IPs from domain names, of any server a user is attempting to join.                                                                                                                          | false           |
+| language            | Specify a file containing language customizations. See [guide for changing wording](#change-wording-of-serverlist)                                                                                                               |                 |
+| store_display_names | If true, player displays names will be included in the stored player data.                                                                                                                                                       | true            |
+| packet_limit        | Number of datagram packets each address can send within one tick (10ms)                                                                                                                                                          | 200             |
+| global_packet_limit | Number of all datagrams that will be handled within one tick (10ms) before server starts dropping any incoming data.                                                                                                             | 100000          |
 
 # Defining your own custom servers
 

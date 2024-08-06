@@ -23,21 +23,23 @@ public class Data {
 
     String serverLimit;
 
-    public Data(String serverLimit) {
+    public Data(String serverLimit, DatabaseTypes database) {
         this.serverLimit = serverLimit;
 
         if(!BedrockConnect.noDB) {
             try {
-                createTables();
+                createTables((database == DatabaseTypes.postgres));
             } catch (Exception e) {
                 errorAlert(e);
             }
         }
     }
 
-    public void createTables() throws SQLException {
+    public void createTables(boolean postgres) throws SQLException {
         // Create table if table does not exist
-        String sqlCreate = "CREATE TABLE IF NOT EXISTS servers"
+        String sqlCreate = "";
+        if (!postgres)
+                sqlCreate = "CREATE TABLE IF NOT EXISTS servers"
                 + "  (id         INTEGER PRIMARY KEY AUTO_INCREMENT,"
                 + "   uuid            TEXT,"
                 + "   name            TEXT,"
@@ -45,6 +47,23 @@ public class Data {
                 + "   serverLimit     INTEGER,"
                 + "   INDEX (uuid(255))"
                 + ");";
+        else
+            sqlCreate = "DO $$\n" +
+                    "BEGIN\n" +
+                    "    IF NOT EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'servers') THEN\n" +
+                    "        CREATE TABLE servers (\n" +
+                    "            id SERIAL PRIMARY KEY,\n" +
+                    "            uuid TEXT,\n" +
+                    "            name TEXT,\n" +
+                    "            servers TEXT,\n" +
+                    "            serverLimit INTEGER\n" +
+                    "        );\n" +
+                    "    END IF;\n" +
+                    "\n" +
+                    "    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_uuid') THEN\n" +
+                    "        CREATE INDEX idx_uuid ON servers(uuid);\n" +
+                    "    END IF;\n" +
+                    "END $$;\n";
 
         Statement stmt = BedrockConnect.connection.createStatement();
         stmt.execute(sqlCreate);
