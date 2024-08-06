@@ -60,7 +60,7 @@ public class MySQL extends Database {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Driver = "jdbc:mysql://";
                     break;
-                case mairadb:
+                case mariadb:
                     Class.forName("org.mariadb.jdbc.Driver");
                     Driver = "jdbc:mariadb://";
                     break;

@@ -46,7 +46,7 @@ public class BedrockConnect {
 
     public static int globalPacketLimit = RakConstants.DEFAULT_GLOBAL_PACKET_LIMIT;
 
-    public static String release = "1.47";
+    public static String release = "1.48";
 
     public static HashMap<String, String> featuredServerIps;
 
@@ -63,7 +63,7 @@ public class BedrockConnect {
             String password = "";
             String port = "19132";
             String bindIp = "0.0.0.0";
-            DatabaseTypes databaseType = DatabaseTypes.nosql;
+            DatabaseTypes databaseType = DatabaseTypes.mysql;
             boolean autoReconnect = false;
 
             String serverLimit = "100";
@@ -104,6 +104,9 @@ public class BedrockConnect {
                 }
             } catch(SecurityException e) {}
 
+            boolean nodbWarning = true;
+            boolean mysqlSettingWarning = false;
+
             for (Map.Entry<String, String> setting : settings.entrySet()) {
                 switch(setting.getKey().toLowerCase()) {
                     case "db_host":
@@ -118,6 +121,43 @@ public class BedrockConnect {
                     case "db_pass":
                         password = setting.getValue();
                         break;
+                    case "db_type":
+                        nodbWarning = false;
+                        String dbType = setting.getValue().toLowerCase();
+                        switch(dbType) {
+                            case "none":
+                                databaseType = DatabaseTypes.nosql;
+                                break;
+                            case "mysql":
+                                databaseType = DatabaseTypes.mysql;
+                                break;
+                            case "mariadb":
+                                databaseType = DatabaseTypes.mariadb;
+                                break;
+                            case "postgres":
+                                databaseType = DatabaseTypes.postgres;
+                                break;
+                        }
+                        break;
+                    // Backwards-compatibility for legacy database/mysql settings
+                    // db_ settings above should be used for any future setups/database-related changes
+                    case "mysql_host":
+                        mysqlSettingWarning = true;
+                        hostname = setting.getValue();
+                        break;
+                    case "mysql_db":
+                        mysqlSettingWarning = true;
+                        database = setting.getValue();
+                        break;
+                    case "mysql_user":
+                        mysqlSettingWarning = true;
+                        username = setting.getValue();
+                        break;
+                    case "mysql_pass":
+                        mysqlSettingWarning = true;
+                        password = setting.getValue();
+                        break;
+                    //
                     case "server_limit":
                         serverLimit = setting.getValue();
                         break;
@@ -125,25 +165,12 @@ public class BedrockConnect {
                         port = setting.getValue();
                         break;
                     case "nodb":
-                        //noDB = setting.getValue().equalsIgnoreCase("true");
                         if (setting.getValue().equalsIgnoreCase("true"))
                         {
+                            nodbWarning = false;
                             databaseType = DatabaseTypes.nosql;
-                            noDB = setting.getValue().equalsIgnoreCase("true");
+                            noDB = true;
                         }
-
-                        break;
-                    case "mysql":
-                        if (setting.getValue().equalsIgnoreCase("true"))
-                            databaseType = DatabaseTypes.mysql;
-                        break;
-                    case "mairadb":
-                        if (setting.getValue().equalsIgnoreCase("true"))
-                            databaseType = DatabaseTypes.mairadb;
-                        break;
-                    case "postgres":
-                        if (setting.getValue().equalsIgnoreCase("true"))
-                            databaseType = DatabaseTypes.postgres;
                         break;
                     case "custom_servers":
                         customServers = setting.getValue();
@@ -241,10 +268,22 @@ public class BedrockConnect {
                 }
             }
 
-            if(!noDB)
-            System.out.println("Database Host: " + hostname + "\n" +
-            "Database: " + database + "\n" +
-            "Database User: " + username);
+
+            if(!noDB) {
+                if(nodbWarning || mysqlSettingWarning) {
+                    System.out.println("----------------");
+                    System.out.println("[!!DEPRECATION!!] Your current database settings may not work in future versions\n");
+                    if(mysqlSettingWarning)
+                        System.out.println("- mysql_* settings should be replaced with db_* settings");
+                    if(nodbWarning)
+                        System.out.println("- db_type should be manually set to mysql");
+                    System.out.println("\nLearn more here: https://github.com/Pugmatt/BedrockConnect/wiki/Deprecated-Database-Settings");
+                    System.out.println("----------------");
+                }
+                System.out.println("Database Host: " + hostname + "\n" +
+                        "Database: " + database + "\n" +
+                        "Database User: " + username);
+            }
 
             System.out.println("\nServer Limit: " + serverLimit + "\n" + "Port: " + port + "\n");
 
