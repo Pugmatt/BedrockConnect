@@ -137,6 +137,8 @@ public class BedrockConnect {
                             case "postgres":
                                 databaseType = DatabaseTypes.postgres;
                                 break;
+                            default:
+                                System.out.println("Unknown DB Type using Mysql. Please use mysql, postgres, mariadb, or none");
                         }
                         break;
                     // Backwards-compatibility for legacy database/mysql settings
