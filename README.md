@@ -19,11 +19,17 @@ There are two methods available to join BedrockConnect:
 
 #### "Add Friend" Method
 
-- In the Minecraft main menu, go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" (whichever is available on your game version)
-- Search for the gamer tag ***BCMain*** (Or any of [these alts](https://github.com/Pugmatt/BedrockConnect/wiki/Alternate-gamer-tags-for-%22Add-Friend%22-method)), and add this user as friend
-- Return to the Minecraft main menu and then return to the "Friends" tab
-- Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List", under "Joinable Friends" or "Joinable Cross-Platform Friends"
-- Join instance to connect to BedrockConnect server list
+***NOTE**: This method is currently broken as of version 1.21.20, and is being looked into. Use DNS method for now.*
+
+~~- In the Minecraft main menu, go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" (whichever is available on your game version)~~
+
+~~- Search for the gamer tag ***BCMain*** (Or any of [these alts](https://github.com/Pugmatt/BedrockConnect/wiki/Alternate-gamer-tags-for-%22Add-Friend%22-method)), and add this user as friend~~
+
+~~- Return to the Minecraft main menu and then return to the "Friends" tab~~
+
+~~- Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List", under "Joinable Friends" or "Joinable Cross-Platform Friends"~~
+
+~~- Join instance to connect to BedrockConnect server list~~
 
 <sub>(This method utilizes [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast) to supply this join option)</sub>
   
@@ -33,7 +39,8 @@ Switch: https://www.youtube.com/watch?v=zalT_oR1nPM
 
 Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
 
-(For PS4/PS5, try the **"Add Friend" Method** above)
+PS4/PS5:
+- Go into your console's internet settings, and set the primary DNS to 45.55.68.52 and secondary DNS to 8.8.8.8
 
 Joining Java Edition Servers: https://www.youtube.com/watch?v=B_oPHl5gz_c
 
