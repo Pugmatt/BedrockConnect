@@ -19,19 +19,19 @@ There are two methods available to join BedrockConnect:
 
 #### "Add Friend" Method
 
-***NOTE**: This method is currently broken as of version 1.21.20, and is being looked into. Use DNS method for now.*
+- In the Minecraft main menu, click "Play" and then go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" (whichever is available on your game version)
 
-~~- In the Minecraft main menu, go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" (whichever is available on your game version)~~
+- Search for the gamer tag ***BCMain*** (Or any of [these alts](https://github.com/Pugmatt/BedrockConnect/wiki/Alternate-gamer-tags-for-%22Add-Friend%22-method)), and add this user as friend
 
-~~- Search for the gamer tag ***BCMain*** (Or any of [these alts](https://github.com/Pugmatt/BedrockConnect/wiki/Alternate-gamer-tags-for-%22Add-Friend%22-method)), and add this user as friend~~
+- Return to the Minecraft main menu, and wait about 20 seconds. Then click "Play" and return to the "Friends" tab
 
-~~- Return to the Minecraft main menu and then return to the "Friends" tab~~
+- Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List", under "Joinable Friends" or "Joinable Cross-Platform Friends"
 
-~~- Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List", under "Joinable Friends" or "Joinable Cross-Platform Friends"~~
-
-~~- Join instance to connect to BedrockConnect server list~~
+- Join instance to connect to BedrockConnect server list
 
 <sub>(This method utilizes [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast) to supply this join option)</sub>
+
+*In order to make room in the friendslist, you will be removed from the friendslist if inactive for 7 or more days. If this happens, simply add back the gamertag.*
   
 #### DNS Method
 
