@@ -19,13 +19,19 @@ There are two methods available to join BedrockConnect:
 
 #### "Add Friend" Method
 
-- In the Minecraft main menu, go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" (whichever is available on your game version)
+- In the Minecraft main menu, click "Play" and then go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" (whichever is available on your game version)
+
 - Search for the gamer tag ***BCMain*** (Or any of [these alts](https://github.com/Pugmatt/BedrockConnect/wiki/Alternate-gamer-tags-for-%22Add-Friend%22-method)), and add this user as friend
-- Return to the Minecraft main menu and then return to the "Friends" tab
+
+- Return to the Minecraft main menu, and wait about 20 seconds. Then click "Play" and return to the "Friends" tab
+
 - Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List", under "Joinable Friends" or "Joinable Cross-Platform Friends"
+
 - Join instance to connect to BedrockConnect server list
 
 <sub>(This method utilizes [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast) to supply this join option)</sub>
+
+*In order to make room in the friendslist, you will be removed from the friendslist if inactive for 7 or more days. If this happens, simply add back the gamertag.*
   
 #### DNS Method
 
@@ -33,7 +39,8 @@ Switch: https://www.youtube.com/watch?v=zalT_oR1nPM
 
 Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
 
-(For PS4/PS5, try the **"Add Friend" Method** above)
+PS4/PS5:
+- Go into your console's internet settings, and set the primary DNS to 45.55.68.52 and secondary DNS to 8.8.8.8
 
 Joining Java Edition Servers: https://www.youtube.com/watch?v=B_oPHl5gz_c
 
@@ -70,16 +77,17 @@ Another possible issue is that some of the featured servers such the Hive, use D
 
 There are multiple BedrockConnect serverlist servers available that can be used, giving you multiple options to connect to. Currently, they do NOT share the same player database, so if you have added a server to your list on any of the given servers and connect to a different one, you will need to save that data again.
 
-| IP Address | Location | Maintainer | Note |
-| ------------- | ------------- | ------------- | ------------- |
-| 104.238.130.180 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method) |
-| 207.244.229.200 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [AdamAtomus](https://github.com/adamatomus) | Located in Central US |
-| 213.171.211.142 | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
-| 217.160.58.93 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
-| 134.255.231.119 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) | |
-| 45.88.109.66 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [LazyBirb](https://github.com/lazybirb) | Details about the instance and contact towards me can be found [here](https://github.com/LazyBirb/LazyBirb/blob/master/bedrockconnect/README.MD) |
-| 185.169.180.190 | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | Dns service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
-| 116.255.1.195 2600:70ff:c0de:bed::c0 | <img src="https://flagicons.lipis.dev/flags/4x3/au.svg" height="20"> | [xavierhorwood](https://github.com/xavierhorwood) | Dns service with PowerDNS. TRBMCXB For Friend Method |
+| IP Address | Gamertag | Location | Maintainer | Note |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| 104.238.130.180 | BCMain, BCMain1 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method), or replace the primary DNS address with 45.55.68.52. |
+| 207.244.229.200 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [AdamAtomus](https://github.com/adamatomus) | Located in Central US |
+| 207.148.1.32 | DEMCBC | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [LazyBirb](https://github.com/lazybirb) | No DNS Service, Located in Dallas, Texas [More Infos!](https://github.com/LazyBirb/LazyBirb/blob/master/bedrockconnect/README.MD) |
+| 213.171.211.142 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
+| 217.160.58.93 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
+| 134.255.231.119 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) | |
+| 45.88.109.66 | McBEFC | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [LazyBirb](https://github.com/lazybirb) | Located in Frankfurt am Main, Germany. [More Infos!](https://github.com/LazyBirb/LazyBirb/blob/master/bedrockconnect/README.MD) |
+| 185.169.180.190 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | Dns service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
+| 116.255.1.195 2600:70ff:c0de:bed::c0 | TRBMCXB | <img src="https://flagicons.lipis.dev/flags/4x3/au.svg" height="20"> | [xavierhorwood](https://github.com/xavierhorwood) | Dns service with PowerDNS. Java Servers Supported |
 
 [Status Page for all public instances](https://bcstatus.teamriverbubbles.com/status/bedrock)
 
@@ -128,28 +136,30 @@ server_limit: 100
 
 The following is the full list of settings available:
 
-| Setting  | Description | Default Value |
-| ------------- | ------------- | ------------- |
-| mysql_host  | MySQL Host  | localhost |
-| mysql_db | MySQL Database Name  | bedrock-connect |
-| mysql_user | MySQL Username  | root |
-| mysql_pass | MySQL Password  |  |
-| server_limit | How many servers a new player can have in their serverlist  | 100 |
-| port | Port of the server (Should only be changed for debugging on PC. Port needs to be on 19132 for the bypass to work on game consoles) | 19132 |
-| bindip | IP that the BedrockConnect server will bind to | 0.0.0.0 |
-| nodb | If true, use JSON files for data instead of MySQL | false |
-| generatedns | If true, generate a DNS zone file using user input (Only needed if you're using the mod0Umleitung DNS software) | false |
-| kick_inactive | If true, players will be kicked after 10 minutes of inactivity with the serverlist UI | true |
-| custom_servers| Sets the path to a custom server file, for specifying your servers in the list for all players. See [custom servers](#defining-your-own-custom-servers). |  |
-| user_servers | If true, players can add and remove servers on the serverlist. If false, the options are hidden. | true |
-| featured_servers | If true, the featured servers will be displayed in the serverlist.  If false, the servers are hidden. | true |
-| whitelist | Specify file containing list of whitelisted players. (Should be a text file with the player names specified on seperate lines) | |
-| fetch_featured_ips | If true, dynamically grab the featured server IPs from the domain names. If false, a file ```featured_server_ips.json``` will be generated, containing the hard-coded featured server IPs, and to allow changing them if needed.  | true |
-| fetch_ips | If true, dynamically grab the server IPs from domain names, of any server a user is attempting to join. | false |
-| language | Specify a file containing language customizations. See [guide for changing wording](#change-wording-of-serverlist) | |
-| store_display_names | If true, player displays names will be included in the stored player data. | true |
-| packet_limit | Number of datagram packets each address can send within one tick (10ms) | 200 |
-| global_packet_limit | Number of all datagrams that will be handled within one tick (10ms) before server starts dropping any incoming data. | 100000 |
+| Setting             | Description                                                                                                                                                                                                                      | Default Value   |
+|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|
+| db_type             | Database Type (accepts values *mysql*, *postgres*, *mariadb*, or *none*)                                                                                                                                                                                                                    | mysql       |
+| db_host             | Database Host                                                                                                                                                                                                                    | localhost       |
+| db_db               | Database Name                                                                                                                                                                                                                    | bedrock-connect |
+| db_user             | Database Username                                                                                                                                                                                                                | root            |
+| db_pass             | Database Password                                                                                                                                                                                                                |                 |
+| server_limit        | How many servers a new player can have in their serverlist                                                                                                                                                                       | 100             |
+| port                | Port of the server (Should only be changed for debugging on PC. Port needs to be on 19132 for the bypass to work on game consoles)                                                                                               | 19132           |
+| bindip              | IP that the BedrockConnect server will bind to                                                                                                                                                                                   | 0.0.0.0         |
+| nodb                | If true, use JSON files                                                                                                                                                                                                          | true            |
+| auto_reconnect      | If true, Make Mysql and MairaDB auto reconnect to the database when disconnected                                                                                                                                                 | false           |
+| generatedns         | If true, generate a DNS zone file using user input (Only needed if you're using the mod0Umleitung DNS software)                                                                                                                  | false           |
+| kick_inactive       | If true, players will be kicked after 10 minutes of inactivity with the serverlist UI                                                                                                                                            | true            |
+| custom_servers      | Sets the path to a custom server file, for specifying your servers in the list for all players. See [custom servers](#defining-your-own-custom-servers).                                                                         |                 |
+| user_servers        | If true, players can add and remove servers on the serverlist. If false, the options are hidden.                                                                                                                                 | true            |
+| featured_servers    | If true, the featured servers will be displayed in the serverlist.  If false, the servers are hidden.                                                                                                                            | true            |
+| whitelist           | Specify file containing list of whitelisted players. (Should be a text file with the player names specified on seperate lines)                                                                                                   |                 |
+| fetch_featured_ips  | If true, dynamically grab the featured server IPs from the domain names. If false, a file ```featured_server_ips.json``` will be generated, containing the hard-coded featured server IPs, and to allow changing them if needed. | true            |
+| fetch_ips           | If true, dynamically grab the server IPs from domain names, of any server a user is attempting to join.                                                                                                                          | false           |
+| language            | Specify a file containing language customizations. See [guide for changing wording](#change-wording-of-serverlist)                                                                                                               |                 |
+| store_display_names | If true, player displays names will be included in the stored player data.                                                                                                                                                       | true            |
+| packet_limit        | Number of datagram packets each address can send within one tick (10ms)                                                                                                                                                          | 200             |
+| global_packet_limit | Number of all datagrams that will be handled within one tick (10ms) before server starts dropping any incoming data.                                                                                                             | 100000          |
 
 # Defining your own custom servers
 

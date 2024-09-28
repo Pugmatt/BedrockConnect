@@ -21,6 +21,10 @@ public class MySQL extends Database {
     private final String password;
     private final String hostname;
 
+    private final DatabaseTypes databasetype;
+
+    private final Boolean autoReconnect;
+
     private Connection connection;
 
     /**
@@ -35,23 +39,52 @@ public class MySQL extends Database {
      * @param password
      *            Password
      */
-    public MySQL(String hostname, String database, String username, String password) {
+    public MySQL(String hostname, String database, String username, String password, DatabaseTypes databasetype, Boolean autoReconnect) {
         this.hostname = hostname;
         this.database = database;
         this.user = username;
         this.password = password;
         this.connection = null;
+        this.databasetype = databasetype;
+        this.autoReconnect = autoReconnect;
     }
 
     @Override
     public Connection openConnection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://" + this.hostname + "/" + this.database + "?serverTimezone=UTC&useLegacyDatetimeCode=false", this.user, this.password);
-            System.out.println("- MySQL Connection Started -");
+            String Driver = "";
+
+            switch (databasetype)
+            {
+                case mysql:
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    Driver = "jdbc:mysql://";
+                    break;
+                case mariadb:
+                    Class.forName("org.mariadb.jdbc.Driver");
+                    Driver = "jdbc:mariadb://";
+                    break;
+                case postgres:
+                    Class.forName("org.postgresql.Driver");
+                    Driver = "jdbc:postgresql://";
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported database type: " + databasetype);
+            }
+
+            String Extra = "";
+
+            if (autoReconnect)
+            {
+                Extra += "&autoReconnect=true";
+            }
+
+
+            connection = DriverManager.getConnection(Driver + this.hostname + "/" + this.database + "?serverTimezone=UTC&useLegacyDatetimeCode=false" + Extra, this.user, this.password);
+            System.out.println("- Database Connection Started -");
 
         } catch (SQLException e) {
-            System.out.println("ERROR: Could not connect to MySQL server! because: " + e.getMessage());
+            System.out.println("ERROR: Could not connect to Database server! because: " + e.getMessage());
         } catch (ClassNotFoundException e) {
             System.out.println("ERROR: JDBC Driver not found!");
         }

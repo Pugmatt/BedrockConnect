@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import main.com.pyratron.pugmatt.bedrockconnect.config.Language;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
+import main.com.pyratron.pugmatt.bedrockconnect.sql.DatabaseTypes;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
 import org.cloudburstmc.netty.channel.raknet.RakConstants;
@@ -12,7 +13,6 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.net.*;
-import java.security.Security;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,7 +46,7 @@ public class BedrockConnect {
 
     public static int globalPacketLimit = RakConstants.DEFAULT_GLOBAL_PACKET_LIMIT;
 
-    public static String release = "1.47";
+    public static String release = "1.50";
 
     public static HashMap<String, String> featuredServerIps;
 
@@ -63,6 +63,8 @@ public class BedrockConnect {
             String password = "";
             String port = "19132";
             String bindIp = "0.0.0.0";
+            DatabaseTypes databaseType = DatabaseTypes.mysql;
+            boolean autoReconnect = false;
 
             String serverLimit = "100";
 
@@ -102,20 +104,62 @@ public class BedrockConnect {
                 }
             } catch(SecurityException e) {}
 
+            boolean nodbWarning = true;
+            boolean mysqlSettingWarning = false;
+
             for (Map.Entry<String, String> setting : settings.entrySet()) {
                 switch(setting.getKey().toLowerCase()) {
+                    case "db_host":
+                        hostname = setting.getValue();
+                        break;
+                    case "db_db":
+                        database = setting.getValue();
+                        break;
+                    case "db_user":
+                        username = setting.getValue();
+                        break;
+                    case "db_pass":
+                        password = setting.getValue();
+                        break;
+                    case "db_type":
+                        nodbWarning = false;
+                        String dbType = setting.getValue().toLowerCase();
+                        switch(dbType) {
+                            case "none":
+                                databaseType = DatabaseTypes.nosql;
+                                break;
+                            case "mysql":
+                                databaseType = DatabaseTypes.mysql;
+                                break;
+                            case "mariadb":
+                                databaseType = DatabaseTypes.mariadb;
+                                break;
+                            case "postgres":
+                                databaseType = DatabaseTypes.postgres;
+                                break;
+                            default:
+                                System.out.println("Unknown DB Type " + dbType + " using Mysql. Please use mysql, postgres, mariadb, or none");
+                        }
+                        break;
+                    // Backwards-compatibility for legacy database/mysql settings
+                    // db_ settings above should be used for any future setups/database-related changes
                     case "mysql_host":
+                        mysqlSettingWarning = true;
                         hostname = setting.getValue();
                         break;
                     case "mysql_db":
+                        mysqlSettingWarning = true;
                         database = setting.getValue();
                         break;
                     case "mysql_user":
+                        mysqlSettingWarning = true;
                         username = setting.getValue();
                         break;
                     case "mysql_pass":
+                        mysqlSettingWarning = true;
                         password = setting.getValue();
                         break;
+                    //
                     case "server_limit":
                         serverLimit = setting.getValue();
                         break;
@@ -123,7 +167,12 @@ public class BedrockConnect {
                         port = setting.getValue();
                         break;
                     case "nodb":
-                        noDB = setting.getValue().equalsIgnoreCase("true");
+                        if (setting.getValue().equalsIgnoreCase("true"))
+                        {
+                            nodbWarning = false;
+                            databaseType = DatabaseTypes.nosql;
+                            noDB = true;
+                        }
                         break;
                     case "custom_servers":
                         customServers = setting.getValue();
@@ -215,13 +264,28 @@ public class BedrockConnect {
                     case "global_packet_limit":
                         globalPacketLimit =  Integer.parseInt(setting.getValue());
                         break;
+                    case "auto_reconnect":
+                        autoReconnect = setting.getValue().equalsIgnoreCase("true");
+                        break;
                 }
             }
 
-            if(!noDB)
-            System.out.println("MySQL Host: " + hostname + "\n" +
-            "MySQL Database: " + database + "\n" +
-            "MySQL User: " + username);
+
+            if(!noDB) {
+                if(nodbWarning || mysqlSettingWarning) {
+                    System.out.println("----------------");
+                    System.out.println("[!!DEPRECATION!!] Your current database settings may not work in future versions\n");
+                    if(mysqlSettingWarning)
+                        System.out.println("- mysql_* settings should be replaced with db_* settings");
+                    if(nodbWarning)
+                        System.out.println("- db_type should be manually set to mysql");
+                    System.out.println("\nLearn more here: https://github.com/Pugmatt/BedrockConnect/wiki/Deprecated-Database-Settings");
+                    System.out.println("----------------");
+                }
+                System.out.println("Database Host: " + hostname + "\n" +
+                        "Database: " + database + "\n" +
+                        "Database User: " + username);
+            }
 
             System.out.println("\nServer Limit: " + serverLimit + "\n" + "Port: " + port + "\n");
 
@@ -273,13 +337,13 @@ public class BedrockConnect {
             }
 
             if(!noDB) {
-                MySQL = new MySQL(hostname, database, username, password);
+                MySQL = new MySQL(hostname, database, username, password, databaseType, autoReconnect);
 
                 connection = null;
 
                 connection = MySQL.openConnection();
 
-                data = new Data(serverLimit);
+                data = new Data(serverLimit, databaseType);
 
                 // Keep MySQL connection alive
                 Timer timer = new Timer();
@@ -315,7 +379,7 @@ public class BedrockConnect {
                 };
                 timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
             } else {
-                data = new Data(serverLimit);
+                data = new Data(serverLimit, databaseType);
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask() {
                     public void run() { }

@@ -19,6 +19,9 @@ import org.cloudburstmc.protocol.bedrock.codec.v649.Bedrock_v649;
 import org.cloudburstmc.protocol.bedrock.codec.v662.Bedrock_v662;
 import org.cloudburstmc.protocol.bedrock.codec.v671.Bedrock_v671;
 import org.cloudburstmc.protocol.bedrock.codec.v685.Bedrock_v685;
+import org.cloudburstmc.protocol.bedrock.codec.v686.Bedrock_v686;
+import org.cloudburstmc.protocol.bedrock.codec.v712.Bedrock_v712;
+import org.cloudburstmc.protocol.bedrock.codec.v729.Bedrock_v729;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +29,13 @@ import java.util.List;
 // Referenced from: https://github.com/GeyserMC/Geyser/blob/master/connector/src/main/java/org/geysermc/connector/network/BedrockProtocol.java
 
 public class BedrockProtocol {
-    private static final BedrockCodec BEDROCK_V686 = Bedrock_v685.CODEC.toBuilder()
-            .protocolVersion(686)
-            .minecraftVersion("1.21.2")
-            .build();
 
     /**
      * Latest available version
      */
-    public static final BedrockCodec DEFAULT_BEDROCK_CODEC = BEDROCK_V686;
+    public static final BedrockCodec DEFAULT_BEDROCK_CODEC = Bedrock_v729.CODEC.toBuilder()
+            .minecraftVersion("1.21.30")
+            .build();
 
 
     /**
@@ -82,6 +83,12 @@ public class BedrockProtocol {
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v671.CODEC.toBuilder()
                 .build());
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v685.CODEC.toBuilder()
+                .build());
+        SUPPORTED_BEDROCK_CODECS.add(Bedrock_v686.CODEC.toBuilder()
+                .minecraftVersion("1.21.2/1.21.3")
+                .build());
+        SUPPORTED_BEDROCK_CODECS.add(Bedrock_v712.CODEC.toBuilder()
+                .minecraftVersion("1.21.20 - 1.21.23")
                 .build());
         SUPPORTED_BEDROCK_CODECS.add(DEFAULT_BEDROCK_CODEC);
     }
