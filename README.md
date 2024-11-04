@@ -80,7 +80,6 @@ There are multiple BedrockConnect serverlist servers available that can be used,
 | IP Address | Gamertag | Location | Maintainer | Note |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | 104.238.130.180 | BCMain, BCMain1 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method), or replace the primary DNS address with 45.55.68.52. |
-| 207.148.1.32 | DEMCBC | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [LazyBirb](https://github.com/lazybirb) | No DNS Service, Located in Dallas, Texas [More Infos!](https://github.com/LazyBirb/LazyBirb/blob/master/bedrockconnect/README.MD) |
 | 213.171.211.142 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
 | 217.160.58.93 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
 | 134.255.231.119 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) | |
