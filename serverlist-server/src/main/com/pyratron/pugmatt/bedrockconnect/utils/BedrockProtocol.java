@@ -23,6 +23,7 @@ import org.cloudburstmc.protocol.bedrock.codec.v686.Bedrock_v686;
 import org.cloudburstmc.protocol.bedrock.codec.v712.Bedrock_v712;
 import org.cloudburstmc.protocol.bedrock.codec.v729.Bedrock_v729;
 import org.cloudburstmc.protocol.bedrock.codec.v748.Bedrock_v748;
+import org.cloudburstmc.protocol.bedrock.codec.v766.Bedrock_v766;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +35,8 @@ public class BedrockProtocol {
     /**
      * Latest available version
      */
-    public static final BedrockCodec DEFAULT_BEDROCK_CODEC = Bedrock_v748.CODEC.toBuilder()
-            .minecraftVersion("1.21.40")
+    public static final BedrockCodec DEFAULT_BEDROCK_CODEC = Bedrock_v766.CODEC.toBuilder()
+            .minecraftVersion("1.21.50")
             .build();
 
 
@@ -93,6 +94,9 @@ public class BedrockProtocol {
                 .build());
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v729.CODEC.toBuilder()
                 .minecraftVersion("1.21.30/1.21.31")
+                .build());
+        SUPPORTED_BEDROCK_CODECS.add(Bedrock_v748.CODEC.toBuilder()
+                .minecraftVersion("1.21.40 - 1.21.44")
                 .build());
         SUPPORTED_BEDROCK_CODECS.add(DEFAULT_BEDROCK_CODEC);
     }

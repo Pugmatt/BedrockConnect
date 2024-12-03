@@ -536,6 +536,8 @@ public class PacketHandler implements BedrockPacketHandler {
             ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
             resourcePacksInfo.setForcedToAccept(false);
             resourcePacksInfo.setScriptingEnabled(false);
+            resourcePacksInfo.setWorldTemplateId(UUID.randomUUID());
+            resourcePacksInfo.setWorldTemplateVersion("*");
             session.sendPacket(resourcePacksInfo);
         } catch (Exception e) {
             session.disconnect("disconnectionScreen.internalError.cantConnect");
