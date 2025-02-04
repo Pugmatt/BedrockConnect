@@ -31,7 +31,7 @@ There are two methods available to join BedrockConnect:
 
 <sub>(This method utilizes [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast) to supply this join option)</sub>
 
-*In order to make room in the friendslist, you will be removed from the friendslist if inactive for 7 or more days. If this happens, simply add back the gamertag.*
+*In order to make room in the friendslist, you will be removed from the friendslist if inactive for 5 or more days. If this happens, simply add back the gamertag.*
   
 #### DNS Method
 
