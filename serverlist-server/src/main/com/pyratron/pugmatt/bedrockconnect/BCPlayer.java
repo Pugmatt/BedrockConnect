@@ -16,6 +16,17 @@ import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.cloudburstmc.protocol.common.DefinitionRegistry;
+import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -286,9 +297,20 @@ public class BCPlayer {
 
         session.sendPacket(startGamePacket);
 
-        // Required to be sent for 1.16.100
+        // Previously was able to send empty ItemData array to fulfill this; Game client crashes now
+        // though if contents/groups are empty. Also tried setting it to lists that have single phony entries...
+        // Example:
+        // creativeItemData.add(new CreativeItemData(ItemData.AIR, 0, 0);
+        // creativeItemGroupData.add(new CreativeItemGroup(CreativeItemCategory.ALL, "", ItemData.AIR));
+        //
+        // ... but no dice (Either crashes client or client shows a 'Server returned broken packet' error)
+        // , unless I'm missing something
+        //
+        // Unless I'm missing something, I'm assuming this version requires the actual parsed creative_items.json
+        // to be passed-in, will need to figure out parsing the file with the new format.
         CreativeContentPacket creativeContentPacket = new CreativeContentPacket();
-        creativeContentPacket.setContents(new ItemData[0]);
+        creativeContentPacket.getContents().addAll(BedrockConnect.paletteManager.CREATIVE_ITEM_DATA);
+        creativeContentPacket.getGroups().addAll(BedrockConnect.paletteManager.CREATIVE_ITEM_GROUPS);
         session.sendPacket(creativeContentPacket);
 
         spawn();

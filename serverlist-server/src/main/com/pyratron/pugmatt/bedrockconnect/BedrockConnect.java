@@ -46,7 +46,7 @@ public class BedrockConnect {
 
     public static int globalPacketLimit = RakConstants.DEFAULT_GLOBAL_PACKET_LIMIT;
 
-    public static String release = "1.52";
+    public static String release = "1.53";
 
     public static HashMap<String, String> featuredServerIps;
 

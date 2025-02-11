@@ -12,6 +12,9 @@ import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory;
 
 import java.io.*;
 import java.nio.ByteOrder;
@@ -62,6 +65,9 @@ public class PaletteManager {
 
     public static final List<ItemData> CREATIVE_ITEMS;
 
+    public static final List<CreativeItemData> CREATIVE_ITEM_DATA;
+    public static final List<CreativeItemGroup> CREATIVE_ITEM_GROUPS;
+
     static {
         /* Load creative items */
         InputStream stream = BedrockConnect.class.getClassLoader().getResourceAsStream("tables/creative_items.json");
@@ -74,32 +80,72 @@ public class PaletteManager {
         }
 
         List<ItemData> creativeItems = new ArrayList<>();
+        List<CreativeItemData> creativeItemData = new ArrayList<>();
         for (JsonNode itemNode : creativeItemEntries) {
-            short damage = 0;
+            int damage = 0;
+            int count = 1;
+            int groupId = 0;
+            NbtMap tag = null;
+
             if (itemNode.has("damage")) {
-                damage = itemNode.get("damage").numberValue().shortValue();
+                damage = itemNode.get("damage").asInt();
+            }
+            if (itemNode.has("count")) {
+                damage = itemNode.get("count").asInt();
+            }
+            if (itemNode.has("groupId")) {
+                groupId = itemNode.get("groupId").asInt();
             }
             if (itemNode.has("nbt_b64")) {
                 byte[] bytes = Base64.getDecoder().decode(itemNode.get("nbt_b64").asText());
                 ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
                 try {
-                    NbtMap tag = (NbtMap) NbtUtils.createReaderLE(bais).readTag();
-                    creativeItems.add(ItemData.builder()
-                            .netId(itemNode.get("id").asInt())
-                            .damage(damage)
-                            .count(1)
-                            .tag(tag).build());
+                    tag = (NbtMap) NbtUtils.createReaderLE(bais).readTag();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-                creativeItems.add(ItemData.builder()
-                        .netId(itemNode.get("id").asInt())
-                        .damage(damage)
-                        .count(1).build());
             }
+
+            ItemData item = ItemData.builder()
+                    .netId(itemNode.get("id").asInt())
+                    .damage(damage)
+                    .count(count)
+                    .tag(tag).build();
+            // Change to something like this?
+            // ItemData.builder()
+            //                .definition(definition)
+            //                .damage(damage)
+            //                .count(count)
+            //                .tag(tag)
+            //                .blockDefinition(blockDefinition);
+            creativeItems.add(item);
+            creativeItemData.add(new CreativeItemData(item, item.getNetId(), groupId));
         }
+
         CREATIVE_ITEMS = creativeItems;
+        CREATIVE_ITEM_DATA = creativeItemData;
+
+        InputStream groupStream = BedrockConnect.class.getClassLoader().getResourceAsStream("tables/creative_items.json");
+
+        JsonNode creativeItemGroupEntries;
+        try {
+            creativeItemGroupEntries = JSON_MAPPER.readTree(groupStream).get("groups");
+        } catch (Exception e) {
+            throw new AssertionError("Unable to load creative item groups", e);
+        }
+
+        List<CreativeItemGroup> creativeItemGroups = new ArrayList<>();
+        for (JsonNode creativeItemEntry : creativeItemGroupEntries) {
+            CreativeItemCategory category = CreativeItemCategory.valueOf(creativeItemEntry.get("category").asText().toUpperCase(Locale.ROOT));
+            String name = creativeItemEntry.get("name").asText();
+
+            JsonNode icon = creativeItemEntry.get("icon");
+            String identifier = icon.get("id").asText();
+
+            creativeItemGroups.add(new CreativeItemGroup(category, name, ItemData.AIR));
+        }
+
+        CREATIVE_ITEM_GROUPS = creativeItemGroups;
     }
 
 
