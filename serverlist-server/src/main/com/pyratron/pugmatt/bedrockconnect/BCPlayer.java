@@ -297,20 +297,10 @@ public class BCPlayer {
 
         session.sendPacket(startGamePacket);
 
-        // Previously was able to send empty ItemData array to fulfill this; Game client crashes now
-        // though if contents/groups are empty. Also tried setting it to lists that have single phony entries...
-        // Example:
-        // creativeItemData.add(new CreativeItemData(ItemData.AIR, 0, 0);
-        // creativeItemGroupData.add(new CreativeItemGroup(CreativeItemCategory.ALL, "", ItemData.AIR));
-        //
-        // ... but no dice (Either crashes client or client shows a 'Server returned broken packet' error)
-        // , unless I'm missing something
-        //
-        // Unless I'm missing something, I'm assuming this version requires the actual parsed creative_items.json
-        // to be passed-in, will need to figure out parsing the file with the new format.
+        ItemComponentPacket componentPacket = new ItemComponentPacket();
+        session.sendPacket(componentPacket);
+
         CreativeContentPacket creativeContentPacket = new CreativeContentPacket();
-        creativeContentPacket.getContents().addAll(BedrockConnect.paletteManager.CREATIVE_ITEM_DATA);
-        creativeContentPacket.getGroups().addAll(BedrockConnect.paletteManager.CREATIVE_ITEM_GROUPS);
         session.sendPacket(creativeContentPacket);
 
         spawn();
