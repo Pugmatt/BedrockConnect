@@ -19,7 +19,7 @@ There are two methods available to join BedrockConnect:
 
 #### "Add Friend" Method
 
-- In the Minecraft main menu, click "Play" and then go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" (whichever is available on your game version)
+- In the Minecraft main menu, click "Play" and then go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" or "Search for players" (whichever is available on your game version)
 
 - Search for the gamer tag ***BCMain*** (Or any of [these alts](https://github.com/Pugmatt/BedrockConnect/wiki/Alternate-gamer-tags-for-%22Add-Friend%22-method)), and add this user as friend
 
