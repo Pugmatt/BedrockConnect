@@ -37,7 +37,9 @@ There are two methods available to join BedrockConnect:
 
 Switch: https://www.youtube.com/watch?v=zalT_oR1nPM
 
-Xbox: https://www.youtube.com/watch?v=g8mHvasVHMs
+Xbox:
+- Go into your console's internet settings, and set the primary DNS to 104.238.130.180 and secondary DNS to 8.8.8.8
+- For a video walkthrough: https://www.youtube.com/watch?v=g8mHvasVHMs
 
 PS4/PS5:
 - Go into your console's internet settings, and set the primary DNS to 45.55.68.52 and secondary DNS to 8.8.8.8
