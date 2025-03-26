@@ -68,7 +68,7 @@ public class Server {
         pong.edition("MCPE");
         pong.motd(BedrockConnect.language.getWording("serverInfo", "motd"));
         pong.subMotd(BedrockConnect.language.getWording("serverInfo", "subMotd"));
-        pong.playerCount(0);
+        pong.playerCount(1);
         pong.maximumPlayerCount(20);
         pong.gameType("Survival");
         pong.ipv4Port(Integer.parseInt(port));
