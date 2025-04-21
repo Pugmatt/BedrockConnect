@@ -25,7 +25,7 @@ There are two methods available to join BedrockConnect:
 
 - Return to the Minecraft main menu, and wait about 20 seconds. Then click "Play" and return to the "Friends" tab
 
-- Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List". Or, you should see BCMain under the "Online" section with a joinable instance.
+- Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List". Or, you should see BCMain under the "Online" section with a joinable instance. (If the join option doesn't appear, you may need to wait another minute for the bot to process the friend request)
 
 - Join instance to connect to BedrockConnect server list
 
