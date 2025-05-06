@@ -272,9 +272,9 @@ public class BCPlayer {
         startGamePacket.setEducationProductionId("");
         startGamePacket.setForceExperimentalGameplay(OptionalBoolean.empty());
 
-        startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.CLIENT);
+        startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER_WITH_REWIND);
         startGamePacket.setRewindHistorySize(0);
-        startGamePacket.setServerAuthoritativeBlockBreaking(false);
+        startGamePacket.setServerAuthoritativeBlockBreaking(true);
         //startGamePacket.setTrial(false);
         startGamePacket.setVanillaVersion("*");
         startGamePacket.setInventoriesServerAuthoritative(true);
@@ -322,10 +322,6 @@ public class BCPlayer {
                 session.sendPacket(data2);
             }
         }
-
-        BiomeDefinitionListPacket biomePacket = new BiomeDefinitionListPacket();
-        biomePacket.setDefinitions(BedrockConnect.paletteManager.BIOMES);
-        session.sendPacket(biomePacket);
 
         AvailableEntityIdentifiersPacket entityPacket = new AvailableEntityIdentifiersPacket();
         entityPacket.setIdentifiers(BedrockConnect.paletteManager.ENTITY_IDENTIFIERS);
