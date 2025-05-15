@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
+
 
 
 
@@ -81,12 +83,12 @@ public class MySQL extends Database {
 
 
             connection = DriverManager.getConnection(Driver + this.hostname + "/" + this.database + "?serverTimezone=UTC&useLegacyDatetimeCode=false" + Extra, this.user, this.password);
-            System.out.println("- Database Connection Started -");
+            BedrockConnect.logger.debug("Connection made with database");
 
         } catch (SQLException e) {
-            System.out.println("ERROR: Could not connect to Database server! because: " + e.getMessage());
+            BedrockConnect.logger.error("Failed to establish connection with database: " + e.getMessage());
         } catch (ClassNotFoundException e) {
-            System.out.println("ERROR: JDBC Driver not found!");
+            BedrockConnect.logger.error("JDBC Driver not found");
         }
         return connection;
     }
@@ -107,8 +109,7 @@ public class MySQL extends Database {
             try {
                 connection.close();
             } catch (SQLException e) {
-                System.out.println("ERROR: Error closing the MySQL Connection!");
-                e.printStackTrace();
+                BedrockConnect.logger.error("Error closing the database connection", e);
             }
         }
     }

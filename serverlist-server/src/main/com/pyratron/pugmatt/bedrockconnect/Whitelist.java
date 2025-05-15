@@ -8,35 +8,33 @@ import java.util.List;
 
 public class Whitelist {
 
-	private static boolean is_whitelist = false;
-	private static List<String> whitelist;
-	static String whitelist_message = "You are not whitelisted on this server";
+	private static List<String> whitelist = null;
+	private static String whitelistMessage = "You are not whitelisted on this server";
 
-	public static void loadWhitelist(File whitelistfile) {
-		is_whitelist = true;
+	public static void loadWhitelist(String whitelistFile) {
 		try {
-			whitelist =  Files.readAllLines(whitelistfile.toPath());
-		} catch (IOException e) {
-			e.printStackTrace();
+			File file = new File(whitelistFile);
+			whitelist =  Files.readAllLines(file.toPath());
+			BedrockConnect.logger.debug("Whitelist data: " + whitelist.toString());
+		} catch (Exception e) {
+			BedrockConnect.logger.error("Error loading whitelist", e);
+			System.exit(1);
 		}
 	}
 
-	//returns whether there is a whitelist.
 	public static boolean hasWhitelist() {
-		return is_whitelist;
+		return whitelist != null;
 	}
 
-	//returns whitelist list
 	public static List<String> getWhitelist() {
 		return whitelist;
 	}
 
-	//returns true if player name is whitelisted, otherwise returns false.
 	public static boolean isPlayerWhitelisted(String name) {
 		return whitelist.contains(name);
 	}
 
 	public static String getWhitelistMessage() {
-		return whitelist_message;
+		return whitelistMessage;
 	}
 }

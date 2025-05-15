@@ -47,10 +47,11 @@ public class CustomServerHandler {
 				}
 			}
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
+			BedrockConnect.logger.debug("Custom server data: " + serverList.toString());
+
+		} catch (Exception e) {
+			BedrockConnect.logger.error("Error loading custom servers", e);
+			System.exit(1);
 		}
 
 	}

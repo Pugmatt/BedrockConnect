@@ -81,9 +81,9 @@ public class Data {
         ).start();
     }
 
-    public BCPlayer getPlayer(ResultSet rs, String uuid, BedrockServerSession session) {
+    public BCPlayer getPlayer(ResultSet rs, String name, String uuid, BedrockServerSession session) {
         try {
-            BCPlayer p = new BCPlayer(uuid, session, UIComponents.getFormData(rs.getString("servers")), rs.getInt("serverLimit"));
+            BCPlayer p = new BCPlayer(name, uuid, session, UIComponents.getFormData(rs.getString("servers")), rs.getInt("serverLimit"));
             return p;
         }
         catch(SQLException e) {
@@ -113,7 +113,7 @@ public class Data {
                                     updateUUID.setString(2, uuid);
                                     updateUUID.executeUpdate();
                                 }
-                                BCPlayer p = getPlayer(rs, uuid, session);
+                                BCPlayer p = getPlayer(rs, name, uuid, session);
                                 packetHandler.setPlayer(p);
                                 if (p != null)
                                     BedrockConnect.server.addPlayer(p);
@@ -146,7 +146,9 @@ public class Data {
                     pw.flush();
                     pw.close();
 
-                    BCPlayer pl = new BCPlayer(uuid, session, new ArrayList<>(), Integer.parseInt(serverLimit));
+                    BedrockConnect.logger.info("Added new user " + name + " (xuid: " + uuid + ")");
+
+                    BCPlayer pl = new BCPlayer(name, uuid, session, new ArrayList<>(), Integer.parseInt(serverLimit));
                     packetHandler.setPlayer(pl);
                     BedrockConnect.server.addPlayer(pl);
                 } else {
@@ -158,13 +160,12 @@ public class Data {
 
                     JSONArray servers = (JSONArray) jo.get("servers");
 
-                    BCPlayer p = new BCPlayer(uuid, session, servers, serverLimit);
+                    BCPlayer p = new BCPlayer(name, uuid, session, servers, serverLimit);
                     packetHandler.setPlayer(p);
                     BedrockConnect.server.addPlayer(p);
                 }
             } catch (Exception e) {
-                System.out.println("An error occurred.");
-                e.printStackTrace();
+                BedrockConnect.logger.error("An error occurred saving to player file", e);
             }
         }
     }
@@ -180,8 +181,8 @@ public class Data {
                     s.setString(2, BedrockConnect.storeDisplayNames ? name : "");
                     s.setInt(3, Integer.parseInt(serverLimit));
                     s.executeUpdate();
-                    System.out.println("[BedrockConnect] Added new user '" + name + "' (" + uuid + ") to Database.");
-                    BCPlayer pl = new BCPlayer(uuid, session, new ArrayList<>(), Integer.parseInt(serverLimit));
+                    BedrockConnect.logger.info("Added new user " + name + " (xuid: " + uuid + ") to Database");
+                    BCPlayer pl = new BCPlayer(name, uuid, session, new ArrayList<>(), Integer.parseInt(serverLimit));
                     packetHandler.setPlayer(pl);
                     BedrockConnect.server.addPlayer(pl);
                 }
@@ -219,8 +220,7 @@ public class Data {
                 pw.flush();
                 pw.close();
             } catch (Exception e) {
-                System.out.println("An error occurred.");
-                e.printStackTrace();
+                BedrockConnect.logger.error("An error occurred saving to player file", e);
             }
         }
     }
@@ -243,8 +243,7 @@ public class Data {
     }
 
     public void errorAlert(Exception e) {
-        System.out.println("[BedrockConnect] WARNING!!! DATABASE ERROR: " + e.getMessage());
-        e.printStackTrace();
+        BedrockConnect.logger.error("A database error has occured" , e);
     }
 
 }

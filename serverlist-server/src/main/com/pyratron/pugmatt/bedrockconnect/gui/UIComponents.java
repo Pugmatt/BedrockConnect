@@ -119,7 +119,7 @@ public class UIComponents {
             }
             return strings;
         } catch(ParseException e) {
-            System.out.println(e.toString());
+            BedrockConnect.logger.error("Error parsing form data", e);
         }
 
         return null;

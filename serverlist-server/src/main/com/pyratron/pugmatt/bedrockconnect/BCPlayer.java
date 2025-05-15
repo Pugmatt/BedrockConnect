@@ -42,6 +42,7 @@ public class BCPlayer {
 
     private int serverLimit;
 
+    private String displayName;
     private String uuid;
 
     private LocalTime lastAction;
@@ -70,7 +71,8 @@ public class BCPlayer {
     }
 
 
-    public BCPlayer(String uuid, BedrockServerSession session, List<String> serverList, int serverLimit) {
+    public BCPlayer(String displayName, String uuid, BedrockServerSession session, List<String> serverList, int serverLimit) {
+        this.displayName = displayName;
         this.uuid = uuid;
         this.session = session;
         this.serverList = serverList;
@@ -115,6 +117,10 @@ public class BCPlayer {
             return true;
         }
         return false;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public String getUuid() {

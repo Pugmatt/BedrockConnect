@@ -102,7 +102,7 @@ public class PaletteManager {
                 try {
                     tag = (NbtMap) NbtUtils.createReaderLE(bais).readTag();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    BedrockConnect.logger.error("Error loading creative items file", e);
                 }
             }
 
@@ -166,7 +166,7 @@ public class PaletteManager {
             tag = (NbtList<NbtMap>) nbtInputStream.readTag();
             nbtInputStream.close();
         } catch (Exception ex) {
-            System.out.println("Failed to receive blocks palette");
+            BedrockConnect.logger.error("Failed to receive blocks palette");
             throw new AssertionError(ex);
         }
 
