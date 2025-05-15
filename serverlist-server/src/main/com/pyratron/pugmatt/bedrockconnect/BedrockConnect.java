@@ -3,13 +3,27 @@ package main.com.pyratron.pugmatt.bedrockconnect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import main.com.pyratron.pugmatt.bedrockconnect.config.Language;
+import main.com.pyratron.pugmatt.bedrockconnect.logging.LogColors;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.Data;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.DatabaseTypes;
 import main.com.pyratron.pugmatt.bedrockconnect.sql.MySQL;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.PaletteManager;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.cloudburstmc.netty.channel.raknet.RakConstants;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.io.*;
 import java.net.*;
@@ -30,17 +44,17 @@ public class BedrockConnect {
     public static Server server;
 
     public static boolean noDB = false;
-    public static boolean whitelist = false;
+    public static String whitelist = null;
     public static String customServers = null;
     public static boolean kickInactive = true;
     public static boolean userServers = true;
     public static boolean featuredServers = true;
     public static boolean fetchFeaturedIps = true;
+    public static boolean debug = false;
 
     public static boolean fetchIps = false;
 
     public static boolean storeDisplayNames = true;
-    public static File whitelistfile;
 
     public static int packetLimit = 200;
 
@@ -52,8 +66,13 @@ public class BedrockConnect {
 
     public static Language language;
 
+    public static Logger logger = LoggerFactory.getLogger(BedrockConnect.class);
+
     public static void main(String[] args) {
-        System.out.println("-= BedrockConnect (Release: " + release + ") =-");
+        BedrockConnect.logger.info(
+            LogColors.cyan("-= BedrockConnect ") + "( " + LogColors.cyan("Release: ") + LogColors.purple(release) + " )"  + LogColors.cyan(" =-")
+        );
+
         paletteManager =  new PaletteManager();
 
         try {
@@ -72,9 +91,14 @@ public class BedrockConnect {
 
             HashMap<String, String> settings = new HashMap<>();
 
+            boolean settingsArgs = false;
+            boolean settingsFile = false;
+            boolean settingsEnv = false;
+
             // Find any settings in startup arguments
             for(String str : args) {
                 if(str.indexOf("=") !=  -1 && str.indexOf("=") < str.length() - 1) {
+                    settingsArgs = true;
                     settings.put(str.substring(0, str.indexOf("=")), str.substring(str.indexOf("=") + 1));
                 }
             }
@@ -82,6 +106,7 @@ public class BedrockConnect {
             // Find any settings in configuration file
             File configFile = new File("config.yml");
             if(configFile.exists() && !configFile.isDirectory()) {
+                settingsFile = true;
                 try {
                     ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
                     Map<String, Object> config = mapper.readValue(configFile, Map.class);
@@ -89,8 +114,8 @@ public class BedrockConnect {
                         settings.put(configKey.toLowerCase(), config.get(configKey).toString());
                     }
                 } catch(Exception e) {
-                    System.out.println("Issue parsing configuration file");
-                    throw new RuntimeException(e);
+                    BedrockConnect.logger.error("Issue parsing configuration file", e);
+                    System.exit(1);
                 }
             }
 
@@ -99,13 +124,14 @@ public class BedrockConnect {
                 Map<String, String> env = System.getenv();
                 for (String envName : env.keySet()) {
                     if (envName.toLowerCase().startsWith("bc_")) {
+                        settingsEnv = true; 
                         settings.put(envName.toLowerCase().replace("bc_", ""), env.get(envName));
                     }
                 }
             } catch(SecurityException e) {}
 
             boolean nodbWarning = true;
-            boolean mysqlSettingWarning = false;
+            boolean mysqlSettingWarning = false;            
 
             for (Map.Entry<String, String> setting : settings.entrySet()) {
                 switch(setting.getKey().toLowerCase()) {
@@ -138,7 +164,8 @@ public class BedrockConnect {
                                 databaseType = DatabaseTypes.postgres;
                                 break;
                             default:
-                                System.out.println("Unknown DB Type " + dbType + " using Mysql. Please use mysql, postgres, mariadb, or none");
+                                BedrockConnect.logger.error("Unknown database type '" + dbType + "'. Valid values: mysql, postgres, mariadb, none");
+                                System.exit(1);
                         }
                         break;
                     // Backwards-compatibility for legacy database/mysql settings
@@ -183,7 +210,7 @@ public class BedrockConnect {
                             try {
                                 Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 
-                                System.out.println("Local IPv4 IPs:");
+                                 System.out.println("Local IPv4 IPs:");
                                 while (interfaces.hasMoreElements()) {
                                     NetworkInterface iface = interfaces.nextElement();
 
@@ -197,7 +224,7 @@ public class BedrockConnect {
                                         if (!(addr instanceof Inet4Address)) continue;
 
                                         ip = addr.getHostAddress();
-                                        System.out.println(iface.getDisplayName() + ": " + ip);
+                                        System.out.println(" - " + iface.getDisplayName() + ": " + ip);
                                     }
                                 }
 
@@ -240,14 +267,7 @@ public class BedrockConnect {
                         fetchIps = setting.getValue().equalsIgnoreCase("true");
                         break;
                     case "whitelist":
-                        try {
-                            whitelistfile = new File(setting.getValue());
-                            Whitelist.loadWhitelist(whitelistfile);
-                        }
-                        catch(Exception e) {
-                            System.out.println("Unable to load whitelist file: " + whitelistfile.getName());
-                            e.printStackTrace();
-                        }
+                        whitelist = setting.getValue();
                         break;
                     case "language":
                         languageFile = setting.getValue();
@@ -267,33 +287,59 @@ public class BedrockConnect {
                     case "auto_reconnect":
                         autoReconnect = setting.getValue().equalsIgnoreCase("true");
                         break;
+                    case "debug":
+                        debug = setting.getValue().equalsIgnoreCase("true");
+                        break;
                 }
             }
 
+            if (debug) {
+                Configurator.setLevel(BedrockConnect.logger.getName(), Level.DEBUG);
+
+                BedrockConnect.logger.debug("Java Version: " + System.getProperty("java.version"));
+                BedrockConnect.logger.debug("Java Vendor: " + System.getProperty("java.vendor"));
+                BedrockConnect.logger.debug("OS Name: " + System.getProperty("os.name"));
+
+                final List<String> censored = new ArrayList<>(List.of(
+                    "db_host",
+                    "db_db",
+                    "db_user",
+                    "db_pass",
+                    "mysql_host",
+                    "mysql_db",
+                    "mysql_user",
+                    "mysql_pass"
+                ));
+
+               BedrockConnect.logger.debug("Passed-in configuration (Loaded through" 
+                + (settingsArgs ? " [Startup Args]" : "") 
+                + (settingsFile ? " [Config File]" : "") 
+                + (settingsEnv ? " [Env Variables]" : "")
+                + "):");
+               for (Map.Entry<String, String> setting : settings.entrySet()) {
+                 BedrockConnect.logger.debug(" - " + setting.getKey() + ": " + (censored.contains(setting.getKey()) ? LogColors.gray("[redacted]") : setting.getValue()));
+               }
+            }
 
             if(!noDB) {
                 if(nodbWarning || mysqlSettingWarning) {
-                    System.out.println("----------------");
-                    System.out.println("[!!DEPRECATION!!] Your current database settings may not work in future versions\n");
+                    BedrockConnect.logger.warn("[!!DEPRECATION!!] Your current database settings may not work in future versions");
                     if(mysqlSettingWarning)
-                        System.out.println("- mysql_* settings should be replaced with db_* settings");
+                        BedrockConnect.logger.warn("- mysql_* settings should be replaced with db_* settings");
                     if(nodbWarning)
-                        System.out.println("- db_type should be manually set to mysql");
-                    System.out.println("\nLearn more here: https://github.com/Pugmatt/BedrockConnect/wiki/Deprecated-Database-Settings");
-                    System.out.println("----------------");
+                        BedrockConnect.logger.warn("- db_type should be manually set to mysql");
+                    BedrockConnect.logger.warn("Learn more here: https://github.com/Pugmatt/BedrockConnect/wiki/Deprecated-Database-Settings");
                 }
-                System.out.println("Database Host: " + hostname + "\n" +
-                        "Database: " + database + "\n" +
-                        "Database User: " + username);
             }
 
-            System.out.println("\nServer Limit: " + serverLimit + "\n" + "Port: " + port + "\n");
-
             CustomServerHandler.initialize();
-            System.out.printf("Loaded %d custom servers\n", CustomServerHandler.getServers().length);
+            if (CustomServerHandler.getServers().length > 0) {
+                BedrockConnect.logger.info("Loaded {} custom servers", CustomServerHandler.getServers().length);
+            }
 
-            if (Whitelist.hasWhitelist()) {
-            	System.out.printf("There are %d whitelisted players\n", Whitelist.getWhitelist().size());
+            if (whitelist != null) {
+                Whitelist.loadWhitelist(whitelist);
+            	BedrockConnect.logger.info("Loaded {} whitelisted players", Whitelist.getWhitelist().size());
             }
 
             language = new Language(languageFile);
@@ -331,12 +377,14 @@ public class BedrockConnect {
                         }
                     }
                 } catch (Exception e) {
-                    System.out.println("An error occurred.");
-                    e.printStackTrace();
+                    BedrockConnect.logger.error("An error occurred parsing featured_server_ips.json", e);
+                    System.exit(1);
                 }
             }
 
             if(!noDB) {
+                BedrockConnect.logger.info("Player data storage: " + LogColors.purple("Database"));
+
                 MySQL = new MySQL(hostname, database, username, password, databaseType, autoReconnect);
 
                 connection = null;
@@ -363,22 +411,20 @@ public class BedrockConnect {
                                                         "SELECT 1");
                                         rs.next();
                                     } catch (SQLException e) {
-                                        // TODO Auto-generated
-                                        // catch block
-                                        e.printStackTrace();
+                                        BedrockConnect.logger.error("Error refreshing SQL connection", e);
                                     }
                                     sec = 0;
                                 }
                             }
                         } catch (SQLException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
+                            BedrockConnect.logger.error("Error refreshing SQL connection", e);
                         }
                         sec++;
                     }
                 };
                 timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
             } else {
+                BedrockConnect.logger.info("Player data storage: " + LogColors.cyan("Files"));
                 data = new Data(serverLimit, databaseType);
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask() {
@@ -389,7 +435,7 @@ public class BedrockConnect {
 
             server = new Server(bindIp, port);
         } catch(Exception e) {
-            e.printStackTrace();
+            BedrockConnect.logger.error("An error occured", e);
         }
 
     }

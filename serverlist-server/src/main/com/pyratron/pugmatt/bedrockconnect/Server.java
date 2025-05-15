@@ -9,6 +9,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
+import main.com.pyratron.pugmatt.bedrockconnect.logging.LogColors;
 import main.com.pyratron.pugmatt.bedrockconnect.utils.BedrockProtocol;
 import org.cloudburstmc.netty.channel.raknet.RakChannel;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
@@ -22,6 +23,8 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketHandler;
 
 
 import javax.annotation.Nonnull;
+
+import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.util.*;
 
@@ -48,8 +51,8 @@ public class Server {
     }
 
     public void addPlayer(BCPlayer player) {
-        System.out.println("Total users connected: " + this.players.size());
         this.players.add(player);
+        BedrockConnect.logger.info("[ " + LogColors.cyan(this.players.size() + " online") + " ] Player connected: " + player.getDisplayName() + " (xuid: " + player.getUuid() + ")");
     }
 
     public void removePlayer(BCPlayer player) {
@@ -57,25 +60,25 @@ public class Server {
             this.players.remove(player);
     }
 
-
     public Server(String bindIp, String port) {
-        Server current = this;
-        players = new ArrayList<>();
+        try {
+            Server current = this;
+            players = new ArrayList<>();
 
-        InetSocketAddress bindAddress = new InetSocketAddress(bindIp, Integer.parseInt(port));
+            InetSocketAddress bindAddress = new InetSocketAddress(bindIp, Integer.parseInt(port));
 
-        pong = new BedrockPong();
-        pong.edition("MCPE");
-        pong.motd(BedrockConnect.language.getWording("serverInfo", "motd"));
-        pong.subMotd(BedrockConnect.language.getWording("serverInfo", "subMotd"));
-        pong.playerCount(1);
-        pong.maximumPlayerCount(20);
-        pong.gameType("Survival");
-        pong.ipv4Port(Integer.parseInt(port));
-        pong.protocolVersion(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion());
-        pong.version(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion());
+            pong = new BedrockPong();
+            pong.edition("MCPE");
+            pong.motd(BedrockConnect.language.getWording("serverInfo", "motd"));
+            pong.subMotd(BedrockConnect.language.getWording("serverInfo", "subMotd"));
+            pong.playerCount(1);
+            pong.maximumPlayerCount(20);
+            pong.gameType("Survival");
+            pong.ipv4Port(Integer.parseInt(port));
+            pong.protocolVersion(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion());
+            pong.version(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion());
 
-        new ServerBootstrap()
+            new ServerBootstrap()
                 .group(this.eventLoopGroup)
                 .channelFactory(RakChannelFactory.server(NioDatagramChannel.class))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
@@ -90,48 +93,55 @@ public class Server {
                 .bind(bindAddress)
                 .syncUninterruptibly();
 
-        System.out.println("Bedrock Connection Started: " + bindIp + ":" + port);
-        if(BedrockConnect.kickInactive) {
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                public void run() {
-                    for (int i = 0; i < players.size(); i++) {
-                        if (players.get(i) != null && !players.get(i).isActive())
-                            players.get(i).disconnect(BedrockConnect.language.getWording("disconnect", "inactivity"), current);
-                    }
-                }
-            };
-            timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
-        }
-
-        new Thread() {
-            public void run() {
-                Scanner sc = null;
-                try {
-                    sc = new Scanner(System.in);
-                    while(sc.hasNextLine()) {
-                        String cmd = sc.next();
-                        switch(cmd) {
-                            case "end":
-                            case "stop":
-                                System.exit(0);
-                                break;
+            BedrockConnect.logger.info("[ " + LogColors.green("OK") + " ] Server is now running: " + LogColors.cyan(bindIp + ":" + port));
+            if(BedrockConnect.kickInactive) {
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    public void run() {
+                        for (int i = 0; i < players.size(); i++) {
+                            if (players.get(i) != null && !players.get(i).isActive())
+                                players.get(i).disconnect(BedrockConnect.language.getWording("disconnect", "inactivity"), current);
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if (sc != null) {
-                        try {
-                            sc.close();
-                        } catch (Exception e1) {
-                            // just ignore it
-                        }
-                        sc = null;
-                    }
-                }
+                };
+                timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
             }
-        }.start();
 
+            new Thread() {
+                public void run() {
+                    Scanner sc = null;
+                    try {
+                        sc = new Scanner(System.in);
+                        while(sc.hasNextLine()) {
+                            String cmd = sc.next();
+                            switch(cmd) {
+                                case "end":
+                                case "stop":
+                                    System.exit(0);
+                                    break;
+                            }
+                        }
+                    } catch (Exception e) {
+                        BedrockConnect.logger.error("Error reading input", e);
+                    } finally {
+                        if (sc != null) {
+                            try {
+                                sc.close();
+                            } catch (Exception e1) {
+                                // just ignore it
+                            }
+                            sc = null;
+                        }
+                    }
+                }
+            }.start();
+
+        } catch(Exception e) {
+            if (e instanceof BindException) {
+                 BedrockConnect.logger.error("Error binding to address (Is port " + port + " already in use?)", e);
+            } else {
+                BedrockConnect.logger.error("Error starting server", e);
+            }
+        }
     }
 }

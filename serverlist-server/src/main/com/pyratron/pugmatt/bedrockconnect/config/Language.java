@@ -45,9 +45,13 @@ public class Language {
 
                     elements.put((String) wording, set);
                 }
+
+                BedrockConnect.logger.info("Loaded custom language elements");
+                BedrockConnect.logger.debug("Language data: " + elements.toString());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            BedrockConnect.logger.error("Error loading language file", e);
+            System.exit(1);
         }
     }
 

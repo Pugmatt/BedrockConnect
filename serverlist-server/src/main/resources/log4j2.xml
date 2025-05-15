@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{HH:mm:ss} [%style{%highlight{%level}{FATAL=red, ERROR=red, WARN=yellow, INFO=green bold, DEBUG=magenta, TRACE=white, disableAnsi=${sys:stripColors:-false}}}] %style{%highlight{%m}{FATAL=red, ERROR=red, WARN=yellow, INFO=default, DEBUG=default, TRACE=default, disableAnsi=${sys:stripColors:-false}}}%n</Property>
+        <Property name="LOG_PATTERN_NO_COLOR">%d{HH:mm:ss} [%level] %replace{%message}{\x1B\[[0-9;]*m}{}%n</Property>
+    </Properties>
+ 
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>
+        <SystemPropertyArbiter propertyName="logFile" propertyValue="true">
+            <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/app-%d{yyyy-MM-dd}-%i.log.gz">
+                <PatternLayout pattern="${LOG_PATTERN_NO_COLOR}" />
+                <Policies>
+                    <TimeBasedTriggeringPolicy />
+                    <SizeBasedTriggeringPolicy size="100 MB"/>
+                </Policies>
+            </RollingRandomAccessFile>
+        </SystemPropertyArbiter>
+    </Appenders>
+ 
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="console"/>
+            <SystemPropertyArbiter propertyName="logFile" propertyValue="true">
+                <AppenderRef ref="File"/>
+            </SystemPropertyArbiter>
+        </Root>
+    </Loggers>
+</Configuration>
