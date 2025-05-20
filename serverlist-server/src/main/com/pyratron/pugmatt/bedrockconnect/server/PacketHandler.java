@@ -1,14 +1,18 @@
-package main.com.pyratron.pugmatt.bedrockconnect.listeners;
+package main.com.pyratron.pugmatt.bedrockconnect.server;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import main.com.pyratron.pugmatt.bedrockconnect.*;
-import main.com.pyratron.pugmatt.bedrockconnect.gui.MainFormButton;
-import main.com.pyratron.pugmatt.bedrockconnect.gui.ManageFormButton;
-import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
-import main.com.pyratron.pugmatt.bedrockconnect.gui.UIForms;
+import main.com.pyratron.pugmatt.bedrockconnect.config.Whitelist;
+import main.com.pyratron.pugmatt.bedrockconnect.config.Custom.CustomEntry;
+import main.com.pyratron.pugmatt.bedrockconnect.config.Custom.CustomServer;
+import main.com.pyratron.pugmatt.bedrockconnect.config.Custom.CustomServerGroup;
 import main.com.pyratron.pugmatt.bedrockconnect.logging.LogColors;
-import main.com.pyratron.pugmatt.bedrockconnect.utils.BedrockProtocol;
+import main.com.pyratron.pugmatt.bedrockconnect.server.gui.MainFormButton;
+import main.com.pyratron.pugmatt.bedrockconnect.server.gui.ManageFormButton;
+import main.com.pyratron.pugmatt.bedrockconnect.server.gui.UIComponents;
+import main.com.pyratron.pugmatt.bedrockconnect.server.gui.UIForms;
+
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
@@ -19,13 +23,10 @@ import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.bedrock.util.JsonUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
-import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.jose4j.json.internal.json_simple.JSONObject;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.lang.JoseException;
 
-import java.io.IOException;
-import java.net.URI;
 import java.security.PublicKey;
 import java.security.interfaces.ECPublicKey;
 import java.util.*;
@@ -35,19 +36,20 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class PacketHandler implements BedrockPacketHandler {
-
-    private Server server;
     private BedrockServerSession session;
 
     private String name;
     private String uuid;
+    private JSONObject extraData;
 
     private BCPlayer player;
 
-    private JSONObject extraData;
-
     // Used for server icon fix
     private ScheduledThreadPoolExecutor executor = null;
+
+     public PacketHandler(BedrockServerSession session, boolean packetListening) {
+        this.session = session;
+    }
 
     public void setPlayer(BCPlayer player) {
         this.player = player;
@@ -55,13 +57,13 @@ public class PacketHandler implements BedrockPacketHandler {
 
     public String getIP(String hostname) {
         try {
-            if(BedrockConnect.fetchFeaturedIps || BedrockConnect.fetchIps) {
+            if(BedrockConnect.getConfig().canFetchFeaturedIps() || BedrockConnect.getConfig().canFetchIps()) {
                 InetAddress host = InetAddress.getByName(hostname);
                 String address = host.getHostAddress();
                 BedrockConnect.logger.debug("Retrieved " + address + " host address from hostname " + hostname);
                 return address;
             } else {
-                return BedrockConnect.featuredServerIps.get(hostname);
+                return BedrockConnect.getConfig().getFeaturedServerIps().get(hostname);
             }
         } catch (UnknownHostException ex) {
             BedrockConnect.logger.error("Error retrieving IP from hostname", ex);
@@ -71,7 +73,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public PacketSignal handlePacket(BedrockPacket packet) {
-        if (BedrockConnect.debug && !(packet instanceof PlayerAuthInputPacket)) {
+        if (BedrockConnect.getConfig().isDebugEnabled() && !(packet instanceof PlayerAuthInputPacket)) {
             String id = session.getSocketAddress().toString();
             if (name != null) {
                 id = name;
@@ -128,8 +130,8 @@ public class PacketHandler implements BedrockPacketHandler {
                     } else { // If selecting button
                         int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
 
-                        CustomEntry[] customServers = CustomServerHandler.getServers();
-                        List<String> playerServers = server.getPlayer(uuid).getServerList();
+                        CustomEntry[] customServers = BedrockConnect.getConfig().getCustomServers();
+                        List<String> playerServers = BedrockConnect.getServer().getPlayer(uuid).getServerList();
 
                         MainFormButton button = UIForms.getMainFormButton(chosen, customServers, playerServers);
 
@@ -143,10 +145,10 @@ public class PacketHandler implements BedrockPacketHandler {
                                 player.openForm(UIForms.MANAGE_SERVER);
                                 break;
                             case EXIT:
-                                player.disconnect(BedrockConnect.language.getWording("disconnect", "exit"), server);
+                                player.disconnect(BedrockConnect.getConfig().getLanguage().getWording("disconnect", "exit"), BedrockConnect.getServer());
                                 break;
                             case USER_SERVER:
-                                String address = server.getPlayer(uuid).getServerList().get(serverIndex);
+                                String address = BedrockConnect.getServer().getPlayer(uuid).getServerList().get(serverIndex);
 
                                 if (address.split(":").length > 1) {
                                     String ip = address.split(":")[0];
@@ -154,7 +156,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
                                     transfer(ip, Integer.parseInt(port));
                                 } else {
-                                    player.createError((BedrockConnect.language.getWording("error", "invalidUserServer")));
+                                    player.createError((BedrockConnect.getConfig().getLanguage().getWording("error", "invalidUserServer")));
                                 }
                                 break;
                             case CUSTOM_SERVER:
@@ -175,7 +177,7 @@ public class PacketHandler implements BedrockPacketHandler {
                                         transfer(getIP("hivebedrock.network"), 19132);
                                         break;
                                     case 1: // Cubecraft
-                                        transfer(!BedrockConnect.fetchFeaturedIps ? getIP("mco.cubecraft.net") : "mco.cubecraft.net", 19132);
+                                        transfer(!BedrockConnect.getConfig().canFetchFeaturedIps() ? getIP("mco.cubecraft.net") : "mco.cubecraft.net", 19132);
                                         break;
                                     case 2: // Lifeboat
                                         transfer(getIP("mco.lbsg.net"), 19132);
@@ -203,7 +205,7 @@ public class PacketHandler implements BedrockPacketHandler {
                     else {
                         int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
 
-                        CustomEntry[] customServers = CustomServerHandler.getServers();
+                        CustomEntry[] customServers = BedrockConnect.getConfig().getCustomServers();
                         CustomServerGroup group = (CustomServerGroup) customServers[player.getSelectedGroup()];
 
                         if(chosen == 0) {
@@ -263,7 +265,7 @@ public class PacketHandler implements BedrockPacketHandler {
                             }
                         }
                     } catch(Exception e) {
-                        player.createError(BedrockConnect.language.getWording("error", "invalidServerConnect"));
+                        player.createError(BedrockConnect.getConfig().getLanguage().getWording("error", "invalidServerConnect"));
                     }
                     break;
                 case UIForms.DIRECT_CONNECT:
@@ -296,7 +298,7 @@ public class PacketHandler implements BedrockPacketHandler {
                             }
                         }
                     } catch(Exception e) {
-                        player.createError((BedrockConnect.language.getWording("error", "invalidServerConnect")));
+                        player.createError((BedrockConnect.getConfig().getLanguage().getWording("error", "invalidServerConnect")));
                     }
                     break;
                 case UIForms.EDIT_CHOOSE_SERVER:
@@ -326,7 +328,7 @@ public class PacketHandler implements BedrockPacketHandler {
                             }
                         }
                     } catch(Exception e) {
-                        player.createError((BedrockConnect.language.getWording("error", "invalidServerEdit")));
+                        player.createError((BedrockConnect.getConfig().getLanguage().getWording("error", "invalidServerEdit")));
                     }
                     break;
                 case UIForms.EDIT_SERVER:
@@ -379,7 +381,7 @@ public class PacketHandler implements BedrockPacketHandler {
                             player.openForm(UIForms.MANAGE_SERVER);
                         }
                     } catch(Exception e) {
-                        player.createError((BedrockConnect.language.getWording("error", "invalidServerRemove")));
+                        player.createError((BedrockConnect.getConfig().getLanguage().getWording("error", "invalidServerRemove")));
                     }
                     break;
                 case UIForms.ERROR:
@@ -412,7 +414,7 @@ public class PacketHandler implements BedrockPacketHandler {
     public void transfer(String ip, int port) {
         try {
             TransferPacket tp = new TransferPacket();
-            if(BedrockConnect.fetchIps && UIComponents.isDomain(ip)) {
+            if(BedrockConnect.getConfig().canFetchIps() && UIComponents.isDomain(ip)) {
                 tp.setAddress(getIP(ip));
             } else {
                 tp.setAddress(ip);
@@ -421,7 +423,7 @@ public class PacketHandler implements BedrockPacketHandler {
             session.sendPacketImmediately(tp);
             BedrockConnect.logger.debug("Transferred player " + name + " to " + tp.getAddress() + ":" + tp.getPort());
         } catch (Exception e) {
-            player.createError(BedrockConnect.language.getWording("error", "transferError"));
+            player.createError(BedrockConnect.getConfig().getLanguage().getWording("error", "transferError"));
         }
     }
 
@@ -461,18 +463,13 @@ public class PacketHandler implements BedrockPacketHandler {
         return PacketSignal.HANDLED;
     }
 
-    public PacketHandler(BedrockServerSession session, Server server, boolean packetListening) {
-        this.session = session;
-        this.server = server;
-    }
-
     @Override
     public void onDisconnect(String reason) {
         if(executor != null)
             executor.shutdown();
         if(player != null)
-            server.removePlayer(player);
-         BedrockConnect.logger.info("[ " + LogColors.cyan(server.getPlayers().size() + " online") + " ] Player disconnected: " + name + " (xuid: " + uuid + ")");
+            BedrockConnect.getServer().removePlayer(player);
+         BedrockConnect.logger.info("[ " + LogColors.cyan(BedrockConnect.getServer().getPlayers().size() + " online") + " ] Player disconnected: " + name + " (xuid: " + uuid + ")");
     }
 
     private boolean verifyJwt(String jwt, PublicKey key) throws JoseException {
@@ -484,15 +481,10 @@ public class PacketHandler implements BedrockPacketHandler {
     }
 
     @Override
-    public PacketSignal handle(DisconnectPacket packet) {
-        return PacketSignal.UNHANDLED;
-    }
-
-    @Override
     public PacketSignal handle(ResourcePackClientResponsePacket packet) {
         switch (packet.getStatus()) {
             case COMPLETED:
-                BedrockConnect.data.userExists(uuid, name, session, this);
+                BedrockConnect.getDataUtil().initializePlayerData(uuid, name, session, this);
                 break;
             case HAVE_ALL_PACKS:
                 ResourcePackStackPacket rs = new ResourcePackStackPacket();
@@ -508,8 +500,6 @@ public class PacketHandler implements BedrockPacketHandler {
 
         return PacketSignal.HANDLED;
     }
-
-    // Heavily referenced from https://github.com/NukkitX/ProxyPass/blob/master/src/main/java/com/nukkitx/proxypass/network/bedrock/session/UpstreamPacketHandler.java
 
     @Override
     public PacketSignal handle(LoginPacket packet) {
@@ -533,15 +523,14 @@ public class PacketHandler implements BedrockPacketHandler {
 
             BedrockConnect.logger.debug("Player made it through login: " + extraData.get("displayName") + " (xuid: " + extraData.get("identity") + ")");
 
-
             name = (String) extraData.get("displayName");
             uuid = (String) extraData.get("identity");
             
-            
             // Whitelist check
-            if (Whitelist.hasWhitelist() && !Whitelist.isPlayerWhitelisted(name)) {
-            	session.disconnect(Whitelist.getWhitelistMessage());
-            	BedrockConnect.logger.info("Kicked " + name + " (xuid: " + uuid + "): \"" + Whitelist.getWhitelistMessage() + "\"");
+            Whitelist whitelist = BedrockConnect.getConfig().getWhitelist();
+            if (whitelist.hasWhitelist() && !whitelist.isPlayerWhitelisted(name)) {
+            	session.disconnect(whitelist.getWhitelistMessage());
+            	BedrockConnect.logger.info("Kicked " + name + " (xuid: " + uuid + "): \"" + whitelist.getWhitelistMessage() + "\"");
             }
 
             PlayStatusPacket status = new PlayStatusPacket();

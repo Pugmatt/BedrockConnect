@@ -1,9 +1,10 @@
-package main.com.pyratron.pugmatt.bedrockconnect.sql;
+package main.com.pyratron.pugmatt.bedrockconnect.data;
 
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
-import main.com.pyratron.pugmatt.bedrockconnect.BCPlayer;
-import main.com.pyratron.pugmatt.bedrockconnect.gui.UIComponents;
-import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
+import main.com.pyratron.pugmatt.bedrockconnect.server.BCPlayer;
+import main.com.pyratron.pugmatt.bedrockconnect.server.PacketHandler;
+import main.com.pyratron.pugmatt.bedrockconnect.server.gui.UIComponents;
+
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -19,34 +20,33 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Data {
+public class DataUtil {
 
-    String serverLimit;
+    private Database database;
 
-    public Data(String serverLimit, DatabaseTypes database) {
-        this.serverLimit = serverLimit;
-
-        if(!BedrockConnect.noDB) {
+    public DataUtil(Database database) {
+        this.database = database;
+        if (!BedrockConnect.getConfig().isNoDB()) {
             try {
-                createTables((database == DatabaseTypes.postgres));
+                createTables((database.getType() == DatabaseTypes.postgres));
             } catch (Exception e) {
                 errorAlert(e);
             }
         }
     }
 
-    public void createTables(boolean postgres) throws SQLException {
-        // Create table if table does not exist
+    private void createTables(boolean postgres) throws SQLException {
+        // Create BedrockConnect related tables if they do not exist
         String sqlCreate = "";
         if (!postgres)
-                sqlCreate = "CREATE TABLE IF NOT EXISTS servers"
-                + "  (id         INTEGER PRIMARY KEY AUTO_INCREMENT,"
-                + "   uuid            TEXT,"
-                + "   name            TEXT,"
-                + "   servers         TEXT,"
-                + "   serverLimit     INTEGER,"
-                + "   INDEX (uuid(255))"
-                + ");";
+            sqlCreate = "CREATE TABLE IF NOT EXISTS servers"
+                    + "  (id         INTEGER PRIMARY KEY AUTO_INCREMENT,"
+                    + "   uuid            TEXT,"
+                    + "   name            TEXT,"
+                    + "   servers         TEXT,"
+                    + "   serverLimit     INTEGER,"
+                    + "   INDEX (uuid(255))"
+                    + ");";
         else
             sqlCreate = "DO $$\n" +
                     "BEGIN\n" +
@@ -65,50 +65,61 @@ public class Data {
                     "    END IF;\n" +
                     "END $$;\n";
 
-        Statement stmt = BedrockConnect.connection.createStatement();
+        Statement stmt = database.getConnection().createStatement();
         stmt.execute(sqlCreate);
     }
 
-    public void Basic_SQL(final String query){
-        new Thread(() -> {
-                try {
-                    PreparedStatement statement = BedrockConnect.connection.prepareStatement(query);
-                    statement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        ).start();
-    }
-
-    public BCPlayer getPlayer(ResultSet rs, String name, String uuid, BedrockServerSession session) {
+    private BCPlayer getPlayer(ResultSet rs, String name, String uuid, BedrockServerSession session) {
         try {
-            BCPlayer p = new BCPlayer(name, uuid, session, UIComponents.getFormData(rs.getString("servers")), rs.getInt("serverLimit"));
+            BCPlayer p = new BCPlayer(name, uuid, session, UIComponents.getFormData(rs.getString("servers")),
+                    rs.getInt("serverLimit"));
             return p;
-        }
-        catch(SQLException e) {
+        } catch (SQLException e) {
             errorAlert(e);
             return null;
         }
     }
 
-    // If user exists
-    public void userExists(String uuid, String name, BedrockServerSession session, PacketHandler packetHandler) {
-        if(!BedrockConnect.noDB) {
-            Data db = this;
+    private void createPlayerRecord(String uuid, String name, BedrockServerSession session, PacketHandler packetHandler) {
+        try {
+            PreparedStatement s = database.getConnection()
+                    .prepareStatement("INSERT INTO servers (uuid, name, serverLimit) VALUES (?, ?, ?)");
+            s.setString(1, uuid);
+            s.setString(2, BedrockConnect.getConfig().canStoreDisplayNames() ? name : "");
+            s.setInt(3, Integer.parseInt(BedrockConnect.getConfig().getServerLimit()));
+            s.executeUpdate();
+            BedrockConnect.logger.info("Added new user " + name + " (xuid: " + uuid + ") to Database");
+            BCPlayer pl = new BCPlayer(name, uuid, session, new ArrayList<>(), Integer.parseInt(BedrockConnect.getConfig().getServerLimit()));
+            packetHandler.setPlayer(pl);
+            BedrockConnect.getServer().addPlayer(pl);
+        } catch (Exception e) {
+            errorAlert(e);
+            session.disconnect(BedrockConnect.getConfig().getLanguage().getWording("disconnect", "dataError"));
+        }
+    }
+
+    // Perform a look up of user to confirm if they already exist.
+    // If they already exist, simply grab the info for our player object (Also
+    // update stored display name for player, if enabled)
+    // If they do not exist, create a new record for the player
+    public void initializePlayerData(String uuid, String name, BedrockServerSession session, PacketHandler packetHandler) {
+        if (!BedrockConnect.getConfig().isNoDB()) {
             new Thread(() -> {
                 try {
-                    PreparedStatement searchUUID = BedrockConnect.connection.prepareStatement("SELECT COUNT(*) AS total FROM servers where uuid = ?");
+                    PreparedStatement searchUUID = database.getConnection()
+                            .prepareStatement("SELECT COUNT(*) AS total FROM servers where uuid = ?");
                     searchUUID.setString(1, uuid);
                     ResultSet RS = searchUUID.executeQuery();
                     while (RS.next()) {
                         if (RS.getInt("total") > 0) {
-                            PreparedStatement getUser = BedrockConnect.connection.prepareStatement("SELECT * FROM servers WHERE uuid = ?;");
+                            PreparedStatement getUser = database.getConnection()
+                                    .prepareStatement("SELECT * FROM servers WHERE uuid = ?;");
                             getUser.setString(1, uuid);
                             ResultSet rs = getUser.executeQuery();
                             while (rs.next()) {
-                                if (BedrockConnect.storeDisplayNames && !rs.getString("name").equals(name)) {
-                                    PreparedStatement updateUUID = BedrockConnect.connection.prepareStatement("UPDATE servers SET name = ? WHERE uuid = ?");
+                                if (BedrockConnect.getConfig().canStoreDisplayNames() && !rs.getString("name").equals(name)) {
+                                    PreparedStatement updateUUID = database.getConnection()
+                                            .prepareStatement("UPDATE servers SET name = ? WHERE uuid = ?");
                                     updateUUID.setString(1, name);
                                     updateUUID.setString(2, uuid);
                                     updateUUID.executeUpdate();
@@ -116,15 +127,15 @@ public class Data {
                                 BCPlayer p = getPlayer(rs, name, uuid, session);
                                 packetHandler.setPlayer(p);
                                 if (p != null)
-                                    BedrockConnect.server.addPlayer(p);
+                                    BedrockConnect.getServer().addPlayer(p);
                             }
                         } else {
-                            addNewUser(uuid, name, session, packetHandler);
+                            createPlayerRecord(uuid, name, session, packetHandler);
                         }
                     }
                 } catch (Exception e) {
                     errorAlert(e);
-                    session.disconnect(BedrockConnect.language.getWording("disconnect", "dataError"));
+                    session.disconnect(BedrockConnect.getConfig().getLanguage().getWording("disconnect", "dataError"));
                 }
             }).start();
         } else {
@@ -135,10 +146,10 @@ public class Data {
                 if (plyrFile.createNewFile()) {
                     JSONObject jo = new JSONObject();
                     jo.put("uuid", uuid);
-                    if(BedrockConnect.storeDisplayNames) {
+                    if (BedrockConnect.getConfig().canStoreDisplayNames()) {
                         jo.put("name", name);
                     }
-                    jo.put("serverLimit", serverLimit);
+                    jo.put("serverLimit", BedrockConnect.getConfig().getServerLimit());
                     jo.put("servers", new JSONArray());
 
                     PrintWriter pw = new PrintWriter("players/" + uuid + ".json");
@@ -148,9 +159,9 @@ public class Data {
 
                     BedrockConnect.logger.info("Added new user " + name + " (xuid: " + uuid + ")");
 
-                    BCPlayer pl = new BCPlayer(name, uuid, session, new ArrayList<>(), Integer.parseInt(serverLimit));
+                    BCPlayer pl = new BCPlayer(name, uuid, session, new ArrayList<>(), Integer.parseInt(BedrockConnect.getConfig().getServerLimit()));
                     packetHandler.setPlayer(pl);
-                    BedrockConnect.server.addPlayer(pl);
+                    BedrockConnect.getServer().addPlayer(pl);
                 } else {
                     Object obj = new JSONParser().parse(new FileReader("players/" + uuid + ".json"));
 
@@ -162,7 +173,7 @@ public class Data {
 
                     BCPlayer p = new BCPlayer(name, uuid, session, servers, serverLimit);
                     packetHandler.setPlayer(p);
-                    BedrockConnect.server.addPlayer(p);
+                    BedrockConnect.getServer().addPlayer(p);
                 }
             } catch (Exception e) {
                 BedrockConnect.logger.error("An error occurred saving to player file", e);
@@ -170,35 +181,12 @@ public class Data {
         }
     }
 
-    public void addNewUser(String uuid, String name, BedrockServerSession session, PacketHandler packetHandler)
-    {
-        Data db = this;
-        new Thread(() -> {
-                try
-                {
-                    PreparedStatement s = BedrockConnect.connection.prepareStatement("INSERT INTO servers (uuid, name, serverLimit) VALUES (?, ?, ?)");
-                    s.setString(1, uuid);
-                    s.setString(2, BedrockConnect.storeDisplayNames ? name : "");
-                    s.setInt(3, Integer.parseInt(serverLimit));
-                    s.executeUpdate();
-                    BedrockConnect.logger.info("Added new user " + name + " (xuid: " + uuid + ") to Database");
-                    BCPlayer pl = new BCPlayer(name, uuid, session, new ArrayList<>(), Integer.parseInt(serverLimit));
-                    packetHandler.setPlayer(pl);
-                    BedrockConnect.server.addPlayer(pl);
-                }
-                catch (Exception e)
-                {
-                    errorAlert(e);
-                    session.disconnect(BedrockConnect.language.getWording("disconnect", "dataError"));
-                }
-        }).start();
-    }
-
     public void setValueString(String column, String value, List<String> serverList, String uuid) {
-        if(!BedrockConnect.noDB) {
+        if (!BedrockConnect.getConfig().isNoDB()) {
             new Thread(() -> {
                 try {
-                    PreparedStatement s = BedrockConnect.connection.prepareStatement("UPDATE servers SET " + column + "= ? WHERE uuid= ?");
+                    PreparedStatement s = database.getConnection()
+                            .prepareStatement("UPDATE servers SET " + column + "= ? WHERE uuid= ?");
                     s.setString(1, value);
                     s.setString(2, uuid);
 
@@ -227,23 +215,21 @@ public class Data {
 
     public void setValueInt(String column, Integer value, String uuid) {
         new Thread(() -> {
-                try
-                {
-                    PreparedStatement s = BedrockConnect.connection.prepareStatement("UPDATE servers SET " + column + "= ? WHERE uuid= ?");
-                    s.setInt(1, value);
-                    s.setString(2, uuid);
+            try {
+                PreparedStatement s = database.getConnection()
+                        .prepareStatement("UPDATE servers SET " + column + "= ? WHERE uuid= ?");
+                s.setInt(1, value);
+                s.setString(2, uuid);
 
-                    s.executeUpdate();
-                }
-                catch (Exception e)
-                {
-                    errorAlert(e);
-                }
+                s.executeUpdate();
+            } catch (Exception e) {
+                errorAlert(e);
+            }
         }).start();
     }
 
     public void errorAlert(Exception e) {
-        BedrockConnect.logger.error("A database error has occured" , e);
+        BedrockConnect.logger.error("A database error has occured", e);
     }
 
 }

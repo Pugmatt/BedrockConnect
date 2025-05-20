@@ -1,17 +1,20 @@
-package main.com.pyratron.pugmatt.bedrockconnect;
+package main.com.pyratron.pugmatt.bedrockconnect.config;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+
+import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 
 
 public class Whitelist {
 
-	private static List<String> whitelist = null;
-	private static String whitelistMessage = "You are not whitelisted on this server";
+	private List<String> whitelist = null;
+	private String whitelistMessage = "You are not whitelisted on this server";
 
-	public static void loadWhitelist(String whitelistFile) {
+	public Whitelist(String whitelistFile) {
+		if (whitelistFile == null) return;
+		
 		try {
 			File file = new File(whitelistFile);
 			whitelist =  Files.readAllLines(file.toPath());
@@ -22,19 +25,19 @@ public class Whitelist {
 		}
 	}
 
-	public static boolean hasWhitelist() {
+	public boolean hasWhitelist() {
 		return whitelist != null;
 	}
 
-	public static List<String> getWhitelist() {
+	public List<String> getPlayers() {
 		return whitelist;
 	}
 
-	public static boolean isPlayerWhitelisted(String name) {
+	public boolean isPlayerWhitelisted(String name) {
 		return whitelist.contains(name);
 	}
 
-	public static String getWhitelistMessage() {
+	public String getWhitelistMessage() {
 		return whitelistMessage;
 	}
 }

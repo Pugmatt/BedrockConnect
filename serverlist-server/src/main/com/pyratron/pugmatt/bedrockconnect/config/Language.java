@@ -17,7 +17,7 @@ import java.util.Map;
 public class Language {
     public final String DEFAULT_PATH = "language.json";
 
-    private HashMap<String, HashMap> elements;
+    private HashMap<String, HashMap<String,String>> elements;
 
     public Language(String languageFile) {
         elements = new HashMap<>();
@@ -27,7 +27,7 @@ public class Language {
             JSONObject defaultLang = loadDefault();
 
             for (Object wording : defaultLang.keySet()) {
-                elements.put((String) wording, (HashMap) defaultLang.get(wording));
+                elements.put((String) wording, (HashMap<String,String>) defaultLang.get(wording));
             }
 
             // If a custom language file is defined, overwrite any default wording elements with the ones that exist in this file
@@ -36,11 +36,11 @@ public class Language {
 
                 for (Object wording : customLang.keySet()) {
                     if(!elements.containsKey(wording)) continue;
-                    HashMap set = elements.get(wording);
-                    HashMap newSet = (HashMap) customLang.get(wording);
+                    HashMap<String,String> set = elements.get(wording);
+                    HashMap<String,String> newSet = (HashMap<String,String>) customLang.get(wording);
 
                     for (Object el : newSet.keySet()) {
-                        set.put(el, newSet.get(el));
+                        set.put((String) el, newSet.get(el));
                     }
 
                     elements.put((String) wording, set);

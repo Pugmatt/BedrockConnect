@@ -1,4 +1,4 @@
-package main.com.pyratron.pugmatt.bedrockconnect;
+package main.com.pyratron.pugmatt.bedrockconnect.config.Custom;
 
 public class CustomServer extends CustomEntry {
 	private String address;

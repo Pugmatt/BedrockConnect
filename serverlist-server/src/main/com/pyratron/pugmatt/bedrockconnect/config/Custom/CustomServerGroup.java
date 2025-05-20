@@ -1,7 +1,6 @@
-package main.com.pyratron.pugmatt.bedrockconnect;
+package main.com.pyratron.pugmatt.bedrockconnect.config.Custom;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CustomServerGroup extends CustomEntry {
     private ArrayList<CustomServer> content;

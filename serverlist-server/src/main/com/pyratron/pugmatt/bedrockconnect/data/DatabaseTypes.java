@@ -1,4 +1,4 @@
-package main.com.pyratron.pugmatt.bedrockconnect.sql;
+package main.com.pyratron.pugmatt.bedrockconnect.data;
 
 public enum DatabaseTypes {
     nosql,

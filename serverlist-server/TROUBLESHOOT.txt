@@ -1,3 +1,0 @@
-If you can't connect to localhost Bedrock server, close Minecraft and run this command in administrator command prompt:
-
-CheckNetIsolation LoopbackExempt -a -n="Microsoft.MinecraftUWP_8wekyb3d8bbwe"
