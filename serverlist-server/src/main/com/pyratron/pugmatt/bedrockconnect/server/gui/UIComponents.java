@@ -1,9 +1,11 @@
-package main.com.pyratron.pugmatt.bedrockconnect.gui;
+package main.com.pyratron.pugmatt.bedrockconnect.server.gui;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import main.com.pyratron.pugmatt.bedrockconnect.BCPlayer;
+
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
+import main.com.pyratron.pugmatt.bedrockconnect.server.BCPlayer;
+
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -127,17 +129,17 @@ public class UIComponents {
 
     public static boolean validateServerInfo(String address, String port, String name, BCPlayer player) {
         if(address.length() >= 253)
-            player.createError(BedrockConnect.language.getWording("error", "addressLarge"));
+            player.createError(BedrockConnect.getConfig().getLanguage().getWording("error", "addressLarge"));
         else if(port.length() >= 10)
-            player.createError(BedrockConnect.language.getWording("error", "portLarge"));
+            player.createError(BedrockConnect.getConfig().getLanguage().getWording("error", "portLarge"));
         else if(name.length() >= 36)
-            player.createError(BedrockConnect.language.getWording("error", "nameLarge"));
+            player.createError(BedrockConnect.getConfig().getLanguage().getWording("error", "nameLarge"));
         else if (!address.matches("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$") && !address.matches("^((?!-)[A-Za-z0-9_-]{1,63}(?<!-)\\.)+[A-Za-z]{2,64}$"))
-            player.createError(BedrockConnect.language.getWording("error", "invalidAddress"));
+            player.createError(BedrockConnect.getConfig().getLanguage().getWording("error", "invalidAddress"));
         else if (!port.matches("[0-9]+"))
-            player.createError(BedrockConnect.language.getWording("error", "invalidPort"));
+            player.createError(BedrockConnect.getConfig().getLanguage().getWording("error", "invalidPort"));
         else if (!name.isEmpty() && !name.matches("^[a-zA-Z0-9]+( +[a-zA-Z0-9]+)*$"))
-            player.createError(BedrockConnect.language.getWording("error", "invalidName"));
+            player.createError(BedrockConnect.getConfig().getLanguage().getWording("error", "invalidName"));
         else
             return true;
         return false;
@@ -151,7 +153,7 @@ public class UIComponents {
         if (server.split(":").length > 1) {
             return server.split(":");
         } else {
-            player.createError((BedrockConnect.language.getWording("error", "invalidUserServer")));
+            player.createError((BedrockConnect.getConfig().getLanguage().getWording("error", "invalidUserServer")));
         }
         return null;
     }

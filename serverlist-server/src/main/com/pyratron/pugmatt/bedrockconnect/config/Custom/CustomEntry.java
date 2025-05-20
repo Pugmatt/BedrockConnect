@@ -1,4 +1,4 @@
-package main.com.pyratron.pugmatt.bedrockconnect;
+package main.com.pyratron.pugmatt.bedrockconnect.config.Custom;
 
 public class CustomEntry {
     public final String DEFAULT_ICON = "https://i.imgur.com/3BmFZRE.png";

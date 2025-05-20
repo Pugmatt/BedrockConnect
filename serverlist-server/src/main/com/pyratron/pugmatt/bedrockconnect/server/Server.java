@@ -1,29 +1,19 @@
-package main.com.pyratron.pugmatt.bedrockconnect;
+package main.com.pyratron.pugmatt.bedrockconnect.server;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import main.com.pyratron.pugmatt.bedrockconnect.listeners.PacketHandler;
+import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.logging.LogColors;
-import main.com.pyratron.pugmatt.bedrockconnect.utils.BedrockProtocol;
-import org.cloudburstmc.netty.channel.raknet.RakChannel;
+
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
-import org.cloudburstmc.netty.channel.raknet.RakConstants;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.BedrockSession;
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketHandler;
-
-
-import javax.annotation.Nonnull;
-
 import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.util.*;
@@ -31,7 +21,7 @@ import java.util.*;
 public class Server {
 
     private final NioEventLoopGroup eventLoopGroup = new NioEventLoopGroup();
-    public BedrockPong pong;
+    private BedrockPong pong;
 
     public static final ObjectMapper JSON_MAPPER = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     public static final YAMLMapper YAML_MAPPER = (YAMLMapper) new YAMLMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -69,8 +59,8 @@ public class Server {
 
             pong = new BedrockPong();
             pong.edition("MCPE");
-            pong.motd(BedrockConnect.language.getWording("serverInfo", "motd"));
-            pong.subMotd(BedrockConnect.language.getWording("serverInfo", "subMotd"));
+            pong.motd(BedrockConnect.getConfig().getLanguage().getWording("serverInfo", "motd"));
+            pong.subMotd(BedrockConnect.getConfig().getLanguage().getWording("serverInfo", "subMotd"));
             pong.playerCount(1);
             pong.maximumPlayerCount(20);
             pong.gameType("Survival");
@@ -82,31 +72,32 @@ public class Server {
                 .group(this.eventLoopGroup)
                 .channelFactory(RakChannelFactory.server(NioDatagramChannel.class))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
-                .option(RakChannelOption.RAK_PACKET_LIMIT, BedrockConnect.packetLimit)
-                .option(RakChannelOption.RAK_GLOBAL_PACKET_LIMIT, BedrockConnect.globalPacketLimit)
+                .option(RakChannelOption.RAK_PACKET_LIMIT, BedrockConnect.getConfig().getPacketLimit())
+                .option(RakChannelOption.RAK_GLOBAL_PACKET_LIMIT, BedrockConnect.getConfig().getGlobalPacketLimit())
                 .childHandler(new BedrockServerInitializer() {
                     @Override
                     protected void initSession(BedrockServerSession session) {
-                        session.setPacketHandler(new PacketHandler(session, current, false));
+                        session.setPacketHandler(new PacketHandler(session, false));
                     }
                 })
                 .bind(bindAddress)
                 .syncUninterruptibly();
 
             BedrockConnect.logger.info("[ " + LogColors.green("OK") + " ] Server is now running: " + LogColors.cyan(bindIp + ":" + port));
-            if(BedrockConnect.kickInactive) {
+            if(BedrockConnect.getConfig().canKickInactive()) {
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask() {
                     public void run() {
                         for (int i = 0; i < players.size(); i++) {
                             if (players.get(i) != null && !players.get(i).isActive())
-                                players.get(i).disconnect(BedrockConnect.language.getWording("disconnect", "inactivity"), current);
+                                players.get(i).disconnect(BedrockConnect.getConfig().getLanguage().getWording("disconnect", "inactivity"), current);
                         }
                     }
                 };
                 timer.scheduleAtFixedRate(task, 0L, 60 * 1000);
             }
 
+            // Command line input (Currently just for stopping BedrockConnect via command)
             new Thread() {
                 public void run() {
                     Scanner sc = null;

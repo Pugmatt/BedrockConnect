@@ -1,7 +1,6 @@
-package main.com.pyratron.pugmatt.bedrockconnect;
+package main.com.pyratron.pugmatt.bedrockconnect.config;
 
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,16 +8,19 @@ import java.util.Iterator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
+import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
+import main.com.pyratron.pugmatt.bedrockconnect.config.Custom.CustomEntry;
+import main.com.pyratron.pugmatt.bedrockconnect.config.Custom.CustomServer;
+import main.com.pyratron.pugmatt.bedrockconnect.config.Custom.CustomServerGroup;
 
 public class CustomServerHandler {
-	private static ArrayList<CustomEntry> servers = new ArrayList<>();
+	private ArrayList<CustomEntry> servers = new ArrayList<>();
 
 	/**
 	 * Loads any custom servers into memory
 	 */
-	public static void initialize() {
-		String serverFile = BedrockConnect.customServers;
+	public CustomServerHandler(String serverFile) {
 		if (serverFile == null) {
 			return;
 		}
@@ -28,7 +30,6 @@ public class CustomServerHandler {
 
 			JSONArray serverList = (JSONArray) parser.parse(reader);
 
-			@SuppressWarnings("unchecked")
 			Iterator<JSONObject> i = serverList.iterator();
 			while (i.hasNext()) {
 				JSONObject obj = i.next();
@@ -56,7 +57,7 @@ public class CustomServerHandler {
 
 	}
 
-	public static CustomServer createServer(JSONObject obj) {
+	private CustomServer createServer(JSONObject obj) {
 		String name = (String) obj.get("name");
 		String iconUrl = (String) obj.get("iconUrl");
 		String address = (String) obj.get("address");
@@ -65,7 +66,7 @@ public class CustomServerHandler {
 		return new CustomServer(name, iconUrl, address, port);
 	}
 
-	public static CustomEntry[] getServers() {
+	public CustomEntry[] getServers() {
 		CustomEntry[] arr = new CustomEntry[servers.size()];
 		arr = servers.toArray(arr);
 		return arr;
