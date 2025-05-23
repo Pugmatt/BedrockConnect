@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UIForms {
-    public static final int ERROR = 2, MAIN = 0, DIRECT_CONNECT = 1, REMOVE_SERVER = 3, MANAGE_SERVER = 4, EDIT_SERVER = 5, EDIT_CHOOSE_SERVER = 6, ADD_SERVER = 7, SERVER_GROUP = 8;
+    public static final int ERROR = 2, MAIN = 0, DIRECT_CONNECT = 1, REMOVE_SERVER = 3, MANAGE_SERVER = 4, EDIT_SERVER = 5, EDIT_CHOOSE_SERVER = 6, ADD_SERVER = 7, SERVER_GROUP = 8, MOTD = 9;
 
     public static JsonArray mainMenuButtons = new JsonArray();
     public static JsonArray manageListButtons = new JsonArray();
@@ -277,6 +277,21 @@ public class UIForms {
         JsonArray content = new JsonArray();
         content.add(UIComponents.createLabel(text));
         form.add("content", content);
+        mf.setFormData(form.toString());
+        return mf;
+    }
+
+    public static ModalFormRequestPacket createMotd() {
+        ModalFormRequestPacket mf = new ModalFormRequestPacket();
+        mf.setFormId(UIForms.MOTD);
+        JsonObject form = UIComponents.createForm("form", BedrockConnect.getConfig().getLanguage().getWording("motd", "heading"));
+        
+        form.addProperty("content", BedrockConnect.getConfig().getMotdMessage());
+
+        JsonArray buttons = new JsonArray();
+        buttons.add(UIComponents.createButton(BedrockConnect.getConfig().getLanguage().getWording("motd", "continueBtn")));
+        form.add("buttons", buttons);
+
         mf.setFormData(form.toString());
         return mf;
     }
