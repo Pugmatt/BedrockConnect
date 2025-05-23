@@ -97,10 +97,10 @@ public class BedrockConnect {
         return server;
     }
 
-    public static void loadDatabase(String hostname, String databaseName, String username, String password, DatabaseTypes databaseType, boolean autoReconnect, boolean noDB) {
+    public static void loadDatasource(String hostname, String databaseName, String username, String password, DatabaseTypes databaseType, boolean autoReconnect, boolean usingDatabase) {
         if (database != null) return;
 
-        if(!noDB) {
+        if(usingDatabase) {
             BedrockConnect.logger.info("Player data storage: " + LogColors.purple("Database"));
 
             database = new Database(hostname, databaseName, username, password, databaseType, autoReconnect);
