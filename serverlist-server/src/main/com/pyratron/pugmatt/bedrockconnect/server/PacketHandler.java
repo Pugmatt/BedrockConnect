@@ -121,6 +121,13 @@ public class PacketHandler implements BedrockPacketHandler {
         player.resetMovementOpen();
 
         switch (packet.getFormId()) {
+                case UIForms.MOTD:
+                    // Store datetime of when motd was viewed, if we need it for tracking when to show it again
+                    if (BedrockConnect.getConfig().isMotdCooldownEnabled()) {
+                        BedrockConnect.getDataUtil().setViewedMotd(player.getUuid());
+                    }
+                    player.openForm(UIForms.MAIN);
+                    break;
                 case UIForms.MAIN:
                     // Re-open window if closed
                     if (packet.getFormData() == null || packet.getFormData().contains("null")) {
@@ -429,7 +436,11 @@ public class PacketHandler implements BedrockPacketHandler {
 
     @Override
     public PacketSignal handle(SetLocalPlayerAsInitializedPacket packet) {
-        session.sendPacketImmediately(UIForms.createMain(player.getServerList(), session));
+        if (BedrockConnect.getConfig().getMotdMessage() != null && player.canShowMotd()) {
+            player.openForm(UIForms.MOTD);
+        } else {
+            player.openForm(UIForms.MAIN);
+        }
         return PacketSignal.HANDLED;
     }
 

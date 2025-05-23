@@ -1,7 +1,9 @@
 package main.com.pyratron.pugmatt.bedrockconnect;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 
 import org.apache.logging.log4j.Level;
@@ -37,6 +40,9 @@ public class Config {
     private String serverLimit = "100";
     private boolean dbAutoReconnect = false;
     private boolean noDB = false;
+    private String motdMessage = null;
+    private boolean motdFirstJoin = true;
+    private int motdCooldown = 0;
     private boolean kickInactive = true;
     private boolean userServers = true;
     private boolean featuredServers = true;
@@ -73,6 +79,7 @@ public class Config {
         String customServersFile = null;
         String languageFile = null;
         String whitelistFile = null;
+        String motdFile = null;
 
         boolean nodbWarning = true;
         boolean mysqlSettingWarning = false;    
@@ -234,6 +241,15 @@ public class Config {
                 case "debug":
                     debug = setting.getValue().equalsIgnoreCase("true");
                     break;
+                case "motd":
+                    motdFile = setting.getValue();
+                    break;
+                case "motd_first_join":
+                    motdFirstJoin = setting.getValue().equalsIgnoreCase("true");
+                    break;
+                case "motd_cooldown":
+                    motdCooldown = Integer.parseInt(setting.getValue());
+                    break;
             }
         }
 
@@ -328,7 +344,24 @@ public class Config {
             }
         }
 
-        BedrockConnect.loadDatabase(dbHost, dbName, dbUser, dbPass, dbType, dbAutoReconnect, noDB);
+        if (motdFile != null) {
+            try {
+                BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(motdFile), "UTF-8"));
+                String msg = "";
+                String line = "";
+                while ((line = in.readLine()) != null) {
+                    msg += line + "\n";
+                }
+                motdMessage = msg + "\n";
+                in.close();
+                BedrockConnect.logger.debug("MOTD data: " + motdMessage.toString());
+            } catch (Exception e) {
+                BedrockConnect.logger.error("An error occurred reading the MOTD file", e);
+                System.exit(1);
+            }
+        }
+
+        BedrockConnect.loadDatasource(dbHost, dbName, dbUser, dbPass, dbType, dbAutoReconnect, noDB);
     }
 
     public String getPort() {
@@ -349,6 +382,22 @@ public class Config {
 
     public boolean isNoDB() {
         return noDB;
+    }
+
+    public String getMotdMessage() {
+        return motdMessage;
+    }
+
+    public boolean isShowingMotdFirstJoin() {
+        return motdFirstJoin;
+    }
+
+    public int getMotdCooldown() {
+        return motdCooldown;
+    }
+
+    public boolean isMotdCooldownEnabled() {
+        return getMotdCooldown() > 0;
     }
 
     public boolean canKickInactive() {

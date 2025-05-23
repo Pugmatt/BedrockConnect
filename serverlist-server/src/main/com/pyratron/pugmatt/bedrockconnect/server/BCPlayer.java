@@ -20,6 +20,7 @@ import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -34,12 +35,15 @@ public class BCPlayer {
     private String uuid;
 
     private LocalTime lastAction;
+    private LocalDateTime viewedMotd;
 
     private int currentForm = 0;
     private LocalTime movementOpenCoolDown = LocalTime.now();
 
     private int editingServer = -1;
     private int selectedGroup = -1;
+
+    private boolean newPlayer = false;
 
     private static final NbtMap EMPTY_TAG = NbtMap.EMPTY;
     private static final byte[] EMPTY_LEVEL_CHUNK_DATA;
@@ -59,13 +63,15 @@ public class BCPlayer {
     }
 
 
-    public BCPlayer(String displayName, String uuid, BedrockServerSession session, List<String> serverList, int serverLimit) {
+    public BCPlayer(String displayName, String uuid, BedrockServerSession session, List<String> serverList, int serverLimit, boolean newPlayer, LocalDateTime viewedMotd) {
         this.displayName = displayName;
         this.uuid = uuid;
         this.session = session;
         this.serverList = serverList;
         this.serverLimit = serverLimit;
         this.lastAction = LocalTime.now();
+        this.viewedMotd = viewedMotd;
+        this.newPlayer = newPlayer;
 
         if(session != null && session.isConnected())
         joinGame();
@@ -160,6 +166,19 @@ public class BCPlayer {
 
     public int getSelectedGroup() { return selectedGroup; }
 
+    public boolean isNewPlayer() { return newPlayer; }
+
+    public LocalDateTime getViewedMotd() { return viewedMotd; }
+
+    public boolean canShowMotd() {
+        if (!BedrockConnect.getConfig().isShowingMotdFirstJoin() && isNewPlayer()) return false;
+
+        if (BedrockConnect.getConfig().isMotdCooldownEnabled() && viewedMotd != null) 
+            return LocalDateTime.now().isAfter(viewedMotd.plusDays(BedrockConnect.getConfig().getMotdCooldown()));
+        
+        return true;
+    }
+
     public void movementOpen() {
 
         if(canMovementOpen()) {
@@ -204,6 +223,9 @@ public class BCPlayer {
                 break;
             case UIForms.SERVER_GROUP:
                 form = UIForms.createServerGroup((CustomServerGroup) BedrockConnect.getConfig().getCustomServers()[getSelectedGroup()], session);
+                break;
+            case UIForms.MOTD:
+                form = UIForms.createMotd();
                 break;
             default:
                 form = UIForms.createMain(getServerList(), session);

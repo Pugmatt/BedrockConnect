@@ -1,4 +1,8 @@
 {
+  "motd": {
+    "heading": "Message of the Day",
+    "continueBtn": "Continue to Server List"
+  },
   "serverInfo": {
     "motd": "Join To Open Server List",
     "subMotd": "BedrockConnect Server List"
