@@ -32,7 +32,7 @@ public class DataUtil {
 
     public DataUtil(Database database) {
         this.database = database;
-        if (!BedrockConnect.getConfig().isNoDB()) {
+        if (BedrockConnect.getConfig().isUsingDatabase()) {
             try {
                 createTables((database.getType() == DatabaseTypes.postgres));
 
@@ -133,7 +133,7 @@ public class DataUtil {
     // update stored display name for player, if enabled)
     // If they do not exist, create a new record for the player
     public void initializePlayerData(String uuid, String name, BedrockServerSession session, PacketHandler packetHandler) {
-        if (!BedrockConnect.getConfig().isNoDB()) {
+        if (BedrockConnect.getConfig().isUsingDatabase()) {
             new Thread(() -> {
                 try {
                     PreparedStatement searchUUID = database.getConnection()
@@ -217,7 +217,7 @@ public class DataUtil {
     }
 
     public void setValueString(String column, String value, List<String> serverList, String uuid) {
-        if (!BedrockConnect.getConfig().isNoDB()) {
+        if (BedrockConnect.getConfig().isUsingDatabase()) {
             new Thread(() -> {
                 try {
                     PreparedStatement s = database.getConnection()
@@ -265,7 +265,7 @@ public class DataUtil {
     }
 
      public void setViewedMotd(String uuid) {
-         if (!BedrockConnect.getConfig().isNoDB()) {
+         if (BedrockConnect.getConfig().isUsingDatabase()) {
             if (viewedMotdExists) {
                 new Thread(() -> {
                     try {

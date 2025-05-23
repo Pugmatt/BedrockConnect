@@ -39,7 +39,7 @@ public class Config {
     private String bindIp = "0.0.0.0";
     private String serverLimit = "100";
     private boolean dbAutoReconnect = false;
-    private boolean noDB = false;
+    private boolean usingDatabase = false;
     private String motdMessage = null;
     private boolean motdFirstJoin = true;
     private int motdCooldown = 0;
@@ -74,14 +74,13 @@ public class Config {
         String dbName = "bedrock-connect";
         String dbUser = "root";
         String dbPass = "";
-        DatabaseTypes dbType = DatabaseTypes.mysql;
+        DatabaseTypes dbType = DatabaseTypes.nosql;
 
         String customServersFile = null;
         String languageFile = null;
         String whitelistFile = null;
         String motdFile = null;
 
-        boolean nodbWarning = true;
         boolean mysqlSettingWarning = false;    
 
         for (Map.Entry<String, String> setting : settings.entrySet()) {
@@ -99,7 +98,6 @@ public class Config {
                     dbPass = setting.getValue();
                     break;
                 case "db_type":
-                    nodbWarning = false;
                     String type = setting.getValue().toLowerCase();
                     switch(type) {
                         case "none":
@@ -122,18 +120,22 @@ public class Config {
                 // Backwards-compatibility for legacy database/mysql settings
                 // db_ settings above should be used for any future setups/database-related changes
                 case "mysql_host":
+                    dbType = DatabaseTypes.mysql;
                     mysqlSettingWarning = true;
                     dbHost = setting.getValue();
                     break;
                 case "mysql_db":
+                    dbType = DatabaseTypes.mysql;
                     mysqlSettingWarning = true;
                     dbName = setting.getValue();
                     break;
                 case "mysql_user":
+                    dbType = DatabaseTypes.mysql;
                     mysqlSettingWarning = true;
                     dbUser = setting.getValue();
                     break;
                 case "mysql_pass":
+                    dbType = DatabaseTypes.mysql;
                     mysqlSettingWarning = true;
                     dbPass = setting.getValue();
                     break;
@@ -143,14 +145,6 @@ public class Config {
                     break;
                 case "port":
                     port = setting.getValue();
-                    break;
-                case "nodb":
-                    if (setting.getValue().equalsIgnoreCase("true"))
-                    {
-                        nodbWarning = false;
-                        dbType = DatabaseTypes.nosql;
-                        noDB = true;
-                    }
                     break;
                 case "custom_servers":
                     customServersFile = setting.getValue();
@@ -281,13 +275,14 @@ public class Config {
             }
         }
 
-        if(!noDB) {
-            if(nodbWarning || mysqlSettingWarning) {
+        if (dbType != DatabaseTypes.nosql) {
+            usingDatabase = true;
+        }
+
+        if(!usingDatabase) {
+            if(mysqlSettingWarning) {
                 BedrockConnect.logger.warn("[!!DEPRECATION!!] Your current database settings may not work in future versions");
-                if(mysqlSettingWarning)
-                    BedrockConnect.logger.warn("- mysql_* settings should be replaced with db_* settings");
-                if(nodbWarning)
-                    BedrockConnect.logger.warn("- db_type should be manually set to mysql");
+                BedrockConnect.logger.warn("- mysql_* settings should be replaced with db_* settings");
                 BedrockConnect.logger.warn("Learn more here: https://github.com/Pugmatt/BedrockConnect/wiki/Deprecated-Database-Settings");
             }
         }
@@ -361,7 +356,7 @@ public class Config {
             }
         }
 
-        BedrockConnect.loadDatasource(dbHost, dbName, dbUser, dbPass, dbType, dbAutoReconnect, noDB);
+        BedrockConnect.loadDatasource(dbHost, dbName, dbUser, dbPass, dbType, dbAutoReconnect, usingDatabase);
     }
 
     public String getPort() {
@@ -380,8 +375,8 @@ public class Config {
         return dbAutoReconnect;
     }
 
-    public boolean isNoDB() {
-        return noDB;
+    public boolean isUsingDatabase() {
+        return usingDatabase;
     }
 
     public String getMotdMessage() {
