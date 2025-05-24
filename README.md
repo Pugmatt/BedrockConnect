@@ -123,9 +123,7 @@ docker run -p 19132:19132/udp pugmatt/bedrock-connect
 
 # Configuration
 
-BedrockConnect can be configured through three ways:
-
-- Through startup arguments (e.g. ```java -jar BedrockConnect-1.0-SNAPSHOT.jar nodb=true user_servers=false server_limit=100```)
+BedrockConnect can be configured through three ways:- Through startup arguments (e.g. ```java -jar BedrockConnect-1.0-SNAPSHOT.jar nodb=true user_servers=false server_limit=100```)
 
 - Configuration file, by adding the file ```config.yml``` to the root directory where your BedrockConnect jar is present, containing settings in YAML format. Example:
 ```
