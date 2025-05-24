@@ -104,11 +104,32 @@ public class Server {
                     try {
                         sc = new Scanner(System.in);
                         while(sc.hasNextLine()) {
-                            String cmd = sc.next();
+                            String line = sc.nextLine(); 
+                            String[] parts = line.trim().split("\\s+");
+
+                            if (parts.length == 0) {
+                                continue;
+                            }
+
+                            String cmd = parts[0];
                             switch(cmd) {
                                 case "end":
                                 case "stop":
                                     System.exit(0);
+                                    break;
+                                case "reload":
+                                    if (parts.length > 1) {
+                                        String arg = parts[1];
+                                        switch(arg) {
+                                            case "motd":
+                                                if (parts.length > 2) {
+                                                    BedrockConnect.getConfig().loadMotdMessage(parts[2]);
+                                                } else {
+                                                    BedrockConnect.getConfig().loadMotdMessage();
+                                                }
+                                                break;
+                                        }
+                                    }
                                     break;
                             }
                         }
