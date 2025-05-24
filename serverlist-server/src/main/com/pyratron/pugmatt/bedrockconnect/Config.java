@@ -40,6 +40,7 @@ public class Config {
     private String serverLimit = "100";
     private boolean dbAutoReconnect = false;
     private boolean usingDatabase = false;
+    private String motdFile = null;
     private String motdMessage = null;
     private boolean motdFirstJoin = true;
     private int motdCooldown = 0;
@@ -79,7 +80,6 @@ public class Config {
         String customServersFile = null;
         String languageFile = null;
         String whitelistFile = null;
-        String motdFile = null;
 
         boolean mysqlSettingWarning = false;    
 
@@ -339,6 +339,12 @@ public class Config {
             }
         }
 
+        loadMotdMessage();
+
+        BedrockConnect.loadDatasource(dbHost, dbName, dbUser, dbPass, dbType, dbAutoReconnect, usingDatabase);
+    }
+
+    public void loadMotdMessage() {        
         if (motdFile != null) {
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(motdFile), "UTF-8"));
@@ -349,14 +355,17 @@ public class Config {
                 }
                 motdMessage = msg + "\n";
                 in.close();
+                BedrockConnect.logger.info("Loaded MOTD");
                 BedrockConnect.logger.debug("MOTD data: " + motdMessage.toString());
             } catch (Exception e) {
                 BedrockConnect.logger.error("An error occurred reading the MOTD file", e);
-                System.exit(1);
             }
         }
+    }
 
-        BedrockConnect.loadDatasource(dbHost, dbName, dbUser, dbPass, dbType, dbAutoReconnect, usingDatabase);
+    public void loadMotdMessage(String file) {
+        motdFile = file;
+        loadMotdMessage();
     }
 
     public String getPort() {
