@@ -138,7 +138,7 @@ public class PacketHandler implements BedrockPacketHandler {
                         int chosen = Integer.parseInt(packet.getFormData().replaceAll("\\s+",""));
 
                         CustomEntry[] customServers = BedrockConnect.getConfig().getCustomServers();
-                        List<String> playerServers = BedrockConnect.getServer().getPlayer(uuid).getServerList();
+                        List<String> playerServers = player.getServerList();
 
                         MainFormButton button = UIForms.getMainFormButton(chosen, customServers, playerServers);
 
@@ -152,10 +152,10 @@ public class PacketHandler implements BedrockPacketHandler {
                                 player.openForm(UIForms.MANAGE_SERVER);
                                 break;
                             case EXIT:
-                                player.disconnect(BedrockConnect.getConfig().getLanguage().getWording("disconnect", "exit"), BedrockConnect.getServer());
+                                player.disconnect(BedrockConnect.getConfig().getLanguage().getWording("disconnect", "exit"));
                                 break;
                             case USER_SERVER:
-                                String address = BedrockConnect.getServer().getPlayer(uuid).getServerList().get(serverIndex);
+                                String address = player.getServerList().get(serverIndex);
 
                                 if (address.split(":").length > 1) {
                                     String ip = address.split(":")[0];
@@ -356,7 +356,8 @@ public class PacketHandler implements BedrockPacketHandler {
                             String name = data.get(2);
 
                             if(UIComponents.validateServerInfo(address, port, name, player)) {
-                                String value = address + ":" + port + ":" + name;
+                                String value = address + ":" + port;
+                                if(!name.isEmpty()) value += ":" + name;
 
                                 List<String> servers = player.getServerList();
                                 servers.set(player.getEditingServer(), value);

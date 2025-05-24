@@ -10,7 +10,7 @@
             <PatternLayout pattern="${LOG_PATTERN}" />
         </Console>
         <SystemPropertyArbiter propertyName="logFile" propertyValue="true">
-            <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/app-%d{yyyy-MM-dd}-%i.log.gz">
+            <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/bc-%d{yyyy-MM-dd}-%i.log.gz">
                 <PatternLayout pattern="${LOG_PATTERN_NO_COLOR}" />
                 <Policies>
                     <TimeBasedTriggeringPolicy />
