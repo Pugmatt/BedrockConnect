@@ -81,9 +81,10 @@ public class BCPlayer {
         return session;
     }
 
-    public void disconnect(String reason, Server server) {
-        session.disconnect(reason);
-        server.removePlayer(this);
+    public void disconnect(String reason) {
+        if (session != null && session.isConnected())
+            session.disconnect(reason);
+        BedrockConnect.getServer().removePlayer(this);
     }
 
     public List<String> getServerList() {

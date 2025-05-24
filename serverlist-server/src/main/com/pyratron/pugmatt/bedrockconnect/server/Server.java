@@ -17,6 +17,7 @@ import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitiali
 import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server {
 
@@ -26,16 +27,16 @@ public class Server {
     public static final ObjectMapper JSON_MAPPER = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     public static final YAMLMapper YAML_MAPPER = (YAMLMapper) new YAMLMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-    private List<BCPlayer> players;
+    private CopyOnWriteArrayList<BCPlayer> players;
 
-    public List<BCPlayer> getPlayers() {
+    public CopyOnWriteArrayList<BCPlayer> getPlayers() {
         return players;
     }
 
     public BCPlayer getPlayer(String uuid) {
-        for(int i=0;i<players.size();i++) {
-            if(players.get(i) != null && players.get(i).getUuid() != null && players.get(i).getUuid() == uuid)
-                return players.get(i);
+        for (BCPlayer player : players) {
+            if(player != null && player.getUuid() != null && player.getUuid() == uuid)
+                return player;
         }
         return null;
     }
@@ -52,8 +53,7 @@ public class Server {
 
     public Server(String bindIp, String port) {
         try {
-            Server current = this;
-            players = new ArrayList<>();
+            players = new CopyOnWriteArrayList<>();
 
             InetSocketAddress bindAddress = new InetSocketAddress(bindIp, Integer.parseInt(port));
 
@@ -88,9 +88,9 @@ public class Server {
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask() {
                     public void run() {
-                        for (int i = 0; i < players.size(); i++) {
-                            if (players.get(i) != null && !players.get(i).isActive())
-                                players.get(i).disconnect(BedrockConnect.getConfig().getLanguage().getWording("disconnect", "inactivity"), current);
+                        for (BCPlayer player : players) {
+                            if(player != null && !player.isActive())
+                                player.disconnect(BedrockConnect.getConfig().getLanguage().getWording("disconnect", "inactivity"));
                         }
                     }
                 };

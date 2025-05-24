@@ -136,32 +136,24 @@ public class DataUtil {
         if (BedrockConnect.getConfig().isUsingDatabase()) {
             new Thread(() -> {
                 try {
-                    PreparedStatement searchUUID = database.getConnection()
-                            .prepareStatement("SELECT COUNT(*) AS total FROM servers where uuid = ?");
-                    searchUUID.setString(1, uuid);
-                    ResultSet RS = searchUUID.executeQuery();
-                    while (RS.next()) {
-                        if (RS.getInt("total") > 0) {
-                            PreparedStatement getUser = database.getConnection()
-                                    .prepareStatement("SELECT * FROM servers WHERE uuid = ?;");
-                            getUser.setString(1, uuid);
-                            ResultSet rs = getUser.executeQuery();
-                            while (rs.next()) {
-                                if (BedrockConnect.getConfig().canStoreDisplayNames() && !rs.getString("name").equals(name)) {
-                                    PreparedStatement updateUUID = database.getConnection()
-                                            .prepareStatement("UPDATE servers SET name = ? WHERE uuid = ?");
-                                    updateUUID.setString(1, name);
-                                    updateUUID.setString(2, uuid);
-                                    updateUUID.executeUpdate();
-                                }
-                                BCPlayer p = getPlayer(rs, name, uuid, session);
-                                packetHandler.setPlayer(p);
-                                if (p != null)
-                                    BedrockConnect.getServer().addPlayer(p);
-                            }
-                        } else {
-                            createPlayerRecord(uuid, name, session, packetHandler);
+                    PreparedStatement getUser = database.getConnection()
+                            .prepareStatement("SELECT * FROM servers WHERE uuid = ?;");
+                    getUser.setString(1, uuid);
+                    ResultSet rs = getUser.executeQuery();
+                    if (rs.next()) {
+                        if (BedrockConnect.getConfig().canStoreDisplayNames() && !rs.getString("name").equals(name)) {
+                            PreparedStatement updateUUID = database.getConnection()
+                                    .prepareStatement("UPDATE servers SET name = ? WHERE uuid = ?");
+                            updateUUID.setString(1, name);
+                            updateUUID.setString(2, uuid);
+                            updateUUID.executeUpdate();
                         }
+                        BCPlayer p = getPlayer(rs, name, uuid, session);
+                        packetHandler.setPlayer(p);
+                        if (p != null)
+                            BedrockConnect.getServer().addPlayer(p);
+                    } else {
+                        createPlayerRecord(uuid, name, session, packetHandler);
                     }
                 } catch (Exception e) {
                     errorAlert(e);
