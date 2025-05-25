@@ -11,7 +11,7 @@ Type=simple
 User=mcbc
 Group=mcbc
 WorkingDirectory=/home/mcbc
-ExecStart=/usr/bin/java -jar BedrockConnect-1.0-SNAPSHOT.jar nodb=true
+ExecStart=/usr/bin/java -jar BedrockConnect-1.0-SNAPSHOT.jar
 Restart=always
 
 [Install]
