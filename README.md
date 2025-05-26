@@ -1,8 +1,10 @@
 # BedrockConnect
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[<img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Ko-fi" width="150">](https://ko-fi.com/Z8Z09Z56K)
 
-<img src="https://i.imgur.com/H9zVzGT.png" alt="Description of your image" align="right" width="200">
+<img src="https://i.imgur.com/H9zVzGT.png" alt="Bedrock Block" align="right" width="200">
+
 
 BedrockConnect is a minimal *Minecraft: Bedrock Edition* server software that provides a server-list solution to players. Players can connect to any Bedrock Edition game servers, along with storing and managing an in-game list of their servers. 
 
@@ -130,9 +132,14 @@ After you set up BedrockConnect, you will need to set up a join method to connec
 - [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)
 
 
-## Donations
+## Sponsors
+Sponsors go a long way in helping BedrockConnect's continued development and keeping server bills paid!
 
-If you like what you see, feel free to throw a few bucks. I won't ever charge for this service. Donations go toward hosting the main BedrockConnect instance, 104.238.130.180.
+If you're interested in sponsoring projects like this one (thank you!) feel free to check out my Patreon - https://www.patreon.com/Pugmatt
 
-https://paypal.me/Pugmatt
+<!-- ![Sponsors](https://raw.githubusercontent.com/Pugmatt/Pugmatt-SponsorKit/refs/heads/static/sponsors.part1.svg) -->
+
+<!-- ### All Sponsors -->
+<!-- ![Sponsors](https://raw.githubusercontent.com/Pugmatt/Pugmatt-SponsorKit/refs/heads/circle/sponsors.part1.svg) -->
+
 
