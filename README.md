@@ -135,7 +135,7 @@ After you set up BedrockConnect, you will need to set up a join method to connec
 ## Thank you Sponsors!
 Sponsors go a long way in helping BedrockConnect's continued development and keeping server bills paid!
 
-If you're interested in sponsoring projects like this one (thank you!) feel free to check out my ![GitHub Sponsors](https://github.com/sponsors/Pugmatt) or ![Patreon](https://www.patreon.com/Pugmatt)
+If you're interested in sponsoring projects like this one (thank you!) feel free to check out my [GitHub Sponsors](https://github.com/sponsors/Pugmatt) or [Patreon](https://www.patreon.com/Pugmatt)
 
 ![Sponsors](https://raw.githubusercontent.com/Pugmatt/Pugmatt-SponsorKit/refs/heads/static/sponsors.svg)
 
