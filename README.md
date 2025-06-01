@@ -132,14 +132,12 @@ After you set up BedrockConnect, you will need to set up a join method to connec
 - [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)
 
 
-## Sponsors
+## Thank you Sponsors!
 Sponsors go a long way in helping BedrockConnect's continued development and keeping server bills paid!
 
-If you're interested in sponsoring projects like this one (thank you!) feel free to check out my Patreon - https://www.patreon.com/Pugmatt
+If you're interested in sponsoring projects like this one (thank you!) feel free to check out my ![GitHub Sponsors](https://github.com/sponsors/Pugmatt) or ![Patreon](https://www.patreon.com/Pugmatt)
 
-<!-- ![Sponsors](https://raw.githubusercontent.com/Pugmatt/Pugmatt-SponsorKit/refs/heads/static/sponsors.part1.svg) -->
+![Sponsors](https://raw.githubusercontent.com/Pugmatt/Pugmatt-SponsorKit/refs/heads/static/sponsors.part2.svg)
 
 <!-- ### All Sponsors -->
-<!-- ![Sponsors](https://raw.githubusercontent.com/Pugmatt/Pugmatt-SponsorKit/refs/heads/circle/sponsors.part1.svg) -->
-
-
+<!-- ![Sponsors](https://raw.githubusercontent.com/Pugmatt/Pugmatt-SponsorKit/refs/heads/circle/sponsors.part2.svg)  -->
