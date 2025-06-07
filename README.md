@@ -80,7 +80,6 @@ There are multiple BedrockConnect serverlist servers available hosted by the com
 | 134.255.231.119 | bedrocklist | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) | MCXboxBroadcast instance is unofficially maintained by [Dinushay](https://github.com/dinushay) |
 | 185.169.180.190 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | Dns service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
 | 116.255.1.195 2401:d002:5c06:ca01:be24:11ff:fe78:41ad | TRBMCXB | <img src="https://flagicons.lipis.dev/flags/4x3/au.svg" height="20"> | [xavierhorwood](https://github.com/xavierhorwood) | Located in Brisbane, Australia, Dns service powered by PowerDNS |
-| 140.238.204.159 | TRBSAU | <img src="https://flagicons.lipis.dev/flags/4x3/au.svg" height="20"> | [xavierhorwood](https://github.com/xavierhorwood) | Located in Sydney, Australia |
 
 [Status Page for all public instances](https://bcstatus.teamriverbubbles.com/status/bedrock)
 
