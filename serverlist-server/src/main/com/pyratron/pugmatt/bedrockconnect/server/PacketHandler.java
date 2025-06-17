@@ -503,6 +503,7 @@ public class PacketHandler implements BedrockPacketHandler {
                 //rs.setExperimental(false);
                 rs.setForcedToAccept(false);
                 rs.setGameVersion("*");
+                rs.setForcedToAccept(false);
                 session.sendPacket(rs);
                 break;
             default:
@@ -516,7 +517,7 @@ public class PacketHandler implements BedrockPacketHandler {
     @Override
     public PacketSignal handle(LoginPacket packet) {
         try {
-            ChainValidationResult chain = EncryptionUtils.validateChain(packet.getChain());
+            ChainValidationResult chain = EncryptionUtils.validatePayload(packet.getAuthPayload());
             JsonNode payload = Server.JSON_MAPPER.valueToTree(chain.rawIdentityClaims());
 
             if (payload.get("extraData").getNodeType() != JsonNodeType.OBJECT) {
@@ -530,7 +531,7 @@ public class PacketHandler implements BedrockPacketHandler {
             }
             ECPublicKey identityPublicKey = EncryptionUtils.parseKey(payload.get("identityPublicKey").textValue());
 
-            String clientJwt = packet.getExtra();
+            String clientJwt = packet.getClientJwt();
             verifyJwt(clientJwt, identityPublicKey);
 
             BedrockConnect.logger.debug("Player made it through login: " + extraData.get("displayName") + " (xuid: " + extraData.get("identity") + ")");
