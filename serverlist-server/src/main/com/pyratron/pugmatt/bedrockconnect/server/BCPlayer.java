@@ -302,6 +302,7 @@ public class BCPlayer {
         startGamePacket.setServerEngine("");
         startGamePacket.setPlayerPropertyData(NbtMap.EMPTY);
         startGamePacket.setWorldTemplateId(UUID.randomUUID());
+        startGamePacket.setOwnerId("");
 
         startGamePacket.setChatRestrictionLevel(ChatRestrictionLevel.NONE);
 
