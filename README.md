@@ -19,7 +19,7 @@ Below are instructions for setting up BedrockConnect on your game console, it ty
 There are two primary methods available to join BedrockConnect:
 
 ### DNS Method
-<details><summary>(Click to expand)</summary>
+<details><summary>📟 (Click to expand)</summary>
 
 **Nintendo Switch**:
 - Go into your console's internet settings, and set the primary DNS to 104.238.130.180 and secondary DNS to 8.8.8.8
@@ -32,12 +32,10 @@ There are two primary methods available to join BedrockConnect:
 **PlayStation**:
 - Go into your console's internet settings, and set the primary DNS to 45.55.68.52 and secondary DNS to 8.8.8.8
 
-If you're having trouble connecting to the serverlist, you can try running through the [troubleshooting page](https://github.com/Pugmatt/BedrockConnect/wiki/Troubleshooting). Or, try the "Add Friend" Method below
-
 </details>
 
 ### "Add Friend" Method
-<details><summary>(Click to expand)</summary>
+<details><summary>👥 (Click to expand)</summary>
 
 <sub>(This method utilizes [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast) to supply this join option)</sub>
 	
@@ -53,6 +51,9 @@ If you're having trouble connecting to the serverlist, you can try running throu
 
 *In order to make room in the friendslist, BCMain/BCMain1 routinely removes players from it's list that are inactive for ~1-3 days (Threshold varies depending on current traffic the bot is getting) If this happens, simply add back the gamertag.*
 </details>
+
+
+If you're having trouble connecting to the serverlist, try running through the [troubleshooting page](https://github.com/Pugmatt/BedrockConnect/wiki/Troubleshooting)
 
 ## How does it work?
 
