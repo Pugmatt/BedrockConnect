@@ -45,7 +45,7 @@ If you're having trouble connecting to the serverlist, you can try running throu
 
 - Search for the gamer tag ***BCMain*** (Or ***BCMain1***, if BCMain is full or experiencing issues), and add this user as friend
 
-- Return to the Minecraft main menu, and wait about 20 seconds. Then click "Play" and return to the "Friends" tab
+- Return to the Minecraft main menu, and wait about 30 seconds. Then click "Play" and return to the "Friends" tab
 
 - Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List". Or, you should see BCMain under the "Online" section with a joinable instance. (If the join option doesn't appear, you may need to wait another minute for the bot to process the friend request)
 
@@ -80,8 +80,6 @@ There are multiple BedrockConnect serverlist servers available hosted by the com
 | 134.255.231.119 | bedrocklist | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) | MCXboxBroadcast instance is unofficially maintained by [Dinushay](https://github.com/dinushay) |
 | 185.169.180.190 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | Dns service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
 | 116.255.1.195 2401:d002:5c06:ca01:be24:11ff:fe78:41ad | TRBMCXB | <img src="https://flagicons.lipis.dev/flags/4x3/au.svg" height="20"> | [xavierhorwood](https://github.com/xavierhorwood) | Located in Brisbane, Australia, Dns service powered by PowerDNS |
-
-[Status Page for all public instances](https://bcstatus.teamriverbubbles.com/status/bedrock)
 
 </details>
 
@@ -136,7 +134,13 @@ Sponsors go a long way in helping BedrockConnect's continued development and kee
 
 If you're interested in sponsoring projects like this one (thank you!) feel free to check out my [GitHub Sponsors](https://github.com/sponsors/Pugmatt) or [Patreon](https://www.patreon.com/Pugmatt)
 
-![Sponsors](https://raw.githubusercontent.com/Pugmatt/Pugmatt-SponsorKit/refs/heads/static/sponsors.svg)
+<p align="center">
+<img src="https://raw.githubusercontent.com/Pugmatt/Pugmatt-SponsorKit/refs/heads/static/sponsors.svg" alt="Silver Sponsors">
+</p>
 
-<!-- ### All Sponsors -->
-<!-- ![Sponsors](https://raw.githubusercontent.com/Pugmatt/Pugmatt-SponsorKit/refs/heads/circle/sponsors.part2.svg)  -->
+<div align="center">
+<h3>All Sponsors</h3>
+</div>
+<p align="center">
+<img src="https://raw.githubusercontent.com/Pugmatt/Pugmatt-SponsorKit/refs/heads/circle/sponsors.svg" alt="All Sponsors"">
+</p>
