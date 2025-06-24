@@ -18,7 +18,7 @@ Below are instructions for setting up BedrockConnect on your game console, it ty
 
 There are two primary methods available to join BedrockConnect:
 
-### DNS Method
+### DNS Method (recommended)
 <details><summary>📟 (Click to expand)</summary>
 
 **Nintendo Switch**:
@@ -38,6 +38,8 @@ There are two primary methods available to join BedrockConnect:
 <details><summary>👥 (Click to expand)</summary>
 
 <sub>(This method utilizes [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast) to supply this join option)</sub>
+
+**NOTE** - The bots for this method have limited friend slots and can be prone to slow down due to limitations set by Microsoft's friend system. It is recommended to first try the "DNS Method" before resorting to this method, as the "DNS Method" does not suffer from the same limitations. If you have already tried the DNS Method or want to try this method anyway, read on:
 	
 - In the Minecraft main menu, click "Play" and then go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" or "Search for players" (whichever is available on your game version)
 
