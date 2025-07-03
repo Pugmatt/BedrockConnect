@@ -43,7 +43,7 @@ There are two primary methods available to join BedrockConnect:
 	
 - In the Minecraft main menu, click "Play" and then go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" or "Search for players" (whichever is available on your game version)
 
-- Search for the gamer tag ***BCMain*** (Or ***BCMain1***, if BCMain is full or experiencing issues), and add this user as friend
+- Search for the gamer tag ***BCMain*** (Or ***BCMain1*** / ***BCMain2***, if BCMain is full or experiencing issues), and add this user as friend
 
 - Return to the Minecraft main menu, and wait about 30 seconds. Then click "Play" and return to the "Friends" tab
 
@@ -76,7 +76,7 @@ There are multiple BedrockConnect serverlist servers available hosted by the com
 	
 | IP Address | Gamertag | Location | Maintainer | Note |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| 104.238.130.180 | BCMain, BCMain1 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method), or replace the primary DNS address with 45.55.68.52. |
+| 104.238.130.180 | BCMain, BCMain1, BCMain2 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method), or replace the primary DNS address with 45.55.68.52. |
 | 5.161.83.73 | Cybrancee | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Cybrancee](https://github.com/cybrancee) |  Located in Virginia, United States. No DNS service, only BedrockConnect server  |
 | 213.171.211.142 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
 | 217.160.58.93 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
