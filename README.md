@@ -12,6 +12,8 @@ This is primarily used for players on the game console version of the game (Nint
 
 Here's a small demo of it in action: https://www.youtube.com/watch?v=Uz-XYXAxd8Q
 
+⚠️ ***DISCLAIMER** - BedrockConnect is and always has been free and open-source since its release in 2019. To ensure you are using the free tool/servers provided by this project, only use or download BedrockConnect resources found on this page/repository. We **do NOT** have an official mobile app on the Apple/Google Play store, and any app with the same name is NOT associated with this project.*
+
 ## ⭐ Quick setup
 
 Below are instructions for setting up BedrockConnect on your game console, it typically takes only a few minutes to get setup and requires no downloads.
