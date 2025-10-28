@@ -20,6 +20,8 @@ import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult;
+import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult.IdentityClaims;
+import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult.IdentityData;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.bedrock.util.JsonUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
@@ -40,7 +42,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
     private String name;
     private String uuid;
-    private JSONObject extraData;
+    private IdentityData extraData;
 
     private BCPlayer player;
 
@@ -483,15 +485,7 @@ public class PacketHandler implements BedrockPacketHandler {
             BedrockConnect.getServer().removePlayer(player);
          BedrockConnect.logger.info("[ " + LogColors.cyan(BedrockConnect.getServer().getPlayers().size() + " online") + " ] Player disconnected: " + name + " (xuid: " + uuid + ")");
     }
-
-    private boolean verifyJwt(String jwt, PublicKey key) throws JoseException {
-        JsonWebSignature jws = new JsonWebSignature();
-        jws.setKey(key);
-        jws.setCompactSerialization(jwt);
-
-        return jws.verifySignature();
-    }
-
+    
     @Override
     public PacketSignal handle(ResourcePackClientResponsePacket packet) {
         switch (packet.getStatus()) {
@@ -517,27 +511,27 @@ public class PacketHandler implements BedrockPacketHandler {
     @Override
     public PacketSignal handle(LoginPacket packet) {
         try {
-            ChainValidationResult chain = EncryptionUtils.validatePayload(packet.getAuthPayload());
-            JsonNode payload = Server.JSON_MAPPER.valueToTree(chain.rawIdentityClaims());
+            ChainValidationResult result = EncryptionUtils.validatePayload(packet.getAuthPayload());
+            if (!result.signed()) {
+                throw new RuntimeException("Chain not signed");
+            }
+            PublicKey identityPublicKey = result.identityClaims().parsedIdentityPublicKey();
 
-            if (payload.get("extraData").getNodeType() != JsonNodeType.OBJECT) {
+            byte[] clientDataPayload = EncryptionUtils.verifyClientData(packet.getClientJwt(), identityPublicKey);
+            if (clientDataPayload == null) {
+                throw new IllegalStateException("Client data isn't signed by the given chain data");
+            }
+
+            if (result.identityClaims().extraData == null) {
                 throw new RuntimeException("AuthData was not found!");
             }
 
-            extraData = new JSONObject(JsonUtils.childAsType(chain.rawIdentityClaims(), "extraData", Map.class));
+            extraData = result.identityClaims().extraData;
 
-            if (payload.get("identityPublicKey").getNodeType() != JsonNodeType.STRING) {
-                throw new RuntimeException("Identity Public Key was not found!");
-            }
-            ECPublicKey identityPublicKey = EncryptionUtils.parseKey(payload.get("identityPublicKey").textValue());
+            BedrockConnect.logger.debug("Player made it through login: " + extraData.displayName + " (xuid: " + extraData.identity + ")");
 
-            String clientJwt = packet.getClientJwt();
-            verifyJwt(clientJwt, identityPublicKey);
-
-            BedrockConnect.logger.debug("Player made it through login: " + extraData.get("displayName") + " (xuid: " + extraData.get("identity") + ")");
-
-            name = (String) extraData.get("displayName");
-            uuid = (String) extraData.get("identity");
+            name = extraData.displayName;
+            uuid = extraData.identity.toString();
             
             // Whitelist check
             Whitelist whitelist = BedrockConnect.getConfig().getWhitelist();
