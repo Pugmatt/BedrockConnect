@@ -87,7 +87,7 @@ There are multiple BedrockConnect serverlist servers available hosted by the com
 </details>
 
 
-[Status Page for all public instances](https://bcstatus.teamriverbubbles.com/status/bedrock)
+[Status Page for all public instances](https://bcstatus.xyz/status/bedrock)
 
 <sub>If you are currently hosting a BedrockConnect instance and are interested in adding it to this list, create a pull request adding it to the table above.</sub>
 
