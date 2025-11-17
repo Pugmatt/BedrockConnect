@@ -85,6 +85,7 @@ There are multiple BedrockConnect serverlist servers available hosted by the com
 | 134.255.231.119 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) |  |
 | 185.169.180.190 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | Dns service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
 | 2.59.252.99 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/kr.svg" height="20"> | [Minjae](https://github.com/minj-ae) | Located in Seoul, South Korea. No DNS service, only BedrockConnect server |
+| 122.222.231.209 | omizu server | <img src="https://flagicons.lipis.dev/flags/4x3/jp.svg" height="20"> | [gurinKANIMAYO](https://github.com/gurinKANIMAYO) | DNS services are not provided, only the BedrockConnect server supports Japanese |
 </details>
 
 
