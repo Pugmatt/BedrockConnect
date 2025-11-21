@@ -140,13 +140,13 @@ public class BCPlayer {
 
         TextPacket text = new TextPacket();
         text.setType(TextPacket.Type.TIP);
-        text.setMessage("==!!== Crouch or punch to re-trigger the popup ==!!==");
+        text.setMessage(BedrockConnect.getConfig().getLanguage().getWording("retriggerMsg", "tip"));
         text.setXuid(uuid);
         session.sendPacket(text);
 
         TextPacket text2 = new TextPacket();
         text2.setType(TextPacket.Type.RAW);
-        text2.setMessage("\n\n\n\n\n\n\n\n\n\n\n\n\n\n==!!== Crouch or punch to re-trigger the popup ==!!==\n\n\n\n\n\n\n\n\n\n\n");
+        text2.setMessage(BedrockConnect.getConfig().getLanguage().getWording("retriggerMsg", "chat"));
         text2.setXuid(uuid);
         session.sendPacket(text2);
     }

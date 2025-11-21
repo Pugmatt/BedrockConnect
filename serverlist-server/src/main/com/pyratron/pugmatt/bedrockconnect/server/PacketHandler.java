@@ -1,7 +1,5 @@
 package main.com.pyratron.pugmatt.bedrockconnect.server;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeType;
 import main.com.pyratron.pugmatt.bedrockconnect.*;
 import main.com.pyratron.pugmatt.bedrockconnect.config.Whitelist;
 import main.com.pyratron.pugmatt.bedrockconnect.config.Custom.CustomEntry;
@@ -20,17 +18,10 @@ import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult;
-import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult.IdentityClaims;
 import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult.IdentityData;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
-import org.cloudburstmc.protocol.bedrock.util.JsonUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
-import org.jose4j.json.internal.json_simple.JSONObject;
-import org.jose4j.jws.JsonWebSignature;
-import org.jose4j.lang.JoseException;
-
 import java.security.PublicKey;
-import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;

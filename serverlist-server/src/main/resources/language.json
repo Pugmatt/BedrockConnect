@@ -9,6 +9,7 @@
   },
   "main": {
     "heading": "ServerList",
+    "message": "",
     "connectBtn" : "Connect to a Server",
     "manageBtn" : "Manage Server List",
     "exitBtn": "Exit Server List"
@@ -42,6 +43,10 @@
   },
   "serverGroup": {
     "backBtn": "Back To List"
+  },
+  "retriggerMsg": {
+    "tip": "Crouch or punch to re-trigger the popup",
+    "chat": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n==!!== Crouch or punch to re-trigger the popup ==!!==\n\n\n\n\n\n\n\n\n\n\n"
   },
   "error": {
     "heading": "Error",

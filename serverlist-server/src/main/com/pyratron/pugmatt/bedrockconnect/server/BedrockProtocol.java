@@ -29,7 +29,7 @@ public class BedrockProtocol {
     /**
      * Latest available version
      */
-    public static final BedrockCodec DEFAULT_BEDROCK_CODEC = Bedrock_v859.CODEC;
+    public static final BedrockCodec DEFAULT_BEDROCK_CODEC = Bedrock_v859.CODEC.toBuilder().protocolVersion(860).minecraftVersion("1.21.124").build();
 
 
     /**
@@ -64,6 +64,7 @@ public class BedrockProtocol {
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v819.CODEC);
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v827.CODEC);
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v844.CODEC);
+        SUPPORTED_BEDROCK_CODECS.add(Bedrock_v859.CODEC);
         SUPPORTED_BEDROCK_CODECS.add(DEFAULT_BEDROCK_CODEC);
     }
 
