@@ -36,7 +36,7 @@ There are two primary methods available to join BedrockConnect:
 
 </details>
 
-### "Add Friend" Method
+#### "Add Friend" Method
 <details><summary>👥 (Click to expand)</summary>
 
 <sub>(This method utilizes [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast) to supply this join option)</sub>
@@ -45,15 +45,15 @@ There are two primary methods available to join BedrockConnect:
 	
 - In the Minecraft main menu, click "Play" and then go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" or "Search for players" (whichever is available on your game version)
 
-- Search for the gamer tag ***BCMain*** (Or ***BCMain1*** / ***BCMain2***, if BCMain is full or experiencing issues), and add this user as friend
+- Search for any of the following gamer tags: ***BCMain*** / ***BCMain1*** / ***BCMain2*** / ***BCMain4***, and add this user as friend
 
 - Return to the Minecraft main menu, and wait about 30 seconds. Then click "Play" and return to the "Friends" tab
 
-- Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List". Or, you should see BCMain under the "Online" section with a joinable instance. (If the join option doesn't appear, you may need to wait another minute for the bot to process the friend request)
+- Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List". Or, you should see BCMain under the "Online" section with a joinable instance. (If the join option doesn't appear, you may need to wait another minute for the bot to process the friend request, or try adding a different bot gamer tag from above)
 
 - Join instance to connect to BedrockConnect server list
 
-*In order to make room in the friendslist, BCMain/BCMain1 routinely removes players from it's list that are inactive for ~1-3 days (Threshold varies depending on current traffic the bot is getting) If this happens, simply add back the gamertag.*
+*In order to make room in the friendslist, main instance bots routinely removes players from it's list that are inactive for ~1-3 days (Threshold varies depending on current traffic the bot is getting) If this happens, simply add back the gamertag.*
 </details>
 
 
@@ -78,7 +78,7 @@ There are multiple BedrockConnect serverlist servers available hosted by the com
 	
 | IP Address | Gamertag | Location | Maintainer | Note |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| 104.238.130.180 | BCMain, BCMain1, BCMain2 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method), or replace the primary DNS address with 45.55.68.52. |
+| 104.238.130.180 | BCMain, BCMain1, BCMain2, BCMain4 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method), or replace the primary DNS address with 45.55.68.52. |
 | 5.161.83.73 | Cybrancee | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Cybrancee](https://github.com/cybrancee) |  Located in Virginia, United States. No DNS service, only BedrockConnect server  |
 | 213.171.211.142 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
 | 217.160.58.93 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
