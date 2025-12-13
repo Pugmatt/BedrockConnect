@@ -45,7 +45,10 @@ There are two primary methods available to join BedrockConnect:
 	
 - In the Minecraft main menu, click "Play" and then go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" or "Search for players" (whichever is available on your game version)
 
-- Search for any of the following gamer tags: ***BCMain*** / ***BCMain1*** / ***BCMain2*** / ***BCMain4***, and add this user as friend
+- Search for any of the following gamer tags:
+  	- ***BCMain*** / ***BCMain1*** / ***BCMain2*** / ***BCMain3*** / ***BCMain4***
+  	
+	... and add this user as friend
 
 - Return to the Minecraft main menu, and wait about 30 seconds. Then click "Play" and return to the "Friends" tab
 
@@ -78,7 +81,7 @@ There are multiple BedrockConnect serverlist servers available hosted by the com
 	
 | IP Address | Gamertag | Location | Maintainer | Note |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| 104.238.130.180 | BCMain, BCMain1, BCMain2, BCMain4 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method), or replace the primary DNS address with 45.55.68.52. |
+| 104.238.130.180 | BCMain, BCMain1, BCMain2, BCMain3, BCMain4 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method), or replace the primary DNS address with 45.55.68.52. |
 | 5.161.83.73 | Cybrancee | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Cybrancee](https://github.com/cybrancee) |  Located in Virginia, United States. No DNS service, only BedrockConnect server  |
 | 213.171.211.142 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
 | 217.160.58.93 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
@@ -118,17 +121,19 @@ docker run -p 19132:19132/udp pugmatt/bedrock-connect
 
 ### Setting up a join method for game consoles
 
-After you set up BedrockConnect, you will need to set up a join method to connect to it on game consoles. Some helpful resources:
+If your console is Playstation or Xbox and on the same network/LAN as the machine running BedrockCoonnect, you can join BedrockConnect as-is via LAN by going to the "Worlds" tab in-game. 
 
-- Windows tutorial (DNS Method): https://www.youtube.com/watch?v=AW5X7-qnvLk
-
-- Linux tutorial: https://github.com/Pugmatt/BedrockConnect/wiki/Setting-up-on-Linux
+If you are on a different game console or want to connect outside of your network, you will need to set-up a join method by checking out the resources below:
 
 - "Add Friend" method - [MCXboxBroadcast repo](https://github.com/MCXboxBroadcast/Broadcaster?tab=readme-ov-file#standalone) (Install and set target server to BedrockConnect instance)
 
-- If you're looking to host a DNS server from scratch for the DNS method, [click here details on what zones to configure](https://github.com/Pugmatt/BedrockConnect/wiki/Using-your-own-DNS-server)
+- Windows tutorial (DNS Method) (LAN): https://www.youtube.com/watch?v=AW5X7-qnvLk
+
+- Linux tutorial: https://github.com/Pugmatt/BedrockConnect/wiki/Setting-up-on-Linux
 
 - A docker-compose file with BedrockConnect and bind9 DNS included can be found in the [docker folder of the repo](https://github.com/Pugmatt/BedrockConnect/tree/master/docker), along with other docker resources.
+
+- If you're looking to host a DNS server using a different DNS software, [click here details on what zones to configure](https://github.com/Pugmatt/BedrockConnect/wiki/Using-your-own-DNS-server)
 
 ## Libraries used
 - [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)
