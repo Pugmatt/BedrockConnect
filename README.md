@@ -12,7 +12,7 @@ This is primarily used for players on the game console version of the game (Nint
 
 Here's a small demo of it in action: https://www.youtube.com/watch?v=Uz-XYXAxd8Q
 
-⚠️ ***DISCLAIMER** - BedrockConnect is and always has been free and open-source since its release in 2019. To ensure you are using the free tool/servers provided by this project, only use or download BedrockConnect resources found on this page/repository. We **do NOT** have an official mobile app on the Apple/Google Play store, and any app with the same name is NOT associated with this project.*
+BedrockConnect is and always has been free and open-source since its release in 2019. To ensure you are using the free tool/servers provided by this project, only use or download BedrockConnect resources found on this page/repository. We **do NOT** have an official mobile app on the Apple/Google Play store, and any app with the same name is NOT associated with this project.*
 
 ## ⭐ Quick setup
 
@@ -25,14 +25,59 @@ There are two primary methods available to join BedrockConnect:
 
 **Nintendo Switch**:
 - Go into your console's internet settings, and set the primary DNS to 104.238.130.180 and secondary DNS to 8.8.8.8
+- Open Minecraft and go to the "Servers" tab. Join a featured server to open BedrockConnect.
 - Video walkthrough: https://www.youtube.com/watch?v=zalT_oR1nPM
 
 **Xbox**:
 - Go into your console's internet settings, and set the primary DNS to 104.238.130.180 and secondary DNS to 8.8.8.8
+- Open Minecraft and go to the "Servers" tab. Join a featured server to open BedrockConnect.
 - Video walkthrough: https://www.youtube.com/watch?v=g8mHvasVHMs
 
 **PlayStation**:
-- Go into your console's internet settings, and set the primary DNS to 45.55.68.52 and secondary DNS to 8.8.8.8
+- Go into your console's internet settings, and set the primary DNS to 45.55.68.52 and secondary DNS to 8.8.8.8 (See 'How to change DNS' guides below)
+- Open Minecraft and go to the "Servers" tab. Join a featured server to open BedrockConnect.
+
+<details><summary>How to change DNS on PS5 (Click to expand)</summary>
+	
+1. In the PS5 home screen, go to "Settings" and then "Network"
+	
+2. Select "Settings" and choose "Set up internet connection"
+
+3. In "Advance Settings", set the "DNS settings" to "Manual"
+
+4. Enter 45.55.68.52 for the primary DNS and 8.8.8.8 for the secondary DNS, and select "Ok"
+
+5. Wait for connection to test
+
+</details>
+
+<details><summary>How to change DNS on PS4 (Click to expand)</summary>
+	
+1. In the PS4 home screen, go to "Settings" and then "Network"
+	
+2. Select "Set up internet connection"
+	
+3. Select your internet's connection type
+
+4. When prompted for how to set up the internet connection, select "Custom"
+
+5. Select your connection from the list
+
+6. Select "Automatic" for "IP address settings"
+
+7. Select "Do not specify" for "DHCP host name"
+
+8. For the "DNS settings" screen, select “Manual”
+
+9. Enter 45.55.68.52 for the primary DNS and 8.8.8.8 for the secondary DNS, and click "Next"
+
+10. Select "Automatic" for "MTU settings"
+
+11. Select "Do not use" for "Proxy server"
+
+12. Test connection
+
+</details>
 
 </details>
 
@@ -125,8 +170,13 @@ If your console is Playstation or Xbox and on the same network/LAN as the machin
 
 If you are on a different game console or want to connect outside of your network, you will need to set-up a join method by checking out the resources below:
 
-- "Add Friend" method - [MCXboxBroadcast repo](https://github.com/MCXboxBroadcast/Broadcaster?tab=readme-ov-file#standalone) (Install and set target server to BedrockConnect instance)
+<details><summary>📁 (Click to expand resources)</summary>
 
+- "Add Friend" method
+    - Follow ["Standalone" install instructions from MCXboxBroadcast repo](https://github.com/MCXboxBroadcast/Broadcaster?tab=readme-ov-file#standalone) and set target server to your BedrockConnect instance
+      - If game console's on the same network as your hosting machine of BedrockConnect, IP would be the [local address of the hosting machine](https://www.whatismybrowser.com/detect/what-is-my-local-ip-address/)
+      - Or, for outside connections, IP would be your [external address](https://whatismyipaddress.com/) (Will also need to port-forward 19132)
+ 
 - Windows tutorial (DNS Method) (LAN): https://www.youtube.com/watch?v=AW5X7-qnvLk
 
 - Linux tutorial: https://github.com/Pugmatt/BedrockConnect/wiki/Setting-up-on-Linux
@@ -134,6 +184,8 @@ If you are on a different game console or want to connect outside of your networ
 - A docker-compose file with BedrockConnect and bind9 DNS included can be found in the [docker folder of the repo](https://github.com/Pugmatt/BedrockConnect/tree/master/docker), along with other docker resources.
 
 - If you're looking to host a DNS server using a different DNS software, [click here details on what zones to configure](https://github.com/Pugmatt/BedrockConnect/wiki/Using-your-own-DNS-server)
+
+</details>
 
 ## Libraries used
 - [NukkitX Bedrock Protocol Library](https://github.com/NukkitX/Protocol)
