@@ -166,7 +166,7 @@ docker run -p 19132:19132/udp pugmatt/bedrock-connect
 
 ### Setting up a join method for game consoles
 
-If your console is Playstation or Xbox and on the same network/LAN as the machine running BedrockCoonnect, you can join BedrockConnect as-is via LAN by going to the "Worlds" tab in-game. 
+If your console is Playstation or Xbox and on the same network/LAN as the machine running BedrockConnect, you can join BedrockConnect as-is via LAN by going to the "Worlds" tab in-game. 
 
 If you are on a different game console or want to connect outside of your network, you will need to set-up a join method by checking out the resources below:
 
