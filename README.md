@@ -6,13 +6,13 @@
 <img src="https://i.imgur.com/H9zVzGT.png" alt="Bedrock Block" align="right" width="200">
 
 
-BedrockConnect is a minimal *Minecraft: Bedrock Edition* server software that provides a server-list solution to players. Players can connect to any Bedrock Edition game servers, along with storing and managing an in-game list of their servers. 
+BedrockConnect is a minimal *Minecraft: Bedrock Edition* server software that provides a server-list interface to players. Players can connect to any Bedrock Edition game servers, along with storing and managing an in-game list of their servers. 
 
-This is primarily used for players on the game console version of the game (Nintendo Switch, Xbox, PlayStation, etc) where a serverlist to connect to 3rd-party servers is not natively available inside the game. This project aims to provide a quick straight forward solution that any player can setup directly on their game console without having to download anything.
+This is primarily helpful on console versions of the game (Switch, Xbox, PlayStation) where a list for 3rd-party servers is not natively available in-game. This project aims to provide a straight-forward solution that any player can setup directly on their game console in a few minutes.
 
-Here's a small demo of it in action: https://www.youtube.com/watch?v=Uz-XYXAxd8Q
+Demo video: https://www.youtube.com/watch?v=Uz-XYXAxd8Q
 
-*BedrockConnect is and always has been free and open-source since its release in 2019. To ensure you are using the free tool/servers provided by this project, only use or download BedrockConnect resources found on this page/repository. We **do NOT** have an official mobile app on the Apple/Google Play store, and any app with the same name is NOT associated with this project.*
+*<sub>BedrockConnect is and always has been free and open-source since its release in 2019. To ensure you are using the free tool/servers provided by this project, only use or download BedrockConnect resources found on this page/repository. We **do NOT** have an official mobile app on the Apple/Google Play store, and any app with the same name is NOT associated with this project.</sub>*
 
 ## ⭐ Quick setup
 
@@ -112,35 +112,37 @@ If you're having trouble connecting to the serverlist, try running through the [
 
 ## How does it work?
 
-When a player connects to BedrockConnect, they are met with a server-list UI sent by the server. When the player enters the details for the server they are looking to join, BedrockConnect sends a packet that transfers the player off of BedrockConnect and on to the server they entered.
+When a player connects to BedrockConnect, they are met with a server-list interface sent by the server. When the player enters the details for the server they are looking to join, BedrockConnect sends a packet that transfers the player off of BedrockConnect and on to the server they entered.
 
-To actually get on the BedrockConnect server on game console, we primarily utilize one of two methods. 
+To access BedrockConnect on game consoles, we primarily utilize one of two methods:
 
-**DNS Method** - In Minecraft Bedrock Edition, players on any version can join the available 'Featured Servers'. By using a DNS server, we can redirect the domains used by these servers to instead go to the BedrockConnect serverlist server.
+- **DNS Method** - By using a custom DNS server, we can redirect the domains used by 'Featured Servers' to instead go to the BedrockConnect serverlist server. This allows players to connect through 'Featured Servers' entries.
 
-**"Add Friend" method** - By utilizing the 'Join Game' button in the game's Friends menu, we can redirect them to the BedrockConnect instance. This method is powered by [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast).
+- **"Add Friend" method** - By utilizing the 'Join Game' button in the game's Friends menu, we can redirect them to the BedrockConnect instance. This method is powered by [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast).
 
 ## Community-hosted instances
 
-There are multiple BedrockConnect serverlist servers available hosted by the community that can be used. Currently, they do NOT share the same player database, so if you have added a server to your list on any of the given servers and connect to a different one, you will need to save that data again.
+There are multiple BedrockConnect instances available hosted by the community available to use:
 
-### List of Servers
-<details><summary>(Click to expand to see list)</summary>
+### List of Instances
+<details><summary>📁 (Click to expand list)</summary>
 	
-| IP Address | Gamertag | Location | Maintainer | Note |
-| ------------- | ------------- | ------------- | ------------- | ------------- |
-| 104.238.130.180 | BCMain, BCMain1, BCMain2, BCMain3, BCMain4 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS, try the ["Add Friend" Method](#add-friend-method), or replace the primary DNS address with 45.55.68.52. |
-| 5.161.83.73 | Cybrancee | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Cybrancee](https://github.com/cybrancee) |  Located in Virginia, United States. No DNS service, only BedrockConnect server  |
-| 213.171.211.142 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server  |
-| 217.160.58.93 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | No DNS service, only BedrockConnect server |
-| 134.255.231.119 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) |  |
-| 185.169.180.190 | HasanBC1 | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | Dns service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
-| 2.59.252.99 | N/A | <img src="https://flagicons.lipis.dev/flags/4x3/kr.svg" height="20"> | [Minjae](https://github.com/minj-ae) | Located in Seoul, South Korea. No DNS service, only BedrockConnect server |
-| 122.222.231.209 | BCsub, BCsub1 | <img src="https://flagicons.lipis.dev/flags/4x3/jp.svg" height="20"> | [gurinKANIMAYO](https://github.com/gurinKANIMAYO) |  No DNS service; Japanese is supported. |
+| IP Address | DNS-Method Enabled | Gamertag (Add-Friend Method) | Location | Maintainer | Note |
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+| 104.238.130.180 | ✔️ | BCMain, BCMain1, BCMain2, BCMain3, BCMain4 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS method, replace primary DNS address with 45.55.68.52 |
+| 5.161.83.73 | 🗙 | Cybrancee | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Cybrancee](https://github.com/cybrancee) |  Located in Virginia, United States  |
+| 134.255.231.119 | ✔️ | 🗙 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) |  |
+| 185.169.180.190 | ✔️ | HasanBC1 | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | DNS service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
+| 122.222.231.209 | 🗙 | BCsub, BCsub1 | <img src="https://flagicons.lipis.dev/flags/4x3/jp.svg" height="20"> | [gurinKANIMAYO](https://github.com/gurinKANIMAYO) |  Japanese is supported. |
+| 213.171.211.142 | 🗙 | 🗙 | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) |  |
+| 217.160.58.93 | 🗙 | 🗙 | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
+| 2.59.252.99 | 🗙 | 🗙 | <img src="https://flagicons.lipis.dev/flags/4x3/kr.svg" height="20"> | [Minjae](https://github.com/minj-ae) | Located in Seoul, South Korea |
 </details>
 
 
-[Status Page for all public instances](https://bcstatus.xyz/status/bedrock)
+[Status Page for public instances](https://bcstatus.xyz/status/bedrock)
+
+Currently, the instances do NOT share the same player database, so if you have added a server to your list on any of the given servers and connect to a different one, you will need to save that data again.
 
 <sub>If you are currently hosting a BedrockConnect instance and are interested in adding it to this list, create a pull request adding it to the table above.</sub>
 
