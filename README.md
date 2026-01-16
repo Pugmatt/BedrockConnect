@@ -133,7 +133,6 @@ There are multiple BedrockConnect instances available hosted by the community av
 | 5.161.83.73 | | Cybrancee | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Cybrancee](https://github.com/cybrancee) |  Located in Virginia, United States  |
 | 134.255.231.119 | ✔️ | | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) |  |
 | 185.169.180.190 | ✔️ | HasanBC1 | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | DNS service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Listener") |
-| 122.222.231.209 | | BCsub, BCsub1 | <img src="https://flagicons.lipis.dev/flags/4x3/jp.svg" height="20"> | [gurinKANIMAYO](https://github.com/gurinKANIMAYO) |  Japanese is supported. |
 | 213.171.211.142 | | | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) |  |
 | 217.160.58.93 | | | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
 | 2.59.252.99 | | | <img src="https://flagicons.lipis.dev/flags/4x3/kr.svg" height="20"> | [Minjae](https://github.com/minj-ae) | Located in Seoul, South Korea |
