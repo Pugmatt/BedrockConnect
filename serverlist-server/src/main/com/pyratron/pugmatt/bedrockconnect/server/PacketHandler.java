@@ -174,7 +174,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
                                 switch (featuredServer) {
                                     case 0: // Hive
-                                        transfer(getIP("hivebedrock.network"), 19132);
+                                        transfer(getIP("geo.hivebedrock.network"), 19132);
                                         break;
                                     case 1: // Cubecraft
                                         transfer(!BedrockConnect.getConfig().canFetchFeaturedIps() ? getIP("mco.cubecraft.net") : "mco.cubecraft.net", 19132);
@@ -503,7 +503,7 @@ public class PacketHandler implements BedrockPacketHandler {
     public PacketSignal handle(LoginPacket packet) {
         try {
             ChainValidationResult result = EncryptionUtils.validatePayload(packet.getAuthPayload());
-            if (!result.signed()) {
+            if (BedrockConnect.getConfig().isOnlineModeEnabled() && !result.signed()) {
                 throw new RuntimeException("Chain not signed");
             }
             PublicKey identityPublicKey = result.identityClaims().parsedIdentityPublicKey();
@@ -520,6 +520,10 @@ public class PacketHandler implements BedrockPacketHandler {
             extraData = result.identityClaims().extraData;
 
             BedrockConnect.logger.debug("Player made it through login: " + extraData.displayName + " (xuid: " + extraData.identity + ")");
+
+            if (!result.signed()) {
+               BedrockConnect.logger.debug("Chain not signed: " + extraData.displayName + " (xuid: " + extraData.identity + ")");
+            }
 
             name = extraData.displayName;
             uuid = extraData.identity.toString();

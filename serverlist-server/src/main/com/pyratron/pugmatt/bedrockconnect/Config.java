@@ -51,6 +51,7 @@ public class Config {
     private boolean debug = false;
     private boolean fetchIps = false;
     private boolean storeDisplayNames = true;
+    private boolean onlineMode = true;
     private int packetLimit = 200;
     private int globalPacketLimit = RakConstants.DEFAULT_GLOBAL_PACKET_LIMIT;
     private HashMap<String, String> featuredServerIps;
@@ -244,6 +245,9 @@ public class Config {
                 case "motd_cooldown":
                     motdCooldown = Integer.parseInt(setting.getValue());
                     break;
+                case "online_mode":
+                    onlineMode = setting.getValue().equalsIgnoreCase("true");
+                    break;
             }
         }
 
@@ -422,6 +426,10 @@ public class Config {
 
     public boolean isDebugEnabled() {
         return debug;
+    }
+
+     public boolean isOnlineModeEnabled() {
+        return onlineMode;
     }
 
     public boolean canFetchIps() {
