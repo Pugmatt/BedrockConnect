@@ -16,11 +16,11 @@ Demo video: https://www.youtube.com/watch?v=Uz-XYXAxd8Q
 
 ## ⭐ Quick setup
 
-Below are instructions for setting up BedrockConnect on your game console, it typically takes only a few minutes to get setup and requires no downloads.
+Below are instructions for setting up BedrockConnect on your game console, it typically takes only a few minutes to get setup.
 
 There are two primary methods available to join BedrockConnect:
 
-### DNS Method (recommended)
+### DNS Method (recommended, no download required)
 <details><summary>📟 (Click to expand)</summary>
 
 **Nintendo Switch**:
@@ -84,27 +84,16 @@ There are two primary methods available to join BedrockConnect:
 
 </details>
 
-#### "Add Friend" Method
+#### "Add Friend" Method (requires download)
 <details><summary>👥 (Click to expand)</summary>
-
-<sub>(This method utilizes [MCXboxBroadcast](https://github.com/rtm516/MCXboxBroadcast) to supply this join option)</sub>
-
-**NOTE** - The bots for this method have limited friend slots and can be prone to slow down due to limitations set by Microsoft's friend system. It is recommended to first try the "DNS Method" before resorting to this method, as the "DNS Method" does not suffer from the same limitations. If you have already tried the DNS Method or want to try this method anyway, read on:
 	
-- In the Minecraft main menu, click "Play" and then go to the "Friends" tab, and click "Add Friend" or "Find Cross-Platform Friends" or "Search for players" (whichever is available on your game version)
+---
 
-- Search for any of the following gamer tags:
-  	- ***BCMain*** / ***BCMain1*** / ***BCMain2*** / ***BCMain3*** / ***BCMain4***
-  	
-	... and add this user as friend
+ℹ️ *The public bots have been turned off until further notice due to inscalibility with player growth and other security related concerns.*
 
-- Return to the Minecraft main menu, and wait about 30 seconds. Then click "Play" and return to the "Friends" tab
-
-- Wait a moment, and you should soon see a joinable instance show up, "Join to Open Server List". Or, you should see BCMain under the "Online" section with a joinable instance. (If the join option doesn't appear, you may need to wait another minute for the bot to process the friend request, or try adding a different bot gamer tag from above)
-
-- Join instance to connect to BedrockConnect server list
-
-*In order to make room in the friendslist, main instance bots routinely removes players from it's list that are inactive for ~1-3 days (Threshold varies depending on current traffic the bot is getting) If this happens, simply add back the gamertag.*
+--- 
+	
+Follow the ["Standalone" install instructions from MCXboxBroadcast repo](https://github.com/MCXboxBroadcast/Broadcaster?tab=readme-ov-file#standalone), and set the target server address in your config.yml to 104.238.130.180.
 </details>
 
 
@@ -127,15 +116,15 @@ There are multiple BedrockConnect instances available hosted by the community av
 ### List of Instances
 <details><summary>📁 (Click to expand list)</summary>
 	
-| IP Address | DNS-Method Enabled | Gamertag (Add-Friend Method) | Location | Maintainer | Note |
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| 104.238.130.180 | ✔️ | BCMain, BCMain1, BCMain2, BCMain3, BCMain4 | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS method, replace primary DNS address with 45.55.68.52 |
-| 5.161.83.73 | | Cybrancee | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Cybrancee](https://github.com/cybrancee) |  Located in Virginia, United States  |
-| 134.255.231.119 | ✔️ | | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) |  |
-| 185.169.180.190 | ✔️ | HasanBC1 | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | DNS service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Resolver" & "BedrockConnect") |
-| 213.171.211.142 | | | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) |  |
-| 217.160.58.93 | | | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
-| 2.59.252.99 | | | <img src="https://flagicons.lipis.dev/flags/4x3/kr.svg" height="20"> | [Minjae](https://github.com/minj-ae) | Located in Seoul, South Korea |
+| IP Address | DNS-Method Enabled | Location | Maintainer | Note |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| 104.238.130.180 | ✔️ | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Pugmatt](https://github.com/Pugmatt) | Main instance. Multiple load balanced servers. If issues occur on PS4/PS5 with DNS method, replace primary DNS address with 45.55.68.52 |
+| 134.255.231.119 | ✔️ | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [ZAP-Hosting](https://github.com/zaphosting) |  |
+| 185.169.180.190 | ✔️ | <img src="https://flagicons.lipis.dev/flags/4x3/tr.svg" height="20"> | [hasankayra04](https://github.com/hasankayra04) | DNS service with NextDNS [Status Page](https://status.hasankayra04.com) (Listed as "Dns Resolver" & "BedrockConnect") |
+| 5.161.83.73 | | <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" height="20"> | [Cybrancee](https://github.com/cybrancee) |  Located in Virginia, United States  |
+| 213.171.211.142 | | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) |  |
+| 217.160.58.93 | | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
+| 2.59.252.99 | | <img src="https://flagicons.lipis.dev/flags/4x3/kr.svg" height="20"> | [Minjae](https://github.com/minj-ae) | Located in Seoul, South Korea |
 </details>
 
 
