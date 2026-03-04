@@ -89,7 +89,7 @@ There are two primary methods available to join BedrockConnect:
 	
 ---
 
-ℹ️ *The public bots have been turned off until further notice due to inscalibility with player growth and other security related concerns.*
+ℹ️ *The public bots have been turned off until further notice due to inscalability with player growth and other security related concerns.*
 
 --- 
 	
