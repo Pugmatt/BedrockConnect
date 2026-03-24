@@ -48,7 +48,7 @@ public class UIForms {
         mf.setFormId(UIForms.MAIN);
 
         JsonObject out = UIComponents.createForm("form", BedrockConnect.getConfig().getLanguage().getWording("main", "heading"));
-        out.addProperty("content", "");
+        out.addProperty("content", BedrockConnect.getConfig().getLanguage().getWording("main", "message"));
 
         JsonArray buttons = new JsonArray();
         CustomEntry[] customServers = BedrockConnect.getConfig().getCustomServers();

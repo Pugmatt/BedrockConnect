@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM eclipse-temurin:17-jre
 RUN mkdir -p /app
 ADD https://github.com/Pugmatt/BedrockConnect/releases/latest/download/BedrockConnect-1.0-SNAPSHOT.jar /app
 WORKDIR /app

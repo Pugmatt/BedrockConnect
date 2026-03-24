@@ -1,7 +1,5 @@
 package main.com.pyratron.pugmatt.bedrockconnect.server;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeType;
 import main.com.pyratron.pugmatt.bedrockconnect.*;
 import main.com.pyratron.pugmatt.bedrockconnect.config.Whitelist;
 import main.com.pyratron.pugmatt.bedrockconnect.config.Custom.CustomEntry;
@@ -20,17 +18,10 @@ import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult;
-import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult.IdentityClaims;
 import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult.IdentityData;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
-import org.cloudburstmc.protocol.bedrock.util.JsonUtils;
 import org.cloudburstmc.protocol.common.PacketSignal;
-import org.jose4j.json.internal.json_simple.JSONObject;
-import org.jose4j.jws.JsonWebSignature;
-import org.jose4j.lang.JoseException;
-
 import java.security.PublicKey;
-import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -183,7 +174,7 @@ public class PacketHandler implements BedrockPacketHandler {
 
                                 switch (featuredServer) {
                                     case 0: // Hive
-                                        transfer(getIP("hivebedrock.network"), 19132);
+                                        transfer(getIP("geo.hivebedrock.network"), 19132);
                                         break;
                                     case 1: // Cubecraft
                                         transfer(!BedrockConnect.getConfig().canFetchFeaturedIps() ? getIP("mco.cubecraft.net") : "mco.cubecraft.net", 19132);
@@ -512,7 +503,7 @@ public class PacketHandler implements BedrockPacketHandler {
     public PacketSignal handle(LoginPacket packet) {
         try {
             ChainValidationResult result = EncryptionUtils.validatePayload(packet.getAuthPayload());
-            if (!result.signed()) {
+            if (BedrockConnect.getConfig().isOnlineModeEnabled() && !result.signed()) {
                 throw new RuntimeException("Chain not signed");
             }
             PublicKey identityPublicKey = result.identityClaims().parsedIdentityPublicKey();
@@ -529,6 +520,10 @@ public class PacketHandler implements BedrockPacketHandler {
             extraData = result.identityClaims().extraData;
 
             BedrockConnect.logger.debug("Player made it through login: " + extraData.displayName + " (xuid: " + extraData.identity + ")");
+
+            if (!result.signed()) {
+               BedrockConnect.logger.debug("Chain not signed: " + extraData.displayName + " (xuid: " + extraData.identity + ")");
+            }
 
             name = extraData.displayName;
             uuid = extraData.identity.toString();

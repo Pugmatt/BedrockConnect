@@ -22,11 +22,11 @@ jobs:
 
     - name: Set Env
       env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
       run: |
-        echo ::set-env name=RELEASE_VERSION::$(echo $(python .github/assets/versionUp.py))
-        echo ::set-env name=MINECRAFT_VERSION::$(echo $(cat .github/assets/supportedVersion))
-        echo ::set-env name=NEW_RELEASE::$(echo $(python .github/assets/pattern_check.py "${{ github.event.head_commit.message }}"))
+        echo "RELEASE_VERSION=$(python .github/assets/versionUp.py)" >> $GITHUB_ENV
+        echo "MINECRAFT_VERSION=${{ vars.SUPPORTED_VERSION }}" >> $GITHUB_ENV
+        echo "NEW_RELEASE=$(python .github/assets/pattern_check.py "$COMMIT_MESSAGE")" >> $GITHUB_ENV
 
     - name: Output env
       id: outputs
