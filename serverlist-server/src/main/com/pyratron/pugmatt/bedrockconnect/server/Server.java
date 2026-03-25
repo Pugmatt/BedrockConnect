@@ -18,6 +18,7 @@ import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import io.netty.channel.Channel;
 
 public class Server {
 
@@ -75,6 +76,21 @@ public class Server {
                 .option(RakChannelOption.RAK_PACKET_LIMIT, BedrockConnect.getConfig().getPacketLimit())
                 .option(RakChannelOption.RAK_GLOBAL_PACKET_LIMIT, BedrockConnect.getConfig().getGlobalPacketLimit())
                 .childHandler(new BedrockServerInitializer() {
+                    @Override
+                    protected void preInitChannel(Channel channel) {
+                        try {
+                            int rakVersion = (Integer)channel.config().getOption(RakChannelOption.RAK_PROTOCOL_VERSION);
+                            // Force latest if rakVersion is missing
+                            if (rakVersion == 0) {
+                                rakVersion = 11;
+                            }
+                            channel.config().setOption(RakChannelOption.RAK_PROTOCOL_VERSION, rakVersion);
+                            super.preInitChannel(channel);
+                        } catch(Exception e) {
+                            BedrockConnect.logger.error("Error during preinit", e);
+                        }
+                    }
+
                     @Override
                     protected void initSession(BedrockServerSession session) {
                         session.setPacketHandler(new PacketHandler(session, false));
