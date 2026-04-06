@@ -39,7 +39,7 @@ There are two primary methods available to join BedrockConnect:
 - Go into your console's internet settings, and set the primary DNS to 45.55.68.52 and secondary DNS to 8.8.8.8 (See 'How to change DNS' guides below)
 - Open Minecraft and go to the "Servers" tab. Join a redirect-compatible featured server to open BedrockConnect
    - **Redirect-compatible servers**: Mineville, Lifeboat, Enchanted, Galaxite, The Hive
-- Video walkthrough: https://www.youtube.com/watch?v=fDmTWBL-_tA
+- Video walkthrough (PS5): https://www.youtube.com/watch?v=fDmTWBL-_tA
 
 <details><summary>How to change DNS on PS5 (Click to expand)</summary>
 	
