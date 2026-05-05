@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.cloudburstmc.protocol</groupId>
             <artifactId>bedrock-connection</artifactId>
-            <version>3.0.0.Beta12-20260324.161234-12</version>
+            <version>3.0.0.Beta12-20260505.144358-18</version>
             <scope>compile</scope>
         </dependency>
 
