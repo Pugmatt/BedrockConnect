@@ -126,6 +126,7 @@ There are multiple BedrockConnect instances available hosted by the community av
 | 213.171.211.142 | | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) |  |
 | 217.160.58.93 | | <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" height="20"> | [kmpoppe](https://github.com/kmpoppe) | |
 | 2.59.252.99 | | <img src="https://flagicons.lipis.dev/flags/4x3/kr.svg" height="20"> | [Minjae](https://github.com/minj-ae) | Located in Seoul, South Korea |
+| 57.128.153.204 | ✔️ | <img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" height="20"> | [AdrianJoeK](https://github.com/AdrianJoeK) | UK instance. DNS method enabled. |
 </details>
 
 
