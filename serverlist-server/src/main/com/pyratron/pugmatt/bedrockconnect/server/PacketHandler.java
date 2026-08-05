@@ -547,7 +547,7 @@ public class PacketHandler implements BedrockPacketHandler {
             ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
             resourcePacksInfo.setForcedToAccept(false);
             resourcePacksInfo.setScriptingEnabled(false);
-            resourcePacksInfo.setWorldTemplateId(UUID.randomUUID());
+            resourcePacksInfo.setWorldTemplateId(new UUID(0, 0));
             resourcePacksInfo.setWorldTemplateVersion("*");
             session.sendPacket(resourcePacksInfo);
         } catch (Exception e) {
