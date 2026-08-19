@@ -73,7 +73,21 @@ public class Database {
         return connection != null;
     }
 
-    public Connection getConnection() {
+    public synchronized Connection getConnection() {
+        // Validate the connection is alive before use and reopen if the server
+        // closed the idle session. Gated by autoReconnect so the option remains
+        // the single switch for connection recovery across all drivers.
+        if (autoReconnect) {
+            try {
+                if (connection == null || connection.isClosed() || !connection.isValid(2)) {
+                    BedrockConnect.logger.debug("Database connection is invalid or closed; reopening");
+                    return openConnection();
+                }
+            } catch (SQLException e) {
+                BedrockConnect.logger.error("Database connection validation failed; reopening", e);
+                return openConnection();
+            }
+        }
         return connection;
     }
 
