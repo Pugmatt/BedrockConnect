@@ -3,6 +3,7 @@ package main.com.pyratron.pugmatt.bedrockconnect.server;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v1001.Bedrock_v1001;
 import org.cloudburstmc.protocol.bedrock.codec.v2168.Bedrock_v2168;
+import org.cloudburstmc.protocol.bedrock.codec.v2169.Bedrock_v2169;
 import org.cloudburstmc.protocol.bedrock.codec.v649.Bedrock_v649;
 import org.cloudburstmc.protocol.bedrock.codec.v662.Bedrock_v662;
 import org.cloudburstmc.protocol.bedrock.codec.v671.Bedrock_v671;
@@ -36,7 +37,7 @@ public class BedrockProtocol {
     /**
      * Latest available version
      */
-    public static final BedrockCodec DEFAULT_BEDROCK_CODEC = Bedrock_v2168.CODEC;
+    public static final BedrockCodec DEFAULT_BEDROCK_CODEC = Bedrock_v2169.CODEC;
 
     /**
      * A list of all supported Bedrock versions that can join BedrockConnect
@@ -77,6 +78,7 @@ public class BedrockProtocol {
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v944.CODEC);
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v975.CODEC);
         SUPPORTED_BEDROCK_CODECS.add(Bedrock_v1001.CODEC);
+        SUPPORTED_BEDROCK_CODECS.add(Bedrock_v2168.CODEC);
         SUPPORTED_BEDROCK_CODECS.add(DEFAULT_BEDROCK_CODEC);
     }
 
