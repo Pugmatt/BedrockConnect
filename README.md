@@ -1,6 +1,7 @@
 # BedrockConnect
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![AUR Version](https://img.shields.io/aur/version/bedrock-connect-git)](https://aur.archlinux.org/packages/bedrock-connect-git)
 [<img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Ko-fi" width="150">](https://ko-fi.com/Z8Z09Z56K)
 
 <img src="https://i.imgur.com/H9zVzGT.png" alt="Bedrock Block" align="right" width="200">
@@ -154,6 +155,18 @@ Alternatively, BedrockConnect can also be ran on Docker through the public image
 
 ```bash
 docker run -p 19132:19132/udp pugmatt/bedrock-connect
+```
+
+### Arch Linux
+
+You can easily install BedrockConnect on Arch Linux using the AUR package:
+```bash
+pacman -S bedrock-connect-git
+```
+
+Then activate it with:
+```bash
+systemctl enable bedrockconnect --now
 ```
 
 ### Configuration
