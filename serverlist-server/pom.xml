@@ -31,14 +31,26 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.6.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <release>17</release>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.1</version>
+                <configuration>
+                    <filters>
+                        <filter>
+                            <!-- Signed dependencies (Bouncy Castle) would invalidate the merged jar -->
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -74,11 +86,58 @@
         </repository>
     </repositories>
 
+    <properties>
+        <!-- Pin every protocol module to one snapshot build, or the transitive -SNAPSHOT drifts -->
+        <protocol.version>3.0.0.Beta14-20261009.172637-6</protocol.version>
+        <!-- CloudburstMC/Network "nethernet" branch: RakNet and NetherNet must come from the same build -->
+        <network.version>2.0.0.CR5-20261014.182204-6</network.version>
+        <libdatachannel.version>0.24.6.0-20261010.095218-4</libdatachannel.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.cloudburstmc.protocol</groupId>
+                <artifactId>common</artifactId>
+                <version>${protocol.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.cloudburstmc.protocol</groupId>
+                <artifactId>bedrock-codec</artifactId>
+                <version>${protocol.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.cloudburstmc.netty</groupId>
+                <artifactId>netty-transport-raknet</artifactId>
+                <version>${network.version}</version>
+            </dependency>
+            <dependency>
+                <!-- The Java binding has to match the natives in libdatachannel-java-arch-detect -->
+                <groupId>dev.opencollab</groupId>
+                <artifactId>libdatachannel-java</artifactId>
+                <version>${libdatachannel.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.cloudburstmc.protocol</groupId>
             <artifactId>bedrock-connection</artifactId>
-            <version>3.0.0.Beta13-20260907.175719-23</version>
+            <version>${protocol.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.cloudburstmc.netty</groupId>
+            <artifactId>netty-transport-nethernet</artifactId>
+            <version>${network.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <!-- WebRTC natives for every supported platform, picked at runtime -->
+            <groupId>dev.opencollab</groupId>
+            <artifactId>libdatachannel-java-arch-detect</artifactId>
+            <version>${libdatachannel.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -91,7 +150,8 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.9</version>
+            <!-- 2.10+ is needed by netty-transport-nethernet, which deserializes records -->
+            <version>2.13.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

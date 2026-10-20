@@ -141,7 +141,7 @@ Currently, the instances do NOT share the same player database, so if you have a
 ### Running the BedrockConnect software
 
 **Requirements:**
-- Java 8 or higher
+- Java 17 or higher
 
 Download the latest release of the BedrockConnect serverlist software here: https://github.com/Pugmatt/BedrockConnect/releases
 
@@ -153,8 +153,10 @@ java -jar BedrockConnect-1.0-SNAPSHOT.jar
 Alternatively, BedrockConnect can also be ran on Docker through the public image ```pugmatt/bedrock-connect```
 
 ```bash
-docker run -p 19132:19132/udp pugmatt/bedrock-connect
+docker run -p 19132:19132/udp -p 19132:19132/tcp -p 19133:19133/udp pugmatt/bedrock-connect
 ```
+
+Bedrock 26.60 and newer connect over NetherNet instead of RakNet: signaling on TCP 19132, then WebRTC on UDP 19133 (`webrtc_port`). Keep the generated `identity.pem` between restarts, or players are asked to trust the server again. In a container or behind NAT, set `advertise_addresses` to the address players reach (e.g. `BC_ADVERTISE_ADDRESSES=203.0.113.10`).
 
 ### Configuration
 [See wiki page here](https://github.com/Pugmatt/BedrockConnect/wiki/Configuration) for how to further configure BedrockConnect and a list of available settings.
@@ -170,7 +172,7 @@ If you are on a different game console or want to connect outside of your networ
 - "Add Friend" method
     - Follow ["Standalone" install instructions from MCXboxBroadcast repo](https://github.com/MCXboxBroadcast/Broadcaster?tab=readme-ov-file#standalone) and set target server to your BedrockConnect instance
       - If game console's on the same network as your hosting machine of BedrockConnect, IP would be the [local address of the hosting machine](https://www.whatismybrowser.com/detect/what-is-my-local-ip-address/)
-      - Or, for outside connections, IP would be your [external address](https://whatismyipaddress.com/) (Will also need to port-forward 19132)
+      - Or, for outside connections, IP would be your [external address](https://whatismyipaddress.com/) (Will also need to port-forward 19132 UDP and TCP, and 19133 UDP)
  
 - Windows tutorial (DNS Method) (LAN): https://www.youtube.com/watch?v=AW5X7-qnvLk
 

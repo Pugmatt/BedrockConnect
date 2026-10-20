@@ -21,6 +21,7 @@ import java.io.FileReader;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.cloudburstmc.netty.channel.raknet.RakConstants;
+import org.cloudburstmc.netty.util.nethernet.EndpointAddress;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -54,6 +55,10 @@ public class Config {
     private boolean onlineMode = true;
     private int packetLimit = 200;
     private int globalPacketLimit = RakConstants.DEFAULT_GLOBAL_PACKET_LIMIT;
+    private String transport = "both";
+    private int webrtcPort = 0; // 0 = RakNet port + 1
+    private List<String> advertiseAddresses = new ArrayList<>();
+    private String netherNetIdentity = "identity.pem";
     private HashMap<String, String> featuredServerIps;
     private Whitelist whitelist;
     private Language language;
@@ -248,6 +253,61 @@ public class Config {
                 case "online_mode":
                     onlineMode = setting.getValue().equalsIgnoreCase("true");
                     break;
+                case "transport":
+                    transport = setting.getValue().trim().toLowerCase();
+                    break;
+                case "webrtc_port":
+                    try {
+                        webrtcPort = Integer.parseInt(setting.getValue().trim());
+                    } catch (NumberFormatException e) {
+                        webrtcPort = -1;
+                    }
+                    break;
+                case "advertise_addresses":
+                    advertiseAddresses.clear();
+                    for (String address : setting.getValue().split(",")) {
+                        if (!address.trim().isEmpty()) {
+                            advertiseAddresses.add(address.trim());
+                        }
+                    }
+                    break;
+                case "nethernet_identity":
+                    netherNetIdentity = setting.getValue();
+                    break;
+            }
+        }
+
+        switch (transport) {
+            case "raknet":
+            case "nethernet":
+            case "both":
+                break;
+            default:
+                BedrockConnect.logger.error("Unknown transport '" + transport + "'. Valid values: raknet, nethernet, both");
+                System.exit(1);
+        }
+
+        if (isNetherNetEnabled()) {
+            if (webrtcPort == 0) {
+                webrtcPort = Integer.parseInt(port) + 1;
+            }
+            if (webrtcPort < 1 || webrtcPort > 65535) {
+                BedrockConnect.logger.error("Invalid webrtc_port. It must be a UDP port number between 1 and 65535");
+                System.exit(1);
+            }
+            if (isRakNetEnabled() && String.valueOf(webrtcPort).equals(port)) {
+                BedrockConnect.logger.error("With transport=both, RakNet and NetherNet each need their own UDP port, but webrtc_port and port are both "
+                    + port + ". Set webrtc_port to a different available port.");
+                System.exit(1);
+            }
+            for (String address : advertiseAddresses) {
+                try {
+                    EndpointAddress.parseEndpoint(address);
+                } catch (IllegalArgumentException e) {
+                    BedrockConnect.logger.error("Invalid address in advertise_addresses: " + e.getMessage()
+                        + ". Use IP literals, optionally with a port, such as 203.0.113.10 or 203.0.113.10:19133");
+                    System.exit(1);
+                }
             }
         }
 
@@ -446,6 +506,26 @@ public class Config {
 
     public int getGlobalPacketLimit() {
         return globalPacketLimit;
+    }
+
+    public boolean isRakNetEnabled() {
+        return !transport.equals("nethernet");
+    }
+
+    public boolean isNetherNetEnabled() {
+        return !transport.equals("raknet");
+    }
+
+    public int getWebrtcPort() {
+        return webrtcPort;
+    }
+
+    public List<String> getAdvertiseAddresses() {
+        return advertiseAddresses;
+    }
+
+    public String getNetherNetIdentity() {
+        return netherNetIdentity;
     }
 
     public HashMap<String, String> getFeaturedServerIps() {

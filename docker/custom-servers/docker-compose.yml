@@ -5,5 +5,7 @@ services:
     restart: always
     ports:
       - "19132:19132/udp"
+      - "19132:19132/tcp"
+      - "19133:19133/udp"
     volumes:
       - ./custom_servers.json:/app/custom_servers.json

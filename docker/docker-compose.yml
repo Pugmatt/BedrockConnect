@@ -4,6 +4,11 @@ services:
     build: ./bedrockconnect
     ports:
       - "19132:19132/udp"
+      - "19132:19132/tcp"
+      - "19133:19133/udp"
+    # NetherNet (Bedrock 26.60+) needs the address players reach, as the container's own is private
+    # environment:
+    #   - BC_ADVERTISE_ADDRESSES=104.238.130.180
   bind9:
     build: 
       context: ./bind9

@@ -10,8 +10,10 @@ import main.com.pyratron.pugmatt.bedrockconnect.server.gui.MainFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.server.gui.ManageFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.server.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.server.gui.UIForms;
+import main.com.pyratron.pugmatt.bedrockconnect.server.nethernet.NetherNetServerInitializer;
 
 import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.netty.util.nethernet.TransportIdentityBinding;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.data.AttributeData;
@@ -511,6 +513,14 @@ public class PacketHandler implements BedrockPacketHandler {
             byte[] clientDataPayload = EncryptionUtils.verifyClientData(packet.getClientJwt(), identityPublicKey);
             if (clientDataPayload == null) {
                 throw new IllegalStateException("Client data isn't signed by the given chain data");
+            }
+
+            // A NetherNet client already proved its identity during signaling, so the login chain must use that same key
+            if (BedrockConnect.getConfig().isOnlineModeEnabled() && session.getPeer() instanceof NetherNetServerInitializer.NetherNetPeer) {
+                String mismatch = TransportIdentityBinding.mismatch(session.getPeer().getChannel(), identityPublicKey);
+                if (mismatch != null) {
+                    throw new IllegalStateException("NetherNet identity mismatch: " + mismatch);
+                }
             }
 
             if (result.identityClaims().extraData == null) {
