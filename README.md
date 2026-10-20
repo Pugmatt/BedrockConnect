@@ -153,10 +153,13 @@ java -jar BedrockConnect-1.0-SNAPSHOT.jar
 Alternatively, BedrockConnect can also be ran on Docker through the public image ```pugmatt/bedrock-connect```
 
 ```bash
-docker run -p 19132:19132/udp -p 19132:19132/tcp -p 19133:19133/udp pugmatt/bedrock-connect
+docker run -p 19132:19132/udp -p 19132:19132/tcp -p 19133:19133/udp -v bedrock-connect:/data -e BC_NETHERNET_IDENTITY=/data/identity.pem pugmatt/bedrock-connect
 ```
 
-Bedrock 26.60 and newer connect over NetherNet instead of RakNet: signaling on TCP 19132, then WebRTC on UDP 19133 (`webrtc_port`). Keep the generated `identity.pem` between restarts, or players are asked to trust the server again. In a container or behind NAT, set `advertise_addresses` to the address players reach (e.g. `BC_ADVERTISE_ADDRESSES=203.0.113.10`).
+Bedrock 26.60 and newer connect over NetherNet instead of RakNet: signaling on TCP 19132 (`port`), then WebRTC on UDP `webrtc_port`.
+- `webrtc_port` defaults to `port` + 1 (19133), or to `port` itself with `transport=nethernet`. It is only claimed when the first player joins, so if several BedrockConnect instances share a host, give each one an explicit `webrtc_port`.
+- Keep the generated `identity.pem` (path set by `nethernet_identity`) between restarts and container rebuilds, or players are asked to trust the server again.
+- In a container or behind NAT, set `advertise_addresses` to the address players reach, such as the host's LAN or public IP (e.g. `BC_ADVERTISE_ADDRESSES=192.168.1.50`).
 
 ### Configuration
 [See wiki page here](https://github.com/Pugmatt/BedrockConnect/wiki/Configuration) for how to further configure BedrockConnect and a list of available settings.
