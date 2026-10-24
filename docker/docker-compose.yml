@@ -4,6 +4,15 @@ services:
     build: ./bedrockconnect
     ports:
       - "19132:19132/udp"
+      - "19132:19132/tcp"
+      - "19133:19133/udp"
+    environment:
+      # Keeps the NetherNet identity when the container is recreated, so players are not asked to trust the server again
+      - BC_NETHERNET_IDENTITY=/data/identity.pem
+      # NetherNet (Bedrock 26.60+) needs the address players reach, as the container's own is private
+      # - BC_ADVERTISE_ADDRESSES=104.238.130.180
+    volumes:
+      - bedrockconnect-data:/data
   bind9:
     build: 
       context: ./bind9
@@ -12,3 +21,5 @@ services:
         NSIP: 104.238.130.180
     ports: 
       - "53:53/udp"
+volumes:
+  bedrockconnect-data:

@@ -8,6 +8,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import main.com.pyratron.pugmatt.bedrockconnect.BedrockConnect;
 import main.com.pyratron.pugmatt.bedrockconnect.logging.LogColors;
+import main.com.pyratron.pugmatt.bedrockconnect.server.nethernet.NetherNetServer;
 
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
@@ -69,37 +70,44 @@ public class Server {
             pong.protocolVersion(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion());
             pong.version(BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion());
 
-            new ServerBootstrap()
-                .group(this.eventLoopGroup)
-                .channelFactory(RakChannelFactory.server(NioDatagramChannel.class))
-                .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
-                .option(RakChannelOption.RAK_PACKET_LIMIT, BedrockConnect.getConfig().getPacketLimit())
-                .option(RakChannelOption.RAK_GLOBAL_PACKET_LIMIT, BedrockConnect.getConfig().getGlobalPacketLimit())
-                .childHandler(new BedrockServerInitializer() {
-                    @Override
-                    protected void preInitChannel(Channel channel) {
-                        try {
-                            int rakVersion = (Integer)channel.config().getOption(RakChannelOption.RAK_PROTOCOL_VERSION);
-                            // Force latest if rakVersion is missing
-                            if (rakVersion == 0) {
-                                rakVersion = 11;
+            if (BedrockConnect.getConfig().isRakNetEnabled()) {
+                new ServerBootstrap()
+                    .group(this.eventLoopGroup)
+                    .channelFactory(RakChannelFactory.server(NioDatagramChannel.class))
+                    .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
+                    .option(RakChannelOption.RAK_PACKET_LIMIT, BedrockConnect.getConfig().getPacketLimit())
+                    .option(RakChannelOption.RAK_GLOBAL_PACKET_LIMIT, BedrockConnect.getConfig().getGlobalPacketLimit())
+                    .childHandler(new BedrockServerInitializer() {
+                        @Override
+                        protected void preInitChannel(Channel channel) {
+                            try {
+                                int rakVersion = (Integer)channel.config().getOption(RakChannelOption.RAK_PROTOCOL_VERSION);
+                                // Force latest if rakVersion is missing
+                                if (rakVersion == 0) {
+                                    rakVersion = 11;
+                                }
+                                channel.config().setOption(RakChannelOption.RAK_PROTOCOL_VERSION, rakVersion);
+                                super.preInitChannel(channel);
+                            } catch(Exception e) {
+                                BedrockConnect.logger.error("Error during preinit", e);
                             }
-                            channel.config().setOption(RakChannelOption.RAK_PROTOCOL_VERSION, rakVersion);
-                            super.preInitChannel(channel);
-                        } catch(Exception e) {
-                            BedrockConnect.logger.error("Error during preinit", e);
                         }
-                    }
 
-                    @Override
-                    protected void initSession(BedrockServerSession session) {
-                        session.setPacketHandler(new PacketHandler(session, false));
-                    }
-                })
-                .bind(bindAddress)
-                .syncUninterruptibly();
+                        @Override
+                        protected void initSession(BedrockServerSession session) {
+                            session.setPacketHandler(new PacketHandler(session, false));
+                        }
+                    })
+                    .bind(bindAddress)
+                    .syncUninterruptibly();
 
-            BedrockConnect.logger.info("[ " + LogColors.green("OK") + " ] Server is now running: " + LogColors.cyan(bindIp + ":" + port));
+                BedrockConnect.logger.info("[ " + LogColors.green("OK") + " ] Server is now running: " + LogColors.cyan(bindIp + ":" + port));
+            }
+
+            if (BedrockConnect.getConfig().isNetherNetEnabled()) {
+                NetherNetServer.start(this.eventLoopGroup, bindIp, Integer.parseInt(port), pong);
+            }
+
             if(BedrockConnect.getConfig().canKickInactive()) {
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask() {

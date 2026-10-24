@@ -210,3 +210,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# NetherNet signaling identity (private key) created on first start
+identity.pem

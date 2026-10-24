@@ -5,5 +5,11 @@ services:
     restart: always
     ports:
       - "19132:19132/udp"
+      - "19132:19132/tcp"
+      - "19133:19133/udp"
+    environment:
+      # Keeps the NetherNet identity when the container is recreated, so players are not asked to trust the server again
+      - BC_NETHERNET_IDENTITY=/app/data/identity.pem
     volumes:
       - ./custom_servers.json:/app/custom_servers.json
+      - ./data:/app/data
