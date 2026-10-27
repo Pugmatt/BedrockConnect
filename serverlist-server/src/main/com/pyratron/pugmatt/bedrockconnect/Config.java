@@ -36,12 +36,14 @@ public class Config {
     private boolean loaded = false;
 
     private String port = "19132";
+    private String webRtcPort = "19132";
     private String bindIp = "0.0.0.0";
     private String serverLimit = "100";
     private boolean dbAutoReconnect = false;
     private boolean usingDatabase = false;
     private String motdFile = null;
     private String motdMessage = null;
+     private String netMode = "nethernet";
     private boolean motdFirstJoin = true;
     private int motdCooldown = 0;
     private boolean kickInactive = true;
@@ -52,9 +54,12 @@ public class Config {
     private boolean fetchIps = false;
     private boolean storeDisplayNames = true;
     private boolean onlineMode = true;
+    private boolean stunDiscovery = true;
     private int packetLimit = 200;
     private int globalPacketLimit = RakConstants.DEFAULT_GLOBAL_PACKET_LIMIT;
     private HashMap<String, String> featuredServerIps;
+    private List<String> advertisedAddresses;
+    private List<String> stunServers;
     private Whitelist whitelist;
     private Language language;
     private CustomServerHandler customServers;
@@ -146,6 +151,9 @@ public class Config {
                     break;
                 case "port":
                     port = setting.getValue();
+                    break;
+                case "webrtc_port":
+                    webRtcPort = setting.getValue();
                     break;
                 case "custom_servers":
                     customServersFile = setting.getValue();
@@ -247,6 +255,26 @@ public class Config {
                     break;
                 case "online_mode":
                     onlineMode = setting.getValue().equalsIgnoreCase("true");
+                    break;
+                case "net_mode":
+                    netMode = setting.getValue();
+                    break;
+                case "stun_discovery":
+                    stunDiscovery = setting.getValue().equalsIgnoreCase("true");
+                    break;
+                case "advertise_addresses":
+                    advertisedAddresses = new ArrayList<>();
+                    String[] addresses = setting.getValue().split(",");
+                    for (String address : addresses) {
+                        advertisedAddresses.add(address.trim());
+                    }
+                    break;
+                case "stun_servers":
+                    stunServers = new ArrayList<>();
+                    String[] servers = setting.getValue().split(",");
+                    for (String server : servers) {
+                        stunServers.add(server.trim());
+                    }
                     break;
             }
         }
@@ -376,6 +404,10 @@ public class Config {
         return port;
     }
 
+    public String getWebRtcPort() {
+        return webRtcPort;
+    }
+
     public String getBindIp() {
         return bindIp;
     }
@@ -394,6 +426,10 @@ public class Config {
 
     public String getMotdMessage() {
         return motdMessage;
+    }
+
+     public String getNetMode() {
+        return netMode;
     }
 
     public boolean isShowingMotdFirstJoin() {
@@ -440,6 +476,10 @@ public class Config {
         return storeDisplayNames;
     }
 
+    public boolean isStunDiscoveryEnabled() {
+        return stunDiscovery;
+    }
+
     public int getPacketLimit() {
         return packetLimit;
     }
@@ -450,6 +490,14 @@ public class Config {
 
     public HashMap<String, String> getFeaturedServerIps() {
         return featuredServerIps;
+    }
+
+    public List<String> getAdvertisedAddresses() {
+        return advertisedAddresses;
+    }
+
+    public List<String> getStunServers() {
+        return stunServers;
     }
 
     public Whitelist getWhitelist() {
