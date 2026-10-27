@@ -122,6 +122,7 @@ add_domain inpvp.net play
 add_domain lbsg.net mco
 add_domain galaxite.net play
 add_domain enchanted.gg play
+add_domain cubecraft.net mco play
 
 # Reload config
 /etc/init.d/named start
