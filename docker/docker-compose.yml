@@ -4,6 +4,7 @@ services:
     build: ./bedrockconnect
     ports:
       - "19132:19132/udp"
+      - "19132:19132/tcp"
   bind9:
     build: 
       context: ./bind9

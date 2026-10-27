@@ -234,7 +234,7 @@ public class NetherNetServer {
         } catch (Exception e) {
             return List.of();
         }
-        return List.of();
+        return List.of(address);
     }
 
     private List<String> stunServers() {

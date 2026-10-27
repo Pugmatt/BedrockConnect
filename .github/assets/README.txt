@@ -3,7 +3,7 @@ Developed by Pugmatt
 
 Full video tutorial on how to set this up can be found on my channel: https://www.youtube.com/user/Pugmatt
 
-Requires Java 8 or higher to run the JAR.
+Requires Java 17 or higher to run the JAR.
 
 This setup requires a program called mod0Umleitung, which can be found here: https://modzero.github.io/mod0Umleitung/
 
