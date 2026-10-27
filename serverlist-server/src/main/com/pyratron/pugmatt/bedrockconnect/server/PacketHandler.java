@@ -6,12 +6,14 @@ import main.com.pyratron.pugmatt.bedrockconnect.config.Custom.CustomEntry;
 import main.com.pyratron.pugmatt.bedrockconnect.config.Custom.CustomServer;
 import main.com.pyratron.pugmatt.bedrockconnect.config.Custom.CustomServerGroup;
 import main.com.pyratron.pugmatt.bedrockconnect.logging.LogColors;
+import main.com.pyratron.pugmatt.bedrockconnect.server.NetherNetServer.NetherNetPeer;
 import main.com.pyratron.pugmatt.bedrockconnect.server.gui.MainFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.server.gui.ManageFormButton;
 import main.com.pyratron.pugmatt.bedrockconnect.server.gui.UIComponents;
 import main.com.pyratron.pugmatt.bedrockconnect.server.gui.UIForms;
 
 import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.netty.util.nethernet.TransportIdentityBinding;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.data.AttributeData;
@@ -511,6 +513,13 @@ public class PacketHandler implements BedrockPacketHandler {
             byte[] clientDataPayload = EncryptionUtils.verifyClientData(packet.getClientJwt(), identityPublicKey);
             if (clientDataPayload == null) {
                 throw new IllegalStateException("Client data isn't signed by the given chain data");
+            }
+
+            if (BedrockConnect.getConfig().isOnlineModeEnabled() && session.getPeer() instanceof NetherNetPeer) {
+                String reason = TransportIdentityBinding.mismatch(session.getPeer().getChannel(), identityPublicKey);
+                if (reason != null) {
+                    throw new IllegalStateException("NetherNet identity failed to verify: " + reason);
+                }
             }
 
             if (result.identityClaims().extraData == null) {

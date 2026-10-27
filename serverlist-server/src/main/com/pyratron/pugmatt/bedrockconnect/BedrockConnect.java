@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class BedrockConnect {
-    private static String release = "1.71.0";
+    private static String release = "1.72.0";
 
     private static Config config;
     private static Database database;
